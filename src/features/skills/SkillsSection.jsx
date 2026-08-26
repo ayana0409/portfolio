@@ -17,7 +17,7 @@ gsap.registerPlugin(ScrollTrigger)
  * - Glowing neon pill tags and active indicator dots
  */
 export default function SkillsSection() {
-  const { t, i18n } = useTranslation('portfolio')
+  const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const containerRef = useRef(null)
 

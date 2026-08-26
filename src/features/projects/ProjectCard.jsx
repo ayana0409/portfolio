@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next'
  * @param {Function} props.onSelect - Callback when clicked
  */
 export default function ProjectCard({ project, onSelect }) {
-  const { t, i18n } = useTranslation('portfolio')
+  const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
 
   const title = project.title?.[currentLang] || project.title?.vi || ''

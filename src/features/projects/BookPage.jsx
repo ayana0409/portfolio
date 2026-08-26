@@ -11,7 +11,6 @@ const BookPage = React.forwardRef(
     {
       children,
       pageNumber,
-      totalPages,
       isCover = false,
       isBackCover = false,
       side = 'right',

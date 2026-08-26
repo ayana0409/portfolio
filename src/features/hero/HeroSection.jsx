@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useTranslation } from 'react-i18next'
-import portfolioData from '../../data/portfolioData.json'
 import { scrollToElement } from '../../utils/helpers'
 
 /**
@@ -11,7 +10,7 @@ import { scrollToElement } from '../../utils/helpers'
  * Built with layered gradients, starfield particles, and fail-safe GSAP entrance.
  */
 export default function HeroSection({ onExploreClick }) {
-  const { t, i18n } = useTranslation('portfolio')
+  const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
 
   const heroRef = useRef(null)

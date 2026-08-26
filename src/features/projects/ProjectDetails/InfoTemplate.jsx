@@ -20,7 +20,7 @@ import { resolveProjectImage } from '../../../utils/helpers'
  * @param {Object} props.project - The project data object from portfolioData.json
  */
 export default function InfoTemplate({ project }) {
-  const { t, i18n } = useTranslation('portfolio')
+  const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeLightboxImg, setActiveLightboxImg] = useState(null)
 

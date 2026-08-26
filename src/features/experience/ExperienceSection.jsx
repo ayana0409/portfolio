@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { gsap } from 'gsap'
 import portfolioData from '../../data/portfolioData.json'
 import { resolveProjectImage } from '../../utils/helpers'
 

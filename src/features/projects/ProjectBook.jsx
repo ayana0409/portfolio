@@ -194,6 +194,18 @@ export default function ProjectBook() {
   }, [currentIndex, isFlipping, totalProjects])
 
   /**
+   * Jump directly to a page
+   */
+  const handleJumpToPage = useCallback((targetIdx) => {
+    if (isFlipping || targetIdx === currentIndex) return
+    setIsFlipping(true)
+
+    setPageVisibility(targetIdx)
+    setCurrentIndex(targetIdx)
+    setIsFlipping(false)
+  }, [currentIndex, isFlipping])
+
+  /**
    * Handle Previous Page Flip
    */
   const handlePrevPage = useCallback(() => {
@@ -251,19 +263,7 @@ export default function ProjectBook() {
         0
       )
     }
-  }, [currentIndex, isFlipping, totalProjects])
-
-  /**
-   * Jump directly to a page
-   */
-  const handleJumpToPage = (targetIdx) => {
-    if (isFlipping || targetIdx === currentIndex) return
-    setIsFlipping(true)
-
-    setPageVisibility(targetIdx)
-    setCurrentIndex(targetIdx)
-    setIsFlipping(false)
-  }
+  }, [currentIndex, handleJumpToPage, isFlipping, totalProjects])
 
   // Open & Close Details Drawer
   const handleOpenDetail = (project) => {
