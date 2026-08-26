@@ -1,0 +1,505 @@
+{
+  "about": {
+    "name": "Dương Đoàn Thuận",
+    "github": "ayana0409",
+    "avatar": "/assets/images/avatar.jpg",
+    "title": {
+      "vi": "Giới thiệu",
+      "en": "About Me"
+    },
+    "role": {
+      "vi": "Lập trình viên Backend",
+      "en": "Backend Developer"
+    },
+    "bio": {
+      "vi": "Tôi là một Lập trình viên Backend với kinh nghiệm trong C# và .NET. Nhanh nhạy trong việc tiếp thu và thích ứng, có tinh thần tự cải thiện liên tục. Làm quen với React, NestJS và cơ bản về Spring Boot. Mong muốn trở thành một Chuyên viên Lập trình Phần mềm với kiến thức chuyên sâu về kiến trúc phần mềm và các hệ thống quy mô lớn.",
+      "en": "Backend Developer with experience in building applications using C# and .NET. Quick learner with strong adaptability and continuous self-improvement mindset. Familiar with React, NestJS, and basic Spring Boot. Aspiring to become a Professional Software Developer with expertise in software architecture and large-scale systems."
+    },
+    "skills": {
+      "programming-language": {
+        "title": {
+          "vi": "Ngôn ngữ lập trình",
+          "en": "Programming Language"
+        },
+        "items": [
+          "C#",
+          "VB.NET",
+          "JavaScript",
+          "Java",
+          "TypeScript"
+        ]
+      },
+      "framework-and-libraries": {
+        "title": {
+          "vi": "Framework & Thư viện",
+          "en": "Framework & Libraries"
+        },
+        "items": [
+          ".NET",
+          "ASP.NET Core",
+          "Windows Form",
+          "WPF",
+          "Entity Framework",
+          "ABP Framework",
+          "React.js",
+          "Nest.js"
+        ]
+      },
+      "databases": {
+        "title": {
+          "vi": "Cơ sở dữ liệu",
+          "en": "Databases"
+        },
+        "items": [
+          "SQL Server",
+          "MySQL",
+          "PostgreSQL",
+          "MongoDB",
+          "OracleDB",
+          "Redis"
+        ]
+      },
+      "architecture-methodologies": {
+        "title": {
+          "vi": "Kiến trúc & Phương pháp",
+          "en": "Architecture & Methodologies"
+        },
+        "items": [
+          "Microservices",
+          "Clean Architecture",
+          "DDD",
+          "Event-Driven Architecture",
+          "Saga Pattern",
+          "ABP Layered Architecture"
+        ]
+      },
+      "tools": {
+        "title": {
+          "vi": "Công cụ & Nền tảng",
+          "en": "Tools & Platforms"
+        },
+        "items": [
+          "Git",
+          "SVN",
+          "Docker",
+          "Kafka"
+        ]
+      },
+      "Others": {
+        "title": {
+          "vi": "Khác",
+          "en": "Others"
+        },
+        "items": [
+          "Spring Boot (basic)",
+          "RabbitMQ",
+          "gRPC",
+          "Ocelot API Gateway"
+        ]
+      }
+    }
+  },
+  "contact": {
+    "title": {
+      "vi": "Liên hệ",
+      "en": "Contact"
+    },
+    "email": "duongdoanthuan@example.com",
+    "github": "https://github.com/ayana0409",
+    "linkedin": ""
+  },
+  "ui": {
+    "navItems": {
+      "about": {
+        "vi": "Giới thiệu",
+        "en": "About"
+      },
+      "skills": {
+        "vi": "Kỹ năng",
+        "en": "Skills"
+      },
+      "experience": {
+        "vi": "Kinh nghiệm",
+        "en": "Experience"
+      },
+      "projects": {
+        "vi": "Dự án",
+        "en": "Projects"
+      },
+      "contact": {
+        "vi": "Liên hệ",
+        "en": "Contact"
+      }
+    },
+    "themeToggle": {
+      "light": {
+        "vi": "Sáng",
+        "en": "Light"
+      },
+      "dark": {
+        "vi": "Tối",
+        "en": "Dark"
+      }
+    },
+    "languageToggle": {
+      "vi": "VI",
+      "en": "EN"
+    },
+    "buttons": {
+      "viewProject": {
+        "vi": "Xem dự án",
+        "en": "View Project"
+      },
+      "viewSource": {
+        "vi": "Mã nguồn",
+        "en": "Source Code"
+      },
+      "prevPage": {
+        "vi": "Trước",
+        "en": "Previous"
+      },
+      "nextPage": {
+        "vi": "Tiếp theo",
+        "en": "Next"
+      }
+    }
+  },
+  "experiences": [
+    {
+      "id": "exp-backend-developer",
+      "order": 1,
+      "type": "fulltime",
+      "role": {
+        "vi": "Lập trình viên",
+        "en": "Developer"
+      },
+      "company": {
+        "vi": "FPT Software",
+        "en": "FPT Software"
+      },
+      "period": {
+        "vi": "11/2025 - Hiện tại",
+        "en": "11/2025 - Present"
+      },
+      "location": {
+        "vi": "Cần Thơ, Việt Nam",
+        "en": "Can Tho, Vietnam"
+      },
+      "coverImage": "/assets/images/experiences/exp-fpt.png",
+      "summary": {
+        "vi": "Làm việc tại FPT Software, tham gia vào dự án phát triển và bảo trì các hệ thống doanh nghiệp nước ngoài.",
+        "en": "Working at FPT Software, participating in the development and maintenance of backend systems for enterprise clients in Japan and Singapore."
+      },
+      "technologies": [
+        "C#",
+        "VB.NET",
+        "Windows Form",
+        "Oracle"
+      ],
+      "responsibilities": {
+        "vi": [
+          "Phát triển và bảo trì các chức năng cho ứng dụng doanh nghiệp sử dụng .NET",
+          "Làm việc với cơ sở dữ liệu Oracle để xử lý dữ liệu và báo cáo (Oracle Views, Tối ưu hóa SQL)",
+          "Triển khai logic nghiệp vụ, xác thực và giao diện người dùng",
+          "Làm việc trong môi trường Agile với nhóm lớn (100+ thành viên)",
+          "Áp dụng giải pháp AI để tăng năng suất và tối ưu hóa quy trình làm việc",
+          "Hỗ trợ và hướng dẫn thực tập sinh tìm hiểu quy trình làm việc và công nghệ"
+        ],
+        "en": [
+          "Developed and maintained features for enterprise application using .NET",
+          "Worked with Oracle database for data processing and reporting (Oracle Views, SQL optimization)",
+          "Implemented business logic, validation and UI component",
+          "Collaborated in a large-scale Agile team (100+ members)",
+          "Applied AI solutions to enhance productivity and optimize workflows",
+          "Supported and guided interns in understanding project workflows and technologies"
+        ]
+      },
+      "achievements": {
+        "vi": [
+          "Xây dựng thành công hệ thống microservices và background worker xử lý hàng nghìn tác vụ đồng thời",
+          "Đóng góp vào việc chuẩn hóa kiến trúc Clean Architecture giúp tăng tốc độ phát triển tính năng mới"
+        ],
+        "en": [
+          "Successfully built microservices and background job processors handling thousands of concurrent tasks",
+          "Standardized Clean Architecture codebase resulting in faster feature delivery cycles"
+        ]
+      },
+      "links": {
+        "company": "",
+        "reference": ""
+      }
+    },
+    {
+      "id": "exp-365-ejsc-intern",
+      "order": 2,
+      "type": "fulltime-internship",
+      "role": {
+        "vi": "Thực tập sinh toàn thời gian",
+        "en": "Full-time Internship"
+      },
+      "company": {
+        "vi": "365 EJSC",
+        "en": "365 EJSC"
+      },
+      "period": {
+        "vi": "02/2025 - 8/2025",
+        "en": "02/2025 - 8/2025"
+      },
+      "location": {
+        "vi": "Cần Thơ, Việt Nam (Remote)",
+        "en": "Can Tho, Vietnam (Remote)"
+      },
+      "coverImage": "/assets/images/experiences/exp-365-ejsc.png",
+      "summary": {
+        "vi": "Thực tập sinh toàn thời gian tại 365 EJSC, tham gia phát triển hệ thống ERP.",
+        "en": "Full-time Internship at 365 EJSC, participating in the development of ERP system."
+      },
+      "technologies": [
+        "C#",
+        "Entity Framework",
+        "RESTful API",
+        "SQL Server",
+        "JWT",
+        "XUnit",
+        "Clean Architecture",
+        "CQRS"
+      ],
+      "responsibilities": {
+        "vi": [
+          "Phát triển và bảo trì nhiều API endpoints cho các nghiệp vụ chính",
+          "Triển khai xác thực JWT và phân quyền",
+          "Viết unit test với XUnit",
+          "Viết tài liệu mô tả API và tài liệu kỹ thuật",
+          "Cải thiện hiệu năng API, giảm response time 20% và cải thiện khả năng mở rộng"
+        ],
+        "en": [
+          "Developed and maintained multiple API endpoints for core business modules",
+          "Implemented JWT-based authentication and role-based authorization",
+          "Wrote unit tests with XUnit",
+          "Created API Definition Documents and technical documentation",
+          "Improved API performance, reducing response time by 20% and improving scalability"
+        ]
+      },
+      "achievements": {
+        "vi": [
+          "Hoàn thành tốt khóa thực tập với các kỹ năng và kinh nghiệm thực tế"
+        ],
+        "en": [
+          "Successfully completed the internship program with practical skills and experience"
+        ]
+      },
+      "links": {
+        "company": "",
+        "reference": ""
+      }
+    }
+  ],
+  "projects": [
+    {
+      "id": "shorter-link",
+      "type": "info",
+      "order": 1,
+      "coverImage": "/assets/images/projects/shorter-link/shorter-link-cover.png",
+      "title": {
+        "vi": "Hệ thống Quản lý Rút gọn Liên kết",
+        "en": "Short Link Management System"
+      },
+      "summary": {
+        "vi": "Dịch vụ rút gọn URL với NestJS, MongoDB, Redis cache cho short link, JWT + refresh token rotation, quản lý nhóm, cấp độ người dùng, audit log và thông báo real-time qua Socket.IO.",
+        "en": "URL shortening service built with NestJS, MongoDB and Redis caching for short links, JWT with refresh token rotation, group management, user levels, audit logging and real-time notifications via Socket.IO."
+      },
+      "technologies": [
+        "NestJS",
+        "TypeScript",
+        "MongoDB",
+        "Mongoose",
+        "Redis",
+        "JWT",
+        "React 19",
+        "Redux Toolkit",
+        "Tailwind CSS",
+        "Socket.IO"
+      ],
+      "description": {
+        "vi": "Hệ thống gồm Backend NestJS (module hóa) với MongoDB (Mongoose) lưu trữ vĩnh viễn và Redis dùng cho cache short URL, session/refresh token, daily count và rate limiting. Frontend React 19 (Create React App) + Redux Toolkit + Tailwind CSS + Socket.IO Client cung cấp giao diện quản lý link, tạo mã QR, quản lý nhóm, bảng điều khiển admin (accounts, levels, config, audit log, health) và nhận thông báo real-time. Có thêm dịch vụ WebSocket riêng (NestJS + Socket.IO).",
+        "en": "The system consists of a modular NestJS backend with MongoDB (Mongoose) for persistent storage and Redis for short-URL cache, session/refresh tokens, daily counts and rate limiting. The React 19 (Create React App) + Redux Toolkit + Tailwind CSS + Socket.IO Client frontend provides link management, instant QR code generation, group management, admin dashboards (accounts, levels, config, audit log, health) and real-time notifications. A separate WebSocket service (NestJS + Socket.IO) is also part of the stack."
+      },
+      "features": {
+        "vi": [
+          "Short code alphanumeric ngẫu nhiên (độ dài cấu hình) + Redis cache redirect",
+          "Click count, mật khẩu, hết hạn / vô thời hạn theo Level",
+          "RBAC 3 cấp + Level quota (link/ngày, group, member)",
+          "Quản lý nhóm, audit log tự động, dynamic config từ DB",
+          "QR code, analytics, WebSocket real-time (user / room / broadcast)",
+          "Refresh token rotation, multi-tab auth sync, proactive refresh"
+        ],
+        "en": [
+          "Random alphanumeric short codes (configurable length) with Redis redirect cache",
+          "Click counting, password protection, expiration / no-expiration by Level",
+          "3-level RBAC + Level quotas (daily links, groups, members)",
+          "Group management, automatic audit log, dynamic DB-driven config",
+          "QR codes, analytics, real-time WebSocket (user / room / broadcast)",
+          "Refresh token rotation, multi-tab auth sync, proactive token refresh"
+        ]
+      },
+      "gallery": [
+        {
+          "id": "stl-img-001",
+          "src": "/assets/images/projects/shorter-link/shorter-link-list.png",
+          "caption": {
+            "vi": "Danh sách link rút gọn đã thêm của người dùng.",
+            "en": "List of user's shortened links."
+          }
+        },
+        {
+          "id": "stl-img-002",
+          "src": "/assets/images/projects/shorter-link/shorter-link-level-mng.png",
+          "caption": {
+            "vi": "Quản lý hạn mức (Quota) theo từng cấp độ tài khoản.",
+            "en": "Quota management for each account level."
+          }
+        },
+        {
+          "id": "stl-img-003",
+          "src": "/assets/images/projects/shorter-link/shorter-link-health-1.png",
+          "caption": {
+            "vi": "Theo dõi thông tin sức khỏe của các service trong hệ thống.",
+            "en": "Monitor health information of services in the system."
+          }
+        },
+        {
+          "id": "stl-img-004",
+          "src": "/assets/images/projects/shorter-link/shorter-link-health-2.png",
+          "caption": {
+            "vi": "Theo dõi chi tiết thông tin sức khỏe của từng service.",
+            "en": "Detailed health information of each service."
+          }
+        }
+      ],
+      "links": {
+        "demo": "https://shink.onrender.com/",
+        "source": "https://github.com/ayana0409/shorter-link-api",
+        "backend": "https://github.com/ayana0409/shorter-link-api",
+        "frontend": "https://github.com/ayana0409/shorter-link-fe",
+        "websocket": "https://github.com/ayana0409/shorter-link-websocket"
+      }
+    },
+    {
+      "id": "motorcycle-repair-shop",
+      "type": "info",
+      "order": 2,
+      "coverImage": "/assets/images/projects/motorcycle-cover.png",
+      "title": {
+        "vi": "Hệ thống Quản lý Tiệm Sửa Xe",
+        "en": "Motorcycle Repair Shop Management System"
+      },
+      "summary": {
+        "vi": "Hệ thống quản lý toàn diện cho tiệm sửa xe máy, bao gồm quản lý đơn sửa chữa, kho phụ tùng, lịch hẹn khách hàng và báo cáo doanh thu.",
+        "en": "A comprehensive management system for motorcycle repair shops, including repair orders, spare parts inventory, customer appointments, and revenue reports."
+      },
+      "description": {
+        "vi": "Dự án được xây dựng theo kiến trúc Clean Architecture với ASP.NET Core làm backend API và ReactJS làm frontend. Hệ thống hỗ trợ phân quyền (Admin, Thợ, Lễ tân) và tích hợp báo cáo thống kê theo thời gian thực.",
+        "en": "The project is built on Clean Architecture with ASP.NET Core as the backend API and ReactJS as the frontend. The system supports role-based access (Admin, Mechanic, Receptionist) and integrates real-time statistical reporting."
+      },
+      "technologies": [
+        "C#",
+        ".NET 8",
+        "ASP.NET Core",
+        "Entity Framework Core",
+        "SQL Server",
+        "ReactJS",
+        "Tailwind CSS",
+        "Docker"
+      ],
+      "features": {
+        "vi": [
+          "Quản lý đơn sửa chữa với theo dõi trạng thái thời gian thực",
+          "Quản lý kho phụ tùng và cảnh báo hết hàng",
+          "Lịch hẹn khách hàng và thông báo tự động",
+          "Báo cáo doanh thu theo ngày, tuần, tháng"
+        ],
+        "en": [
+          "Repair order management with real-time status tracking",
+          "Spare parts inventory management with low-stock alerts",
+          "Customer appointment scheduling with automated notifications",
+          "Revenue reports by day, week, and month"
+        ]
+      },
+      "links": {
+        "demo": "",
+        "source": "https://github.com/ayana0409/motorcycle-repair-shop"
+      }
+    },
+    {
+      "id": "dev-photo-journal",
+      "type": "gallery",
+      "order": 3,
+      "coverImage": "/assets/images/projects/photo-journal-cover.png",
+      "title": {
+        "vi": "Nhật ký Ảnh Lập trình viên",
+        "en": "Developer Photo Journal"
+      },
+      "summary": {
+        "vi": "Ứng dụng nhật ký ảnh dành cho lập trình viên, nơi ghi lại khoảnh khắc làm việc, setup bàn phím cơ, màn hình đôi và các sự kiện công nghệ.",
+        "en": "A photo journal app for developers to document working moments, mechanical keyboard setups, dual monitors, and tech events."
+      },
+      "description": {
+        "vi": "Ứng dụng sử dụng ASP.NET Core Minimal API với lưu trữ ảnh trên Azure Blob Storage. Giao diện được xây dựng bằng ReactJS với layout kiểu Masonry và lazy loading hình ảnh để tối ưu hiệu suất.",
+        "en": "The app uses ASP.NET Core Minimal API with image storage on Azure Blob Storage. The UI is built with ReactJS featuring Masonry layout and lazy-loading images for performance optimization."
+      },
+      "technologies": [
+        "C#",
+        ".NET 8",
+        "ASP.NET Core Minimal API",
+        "Azure Blob Storage",
+        "ReactJS",
+        "React Query",
+        "Vite"
+      ],
+      "gallery": [
+        {
+          "id": "img-001",
+          "src": "/assets/images/projects/photo-journal/setup-01.jpg",
+          "caption": {
+            "vi": "Setup bàn làm việc với màn hình đôi và bàn phím cơ",
+            "en": "Workstation setup with dual monitors and mechanical keyboard"
+          }
+        },
+        {
+          "id": "img-002",
+          "src": "/assets/images/projects/photo-journal/event-01.jpg",
+          "caption": {
+            "vi": "Sự kiện Google I/O Extended Việt Nam 2024",
+            "en": "Google I/O Extended Vietnam 2024 event"
+          }
+        },
+        {
+          "id": "img-003",
+          "src": "/assets/images/projects/photo-journal/code-01.jpg",
+          "caption": {
+            "vi": "Late-night coding session với .NET và coffee",
+            "en": "Late-night coding session with .NET and coffee"
+          }
+        }
+      ],
+      "features": {
+        "vi": [
+          "Upload và quản lý ảnh với Azure Blob Storage",
+          "Layout Masonry tự động tính toán vị trí ảnh",
+          "Lazy loading ảnh để tối ưu thời gian tải trang",
+          "Lightbox xem ảnh full screen với swipe gesture"
+        ],
+        "en": [
+          "Photo upload and management with Azure Blob Storage",
+          "Masonry layout with automatic image positioning",
+          "Lazy loading images for optimized page load time",
+          "Full-screen lightbox with swipe gesture support"
+        ]
+      },
+      "links": {
+        "demo": "https://dev-photo-journal.example.com",
+        "source": "https://github.com/ayana0409/dev-photo-journal"
+      }
+    }
+  ]
+}
