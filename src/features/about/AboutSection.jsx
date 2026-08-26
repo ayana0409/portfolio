@@ -28,13 +28,13 @@ export default function AboutSection() {
 
       <div className="relative z-10 w-full grid md:grid-cols-12 gap-8 lg:gap-12 items-center my-auto">
         {/* Left Column: Heading & Role Accent */}
-        <div className="md:col-span-5 space-y-4" data-animate>
+        <div className="md:col-span-4 space-y-4" data-animate>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-950/80 text-blue-300 border border-blue-800/80">
             <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
             <span>01 / ABOUT ME</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl font-black uppercase tracking-tight text-white leading-tight">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight">
             {t('about.title', 'Giới thiệu về tôi')}
           </h2>
 
@@ -44,30 +44,30 @@ export default function AboutSection() {
         </div>
 
         {/* Right Column: Bio Narrative & Stats Card */}
-        <div className="md:col-span-7 space-y-6" data-animate>
+        <div className="md:col-span-8 space-y-6" data-animate>
           <div className="p-6 md:p-8 rounded-2xl bg-slate-900/60 backdrop-blur-sm border border-slate-800 shadow-xl">
-            <p className="text-sm md:text-base leading-relaxed text-slate-300 font-sans">
-              {bio}
+            <p className="text-sm md:text-base leading-relaxed text-slate-200 font-sans italic">
+              "{bio}"
             </p>
 
-            <div className="grid grid-cols-3 gap-4 pt-6 mt-6 border-t border-slate-800 text-center">
-              <div>
+            <div className="grid grid-cols-4 gap-3 sm:gap-4 pt-6 mt-6 border-t border-slate-800 text-center">
+              <div className="col-span-1">
                 <span className="block text-2xl md:text-3xl font-black text-blue-400 font-mono">
-                  C# / .NET
+                  .NET
                 </span>
                 <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">
                   Primary Stack
                 </span>
               </div>
-              <div>
-                <span className="block text-2xl md:text-3xl font-black text-blue-400 font-mono">
+              <div className="col-span-2">
+                <span className="block text-2xl md:text-3xl font-black text-blue-400 font-mono whitespace-nowrap">
                   API & Micro
                 </span>
                 <span className="text-[11px] font-mono text-slate-500 uppercase tracking-wider">
                   Architecture
                 </span>
               </div>
-              <div>
+              <div className="col-span-1">
                 <span className="block text-2xl md:text-3xl font-black text-blue-400 font-mono">
                   ReactJS
                 </span>

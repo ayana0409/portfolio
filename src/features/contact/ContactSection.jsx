@@ -32,7 +32,7 @@ export default function ContactSection() {
         {/* Section Pill */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-blue-950/80 text-blue-300 border border-blue-800/80" data-animate>
           <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-          <span>04 / GET IN TOUCH</span>
+          <span>05 / GET IN TOUCH</span>
         </div>
 
         {/* Heading & Subtitle */}

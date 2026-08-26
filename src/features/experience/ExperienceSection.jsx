@@ -188,7 +188,7 @@ export default function ExperienceSection() {
                   onClick={() => handleOpenDetail(currentExp)}
                   className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-semibold tracking-wider uppercase shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
                 >
-                  <span>{currentLang === 'vi' ? 'XEM CHI TIẾT KINH NGHIỆM' : 'VIEW FULL EXPERIENCE'}</span>
+                  <span>{currentLang === 'vi' ? 'XEM CHI TIẾT' : 'VIEW FULL'}</span>
                   <span>→</span>
                 </button>
               </div>
@@ -219,16 +219,6 @@ export default function ExperienceSection() {
                   <span className="text-blue-400 font-semibold flex items-center gap-1">
                     <span>EXPAND</span>
                     <span className="group-hover:translate-x-0.5 transition-transform">↗</span>
-                  </span>
-                </div>
-
-                {/* Center Icon */}
-                <div className="relative z-10 text-center space-y-1.5 my-auto">
-                  <div className="w-10 h-10 mx-auto rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-mono font-bold text-blue-400 text-sm shadow-brand-glow group-hover:scale-110 transition-transform">
-                    &lt;/&gt;
-                  </div>
-                  <span className="inline-block px-3 py-1 rounded-lg bg-slate-950/85 backdrop-blur-md border border-slate-800 font-bold text-xs text-white shadow line-clamp-1">
-                    {company}
                   </span>
                 </div>
 

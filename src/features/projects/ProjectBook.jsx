@@ -360,9 +360,8 @@ export default function ProjectBook() {
                 key={idx}
                 type="button"
                 onClick={() => handleJumpToPage(idx)}
-                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
-                  idx === currentIndex ? 'w-6 bg-blue-500' : 'w-2 bg-slate-800 hover:bg-slate-700'
-                }`}
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${idx === currentIndex ? 'w-6 bg-blue-500' : 'w-2 bg-slate-800 hover:bg-slate-700'
+                  }`}
                 aria-label={`Jump to page ${idx + 1}`}
               />
             ))}
@@ -414,11 +413,10 @@ export default function ProjectBook() {
                 <div className="flex items-center justify-between pb-3 border-b border-slate-800/80">
                   <div className="flex items-center gap-2.5">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider ${
-                        project.type === 'gallery'
+                      className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-mono font-semibold uppercase tracking-wider ${project.type === 'gallery'
                           ? 'bg-purple-950/80 text-purple-300 border border-purple-800/80'
                           : 'bg-blue-950/80 text-blue-300 border border-blue-800/80'
-                      }`}
+                        }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                       TYPE: {project.type}
@@ -531,19 +529,6 @@ export default function ProjectBook() {
                           <span className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform">↗</span>
                         </span>
                       </div>
-
-                      {/* Center Title Highlight */}
-                      <div className="relative z-10 text-center space-y-1.5 my-auto">
-                        {!project.coverImage && (
-                          <div className="w-10 h-10 mx-auto rounded-xl bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-mono font-black text-base text-blue-400 shadow-brand-glow group-hover:scale-110 transition-transform">
-                            &lt;/&gt;
-                          </div>
-                        )}
-                        <span className="inline-block px-3 py-1 rounded-lg bg-slate-950/85 backdrop-blur-md border border-slate-800 font-bold text-xs sm:text-sm text-white shadow-lg line-clamp-1">
-                          {title}
-                        </span>
-                      </div>
-
                       {/* Footer Spec Tag */}
                       <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-slate-300 border-t border-slate-800/80 pt-2 bg-slate-950/75 backdrop-blur-md -mx-3.5 -mb-3.5 px-3.5 pb-2.5">
                         <span className="uppercase text-slate-400 font-semibold">
