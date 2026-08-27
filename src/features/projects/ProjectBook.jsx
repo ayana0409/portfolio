@@ -439,7 +439,7 @@ export default function ProjectBook() {
                       {title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans line-clamp-3 sm:line-clamp-4">
+                    <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans line-clamp-3 sm:line-clamp-4 whitespace-pre-line">
                       {summary}
                     </p>
 

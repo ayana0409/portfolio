@@ -4,6 +4,177 @@ import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
 
 /**
+ * Normalizes project links into a standardized list supporting both
+ * Array format and Key-Value Object format with multilingual labels.
+ *
+ * @param {Array|Object} links - Raw links definition from portfolioData.json
+ * @param {string} currentLang - Current active language ('vi' | 'en')
+ * @returns {Array} List of normalized link objects { label, url, type }
+ */
+function normalizeProjectLinks(links, currentLang) {
+  if (!links) return []
+
+  // Case 1: Array of link objects
+  // Example: [{ label: { vi: "...", en: "..." }, url: "...", type: "demo" }]
+  if (Array.isArray(links)) {
+    return links
+      .filter((item) => item && (item.url || item.href))
+      .map((item) => {
+        const url = item.url || item.href
+        let label = ''
+        if (typeof item.label === 'object' && item.label !== null) {
+          label = item.label[currentLang] || item.label.vi || item.label.en || ''
+        } else if (typeof item.label === 'string') {
+          label = item.label
+        } else if (item.title) {
+          label = item.title[currentLang] || item.title.vi || item.title.en || 'LINK'
+        } else {
+          label = 'OPEN LINK'
+        }
+
+        const isGithub = url.includes('github.com')
+        const type = item.type || (isGithub ? 'github' : 'demo')
+        return { label, url, type }
+      })
+  }
+
+  // Case 2: Object format with keys
+  // Example: { demo: "https...", demo2: { label: { vi: "...", en: "..." }, url: "..." } }
+  if (typeof links === 'object' && links !== null) {
+    return Object.entries(links)
+      .filter(([_, val]) => Boolean(val))
+      .map(([key, val]) => {
+        let url = ''
+        let label = ''
+        let type = 'default'
+
+        if (typeof val === 'string') {
+          url = val
+          const keyLower = key.toLowerCase()
+
+          if (keyLower === 'demo') {
+            label = currentLang === 'vi' ? 'TRẢI NGHIỆM DEMO ↗' : 'LIVE DEMO ↗'
+            type = 'demo'
+          } else if (keyLower === 'demo2' || keyLower === 'admindemo' || keyLower === 'demomanager') {
+            label = currentLang === 'vi' ? 'ADMIN PORTAL DEMO ↗' : 'ADMIN PORTAL DEMO ↗'
+            type = 'demo-alt'
+          } else if (keyLower.startsWith('demo')) {
+            label = `${key.toUpperCase()} ↗`
+            type = 'demo-alt'
+          } else if (keyLower === 'customerweb') {
+            label = 'CUSTOMER WEB REPO'
+            type = 'repo-cyan'
+          } else if (keyLower === 'adminportal') {
+            label = 'ADMIN PORTAL REPO'
+            type = 'repo-purple'
+          } else if (keyLower === 'websocket') {
+            label = 'WEBSOCKET REPO'
+            type = 'repo-purple'
+          } else if (keyLower === 'backend' || keyLower === 'api') {
+            label = 'API REPO'
+            type = 'repo-blue'
+          } else if (keyLower === 'frontend' || keyLower === 'fe') {
+            label = 'FE REPO'
+            type = 'repo-blue'
+          } else if (keyLower === 'source') {
+            label = 'GITHUB SOURCE'
+            type = 'repo-blue'
+          } else {
+            label = key.replace(/([A-Z])/g, ' $1').toUpperCase()
+            type = url.includes('github.com') ? 'repo-blue' : 'demo'
+          }
+        } else if (typeof val === 'object' && val !== null) {
+          url = val.url || val.href || ''
+          if (typeof val.label === 'object' && val.label !== null) {
+            label = val.label[currentLang] || val.label.vi || val.label.en || key
+          } else if (typeof val.label === 'string') {
+            label = val.label
+          } else {
+            label = key.replace(/([A-Z])/g, ' $1').toUpperCase()
+          }
+
+          const isGithub = url.includes('github.com')
+          type = val.type || (isGithub ? 'repo-blue' : 'demo')
+        }
+
+        return { key, label, url, type }
+      })
+      .filter((item) => Boolean(item.url))
+  }
+
+  return []
+}
+
+/**
+ * Returns distinct styling classes and icons based on link type
+ */
+function getLinkButtonStyles(type) {
+  switch (type) {
+    case 'demo':
+      return {
+        className:
+          'bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50 active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        ),
+      }
+    case 'demo-alt':
+      return {
+        className:
+          'bg-teal-600 hover:bg-teal-500 text-white shadow-lg shadow-teal-600/30 hover:shadow-teal-500/50 active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
+          </svg>
+        ),
+      }
+    case 'repo-cyan':
+      return {
+        className:
+          'border border-cyan-700 bg-cyan-950/60 hover:bg-cyan-900 text-cyan-200 hover:text-white hover:border-cyan-400 shadow-md active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        ),
+      }
+    case 'repo-purple':
+      return {
+        className:
+          'border border-purple-700 bg-purple-950/60 hover:bg-purple-900 text-purple-200 hover:text-white hover:border-purple-400 shadow-md active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        ),
+      }
+    case 'repo-blue':
+    case 'github':
+      return {
+        className:
+          'bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+          </svg>
+        ),
+      }
+    default:
+      return {
+        className:
+          'border border-slate-700 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white hover:border-blue-500/50 active:scale-95',
+        icon: (
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
+        ),
+      }
+  }
+}
+
+/**
  * InfoTemplate / Unified Project Detail Component
  * 
  * Renders the project details strictly following the exact field sequence in `portfolioData.json`:
@@ -12,15 +183,15 @@ import { resolveProjectImage } from '../../../utils/helpers'
  * 3. Cover Image (Full width preview with click-to-zoom)
  * 4. Technologies (Tech stack pills)
  * 5. Summary (Executive Brief / Callout quotation)
- * 6. Description (Architecture & System solution)
+ * 6. Description (Architecture & System solution with multi-line support)
  * 7. Features (Key capabilities bullet list)
  * 8. Gallery (Photo Showcase & Screenshots with Viewport-Centered Lightbox Portal)
- * 9. Links (Demo, Backend API, Frontend, GitHub Source)
+ * 9. Links (Universal Dynamic Link Buttons)
  *
  * @param {Object} props.project - The project data object from portfolioData.json
  */
 export default function InfoTemplate({ project }) {
-  const { i18n } = useTranslation('portfolio')
+  const { t, i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeLightboxImg, setActiveLightboxImg] = useState(null)
 
@@ -31,6 +202,9 @@ export default function InfoTemplate({ project }) {
   const features = project.features?.[currentLang] || project.features?.vi || []
   const gallery = project.gallery || []
   const coverUrl = resolveProjectImage(project.coverImage)
+
+  // Universal dynamic links normalization
+  const normalizedLinks = normalizeProjectLinks(project.links, currentLang)
 
   // Handle ESC key for Lightbox
   useEffect(() => {
@@ -137,7 +311,7 @@ export default function InfoTemplate({ project }) {
       {/* ─── 5. Summary (Executive Brief) ─────────────────────────────────────── */}
       {summary && (
         <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-900/60 shadow-inner">
-          <p className="text-xs md:text-sm text-slate-200 leading-relaxed italic">
+          <p className="text-xs md:text-sm text-slate-200 leading-relaxed italic whitespace-pre-line">
             "{summary}"
           </p>
         </div>
@@ -152,9 +326,9 @@ export default function InfoTemplate({ project }) {
             </svg>
             <span>{currentLang === 'vi' ? 'Kiến trúc & Giải pháp Chi tiết' : 'Architecture & Solution'}</span>
           </h3>
-          <p className="text-xs md:text-sm text-slate-300 leading-relaxed font-sans">
+          <div className="text-xs md:text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-line space-y-2">
             {description}
-          </p>
+          </div>
         </div>
       )}
 
@@ -240,87 +414,26 @@ export default function InfoTemplate({ project }) {
         </div>
       )}
 
-      {/* ─── 9. Links (Action Buttons) ────────────────────────────────────────── */}
-      <div className="pt-5 flex flex-wrap items-center gap-3 border-t border-slate-800">
-        {project.links?.demo && (
-          <a
-            href={project.links.demo}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold
-              bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-600/30 hover:shadow-emerald-500/50
-              active:scale-95 transition-all"
-          >
-            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-            </svg>
-            <span>TRẢI NGHIỆM DEMO ↗</span>
-          </a>
-        )}
-
-        {project.links?.backend && (
-          <a
-            href={project.links.backend}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold
-              bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50
-              active:scale-95 transition-all"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            <span>API REPO</span>
-          </a>
-        )}
-
-        {project.links?.frontend && (
-          <a
-            href={project.links.frontend}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold
-              border border-slate-700 bg-slate-900/90 hover:bg-slate-800 text-slate-200 hover:text-white
-              hover:border-blue-500/50 transition-all"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            <span>FE REPO</span>
-          </a>
-        )}
-
-        {project.links?.websocket && (
-          <a
-            href={project.links.websocket}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold
-              border border-purple-800/80 bg-purple-950/50 hover:bg-purple-900/80 text-purple-200 hover:text-white
-              hover:border-purple-500/60 transition-all shadow-md"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            <span>WEBSOCKET REPO</span>
-          </a>
-        )}
-
-        {project.links?.source && !project.links?.backend && !project.links?.frontend && (
-          <a
-            href={project.links.source}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold
-              bg-blue-600 hover:bg-blue-500 text-white shadow-lg shadow-blue-600/30 active:scale-95 transition-all"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-              <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
-            <span>GITHUB SOURCE</span>
-          </a>
-        )}
-      </div>
+      {/* ─── 9. Links (Universal Dynamic Multi-Demo & Repos) ─────────────────── */}
+      {normalizedLinks.length > 0 && (
+        <div className="pt-5 flex flex-wrap items-center gap-3 border-t border-slate-800">
+          {normalizedLinks.map((linkItem, idx) => {
+            const { className, icon } = getLinkButtonStyles(linkItem.type)
+            return (
+              <a
+                key={idx}
+                href={linkItem.url}
+                target="_blank"
+                rel="noreferrer"
+                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${className}`}
+              >
+                {icon}
+                <span>{linkItem.label}</span>
+              </a>
+            )
+          })}
+        </div>
+      )}
 
       {/* ─── Lightbox Portal: Viewport-Centered Fullscreen Zoom ────────────────── */}
       {activeLightboxImg &&

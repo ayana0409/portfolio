@@ -385,9 +385,145 @@
       }
     },
     {
-      "id": "motorcycle-repair-shop",
+      "id": "quickbite",
       "type": "info",
       "order": 2,
+      "coverImage": "/assets/images/projects/quickbite/quickbite-cover.png",
+      "title": {
+        "vi": "QuickBite — Nền tảng Đặt & Giao Đồ Ăn Polyglot Microservices",
+        "en": "QuickBite — Polyglot Microservices Food Delivery Platform"
+      },
+      "summary": {
+        "vi": "Nền tảng đặt & giao đồ ăn kiến trúc Polyglot Microservices kết hợp .NET 10 (ABP Framework), Spring Boot 3.3 (Java 21) và NestJS 11, điều phối giao dịch phân tán qua Apache Kafka (MassTransit Saga State Machine, Outbox/Inbox Pattern) cùng 2 giao diện Next.js 16 (Customer Web) và React 19 + Vite 8 (Admin/Merchant Portal).",
+        "en": "Enterprise-grade food delivery platform engineered with a Polyglot Microservices architecture (.NET 10 / ABP Framework, Spring Boot 3.3 / Java 21, NestJS 11), distributed transaction orchestration via Apache Kafka (MassTransit Saga State Machine, Outbox/Inbox patterns), and dual frontends (Next.js 16 Customer Web & React 19 / Vite 8 Admin/Merchant Portal)."
+      },
+      "technologies": [
+        ".NET 10",
+        "ABP Framework 10",
+        "C#",
+        "Java 21",
+        "Spring Boot 3.3",
+        "NestJS 11",
+        "TypeScript",
+        "Apache Kafka",
+        "PostgreSQL",
+        "MySQL",
+        "Redis",
+        "MongoDB",
+        "OpenIddict (OAuth2/OIDC)",
+        "Next.js 16",
+        "React 19",
+        "Vite 8",
+        "Tailwind CSS",
+        "TanStack Query 5",
+        "Leaflet",
+        "Docker"
+      ],
+      "description": {
+        "vi": "Hệ thống gồm 6 microservices backend phân bổ theo thế mạnh từng domain:\n- Identity Service (.NET 10/ABP): Quản lý IAM/RBAC & OpenIddict OIDC.\n- Order Service (.NET 10/ABP/MySQL): Điều phối Saga Orchestration qua MassTransit.\n- Payment Service & Inventory Service (Spring Boot 3.3): Xử lý uỷ quyền thanh toán Hexagonal và giữ chỗ tồn kho (Optimistic Locking JPA).\n- Catalog Service & API Gateway BFF (NestJS 11): Quản lý thực đơn, dynamic config 3 cấp (Redis -> Mongo -> Env), rate limit và JWKS validation.\n\nTầng Client bao gồm 2 phân hệ chính:\n- Customer Web App: Next.js 16 SSR kết hợp Leaflet GPS tracking.\n- Admin & Merchant Portal: React 19 + Vite 8 + TanStack Query 5 + Recharts.\n\nToàn bộ giao tiếp bất đồng bộ được thực hiện qua Apache Kafka, kết hợp với Transactional Outbox & Inbox Pattern nhằm đảm bảo tính toàn vẹn dữ liệu.",
+        "en": "The platform comprises 6 backend microservices aligned with domain strengths:\n- Identity Service (.NET 10/ABP): for IAM/RBAC & OpenIddict OIDC.\n- Order Service (.NET 10/ABP/MySQL): orchestrating distributed Sagas via MassTransit.\n- Payment & Inventory Services (Spring Boot 3.3): for Hexagonal payment workflows and high-concurrency stock reservation (JPA Optimistic Locking).\n- Catalog Service & API Gateway BFF (NestJS 11): managing menus, 3-tier dynamic config (Redis -> Mongo -> Env), rate limiting and JWKS edge validation.\n\nThe frontend layer features 2 main applications:\n- Customer Web App: Next.js 16 SSR + Leaflet live GPS tracking.\n- Admin & Merchant Portal: React 19 + Vite 8 + TanStack Query 5 + Recharts.\n\nAsynchronous event streams run on Apache Kafka using Transactional Outbox and Inbox patterns for guaranteed reliability."
+      },
+      "features": {
+        "vi": [
+          "Kiến trúc Polyglot Microservices chuyên biệt: .NET 10 (IAM, Order Saga), Spring Boot 3.3 (Payment, Inventory), NestJS 11 (Catalog, Gateway BFF)",
+          "Điều phối giao dịch phân tán (Orchestration Saga) bằng MassTransit State Machine với cơ chế bù trừ (Compensation) tự động khi thất bại",
+          "Đảm bảo tin cậy và chống trùng lặp với Transactional Outbox Worker, Idempotent Consumer (Inbox Pattern) và Optimistic Locking JPA",
+          "Xác thực tập trung OIDC / OAuth2 qua OpenIddict 7.2 (RS256 JWT, JWKS discovery), RBAC đa tầng và xác thực ở Edge Gateway",
+          "API Gateway BFF tích hợp Dynamic Config 3 cấp (Redis -> MongoDB -> .env fallback), Rate Limiting, Correlation ID tracing và Wake-up health probe",
+          "Customer Web App (Next.js 16 SSR) hỗ trợ tìm kiếm món ăn, giỏ hàng, đặt hàng và theo dõi lộ trình tài xế thời gian thực với Leaflet GPS",
+          "Admin & Merchant Portal (React 19 + Vite 8) quản lý thực đơn, duyệt yêu cầu mở quán (JSONB), xử lý đơn hàng và thống kê doanh thu với Recharts"
+        ],
+        "en": [
+          "Domain-driven Polyglot Microservices: .NET 10 (IAM, Order Saga), Spring Boot 3.3 (Payment, Inventory), NestJS 11 (Catalog, Gateway BFF)",
+          "Distributed Orchestration Saga via MassTransit State Machine with automated rollback and compensation on payment/inventory failure",
+          "Guaranteed data consistency via Transactional Outbox workers, Idempotent Consumer (Inbox Pattern) and JPA Optimistic Locking",
+          "Centralized OIDC / OAuth2 IAM powered by OpenIddict 7.2 (RS256 JWT, JWKS discovery), multi-tenant RBAC, and edge token verification",
+          "Resilient API Gateway (BFF) with 3-tier dynamic configuration (Redis -> MongoDB -> .env), rate limiting, correlation tracing and cold-start wake-up probe",
+          "Customer Storefront (Next.js 16 SSR) featuring fast menu search, dynamic checkout, and interactive live GPS delivery tracking with Leaflet",
+          "Admin & Merchant Portal (React 19 + Vite 8) with menu designer, generic JSONB onboarding request approvals, order triage, and Recharts analytics"
+        ]
+      },
+      "gallery": [
+        {
+          "id": "qb-img-001",
+          "src": "/assets/images/projects/quickbite/quickbite-home.png",
+          "caption": {
+            "vi": "Giao diện trang chủ Customer Web App (Next.js 16 SSR).",
+            "en": "Customer Web App storefront interface (Next.js 16 SSR)."
+          }
+        },
+        {
+          "id": "qb-img-002",
+          "src": "/assets/images/projects/quickbite/quickbite-tracking.png",
+          "caption": {
+            "vi": "Theo dõi tiến độ đơn hàng và vị trí tài xế thời gian thực với Leaflet GPS.",
+            "en": "Real-time order tracking and driver route with Leaflet GPS."
+          }
+        },
+        {
+          "id": "qb-img-003",
+          "src": "/assets/images/projects/quickbite/quickbite-admin-orders.png",
+          "caption": {
+            "vi": "Bảng điều khiển quản lý và xử lý đơn hàng dành cho Merchant & Admin.",
+            "en": "Merchant & Admin dashboard for real-time order triage."
+          }
+        },
+        {
+          "id": "qb-img-004",
+          "src": "/assets/images/projects/quickbite/quickbite-boot-screen.png",
+          "caption": {
+            "vi": "Màn hình BootScreen hoạt họa kiểm tra trạng thái sức khỏe (Health Check Wake-up) của toàn bộ Microservices.",
+            "en": "Animated BootScreen visualizing health-probe wake-up status across all microservices."
+          }
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "vi": "TRẢI NGHIỆM WEB KHÁCH HÀNG ↗",
+            "en": "CUSTOMER WEB DEMO ↗"
+          },
+          "url": "https://quickbite-wnkc.onrender.com/",
+          "type": "demo"
+        },
+        {
+          "label": {
+            "vi": "CỔNG QUẢN TRỊ & MERCHANT ↗",
+            "en": "ADMIN & MERCHANT PORTAL ↗"
+          },
+          "url": "https://quickbitemanager.onrender.com/",
+          "type": "demo-alt"
+        },
+        {
+          "label": {
+            "vi": "POLYGLOT BACKEND REPO",
+            "en": "POLYGLOT BACKEND REPO"
+          },
+          "url": "https://github.com/ayana0409/QuickBite",
+          "type": "repo-blue"
+        },
+        {
+          "label": {
+            "vi": "CUSTOMER WEB REPO (NEXT.JS 16)",
+            "en": "CUSTOMER WEB REPO (NEXT.JS 16)"
+          },
+          "url": "https://github.com/ayana0409/QuickBite/tree/main/src/quick-bite-customer-web",
+          "type": "repo-cyan"
+        },
+        {
+          "label": {
+            "vi": "ADMIN PORTAL REPO (REACT 19)",
+            "en": "ADMIN PORTAL REPO (REACT 19)"
+          },
+          "url": "https://github.com/ayana0409/QuickBite/tree/main/src/quick-bite-admin-portal",
+          "type": "repo-purple"
+        }
+      ]
+    },
+    {
+      "id": "motorcycle-repair-shop",
+      "type": "info",
+      "order": 3,
       "coverImage": "/assets/images/projects/motorcycle-cover.png",
       "title": {
         "vi": "Hệ thống Quản lý Tiệm Sửa Xe",
@@ -433,7 +569,7 @@
     {
       "id": "dev-photo-journal",
       "type": "gallery",
-      "order": 3,
+      "order": 4,
       "coverImage": "/assets/images/projects/photo-journal-cover.png",
       "title": {
         "vi": "Nhật ký Ảnh Lập trình viên",

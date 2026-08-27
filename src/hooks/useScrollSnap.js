@@ -1,151 +1,76 @@
 import { useEffect } from 'react'
-import { gsap } from 'gsap'
-import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-
-gsap.registerPlugin(ScrollToPlugin)
 
 /**
- * useScrollSnap Hook
+ * useScrollSnap Hook (Pure Native CSS Snapping Integration)
  * 
- * 30% Intent-Based Section Swapping Engine:
- * - Detects light scroll gestures (30% threshold / gentle flick) in both UP and DOWN directions.
- * - Automatically advances smoothly to the next or previous full-height section.
- * - Prevents jitter, skips, and erratic scrolling with an animation lock.
- * - Respects detail modal state (disables auto-jump when viewing project details).
- * - Full support for Mouse Wheel, Touch Gestures, and Keyboard Navigation.
+ * Philosophy:
+ * - Relies 100% on Native CSS Scroll Snapping (`scroll-snap-type: y mandatory` & `scroll-snap-stop: always`)
+ *   for hardware-accelerated 120fps trackpad physics without JS wheel hijacking.
+ * - Guarantees exactly 1 section transition per flick, with ZERO double-skips and ZERO jitter.
+ * - Provides keyboard navigation (Arrow Up/Down, Page Up/Down, Spacebar).
  */
 export function useScrollSnap() {
   useEffect(() => {
-    let currentIndex = 0
-    let isAnimating = false
-    let touchStartY = 0
-
     const getSections = () => Array.from(document.querySelectorAll('section'))
 
-    // Sync initial index based on current scroll position
-    const updateCurrentIndexFromScroll = () => {
+    // Get current section based on scroll position
+    const getCurrentSectionIndex = () => {
       const sections = getSections()
-      if (!sections.length) return
+      if (!sections.length) return 0
 
       const scrollY = window.scrollY || document.documentElement.scrollTop
-      let closestIdx = 0
+      let activeIdx = 0
       let minDiff = Infinity
 
       sections.forEach((sec, idx) => {
-        const diff = Math.abs(sec.offsetTop - scrollY)
+        const top = sec.offsetTop
+        const diff = Math.abs(top - scrollY)
         if (diff < minDiff) {
           minDiff = diff
-          closestIdx = idx
+          activeIdx = idx
         }
       })
 
-      currentIndex = closestIdx
+      return activeIdx
     }
 
-    updateCurrentIndexFromScroll()
-
-    // Smooth programmatic transition to a target section index
-    const goToSection = (targetIndex) => {
+    // Smoothly scroll to target section index
+    const scrollToSection = (targetIndex) => {
       const sections = getSections()
       if (!sections.length || targetIndex < 0 || targetIndex >= sections.length) {
         return
       }
 
-      isAnimating = true
-      currentIndex = targetIndex
-
-      const targetTop = sections[targetIndex].offsetTop
-
-      gsap.to(window, {
-        scrollTo: { y: targetTop, autoKill: false },
-        duration: 0.7,
-        ease: 'power2.out',
-        overwrite: 'auto',
-        onComplete: () => {
-          // Cooldown to prevent multi-triggering
-          setTimeout(() => {
-            isAnimating = false
-          }, 120)
-        },
-      })
-    }
-
-    // ── 1. MOUSE WHEEL GESTURE (30% Threshold Detection) ───────────────────
-    const handleWheel = (e) => {
-      // If modal drawer is open (body overflow is hidden), allow natural modal inner scroll
-      if (document.body.style.overflow === 'hidden') return
-
-      // If already transitioning, block raw scroll to ensure clean snap
-      if (isAnimating) {
-        e.preventDefault()
-        return
-      }
-
-      // Check for light scroll intent (deltaY threshold >= 25px ~ 30% flick)
-      const threshold = 25
-      if (Math.abs(e.deltaY) >= threshold) {
-        e.preventDefault()
-        const sections = getSections()
-        const direction = e.deltaY > 0 ? 1 : -1
-        const targetIndex = currentIndex + direction
-
-        if (targetIndex >= 0 && targetIndex < sections.length) {
-          goToSection(targetIndex)
-        }
+      const targetEl = sections[targetIndex]
+      if (targetEl) {
+        targetEl.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+        })
       }
     }
 
-    // ── 2. MOBILE TOUCH SWIPE GESTURES ─────────────────────────────────────
-    const handleTouchStart = (e) => {
-      if (document.body.style.overflow === 'hidden') return
-      touchStartY = e.touches[0].clientY
-    }
-
-    const handleTouchEnd = (e) => {
-      if (document.body.style.overflow === 'hidden' || isAnimating) return
-
-      const touchEndY = e.changedTouches[0].clientY
-      const diffY = touchStartY - touchEndY
-
-      // 30px swipe threshold on mobile
-      if (Math.abs(diffY) > 35) {
-        const sections = getSections()
-        const direction = diffY > 0 ? 1 : -1
-        const targetIndex = currentIndex + direction
-
-        if (targetIndex >= 0 && targetIndex < sections.length) {
-          goToSection(targetIndex)
-        }
-      }
-    }
-
-    // ── 3. KEYBOARD NAVIGATION ─────────────────────────────────────────────
+    // ── KEYBOARD NAVIGATION ONLY ─────────────────────────────────────────────
     const handleKeyDown = (e) => {
+      // If modal drawer is open or user is typing in form inputs, do nothing
       if (document.body.style.overflow === 'hidden') return
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
 
+      const currentIndex = getCurrentSectionIndex()
+
       if (e.key === 'ArrowDown' || e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) {
         e.preventDefault()
-        goToSection(currentIndex + 1)
+        scrollToSection(currentIndex + 1)
       } else if (e.key === 'ArrowUp' || e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) {
         e.preventDefault()
-        goToSection(currentIndex - 1)
+        scrollToSection(currentIndex - 1)
       }
     }
 
-    // Attach passive: false wheel listener for instant interception
-    window.addEventListener('wheel', handleWheel, { passive: false })
-    window.addEventListener('touchstart', handleTouchStart, { passive: true })
-    window.addEventListener('touchend', handleTouchEnd, { passive: true })
     window.addEventListener('keydown', handleKeyDown)
-    window.addEventListener('resize', updateCurrentIndexFromScroll)
 
     return () => {
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchend', handleTouchEnd)
       window.removeEventListener('keydown', handleKeyDown)
-      window.removeEventListener('resize', updateCurrentIndexFromScroll)
     }
   }, [])
 }

@@ -15,6 +15,7 @@
 
   body {
     scroll-snap-type: y mandatory;
+    overscroll-behavior-y: none;
   }
 
   section {
