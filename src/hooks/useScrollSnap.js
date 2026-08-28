@@ -1,19 +1,23 @@
 import { useEffect } from 'react'
 
 /**
- * useScrollSnap Hook (Pure Native CSS Snapping Integration)
+ * useScrollSnap Hook (Magnetic Auto-Fix & Section Snapping Engine)
  * 
- * Philosophy:
- * - Relies 100% on Native CSS Scroll Snapping (`scroll-snap-type: y mandatory` & `scroll-snap-stop: always`)
- *   for hardware-accelerated 120fps trackpad physics without JS wheel hijacking.
- * - Guarantees exactly 1 section transition per flick, with ZERO double-skips and ZERO jitter.
- * - Provides keyboard navigation (Arrow Up/Down, Page Up/Down, Spacebar).
+ * Features:
+ * - Magnetic Auto-Fix: Automatically pulls and locks (snaps) to the nearest section
+ *   when scrolling slows down or stops nearby, preventing floating in-between states.
+ * - Native 120fps CSS Scroll Snap synchronization.
+ * - Respects detail drawer modal state (unlocks full natural inner scrolling when open).
+ * - Smooth keyboard navigation (Arrow Up/Down, Page Up/Down, Spacebar).
  */
 export function useScrollSnap() {
   useEffect(() => {
+    let scrollTimeout = null
+    let isSnapping = false
+
     const getSections = () => Array.from(document.querySelectorAll('section'))
 
-    // Get current section based on scroll position
+    // Get current section index based on scroll position
     const getCurrentSectionIndex = () => {
       const sections = getSections()
       if (!sections.length) return 0
@@ -43,16 +47,58 @@ export function useScrollSnap() {
 
       const targetEl = sections[targetIndex]
       if (targetEl) {
+        isSnapping = true
         targetEl.scrollIntoView({
           behavior: 'smooth',
           block: 'start',
         })
+        setTimeout(() => {
+          isSnapping = false
+        }, 400)
       }
     }
 
-    // ── KEYBOARD NAVIGATION ONLY ─────────────────────────────────────────────
+    // ── 1. MAGNETIC AUTO-FIX TO NEAREST SECTION ─────────────────────────────
+    // When the user stops scrolling or lands near a section, automatically
+    // magnetic-snap strictly to that section top.
+    const handleScroll = () => {
+      // If modal drawer is open, let inner container scroll naturally
+      if (document.body.style.overflow === 'hidden' || isSnapping) return
+
+      clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        const sections = getSections()
+        if (!sections.length) return
+
+        const scrollY = window.scrollY || document.documentElement.scrollTop
+        let closestSection = null
+        let minDiff = Infinity
+
+        sections.forEach((sec) => {
+          const top = sec.offsetTop
+          const diff = Math.abs(top - scrollY)
+          if (diff < minDiff) {
+            minDiff = diff
+            closestSection = sec
+          }
+        })
+
+        // If the page is slightly off (between 3px and 60% of viewport height), magnetic-snap into place!
+        if (closestSection && minDiff > 4 && minDiff < window.innerHeight * 0.6) {
+          isSnapping = true
+          closestSection.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+          setTimeout(() => {
+            isSnapping = false
+          }, 350)
+        }
+      }, 100)
+    }
+
+    // ── 2. KEYBOARD NAVIGATION ───────────────────────────────────────────────
     const handleKeyDown = (e) => {
-      // If modal drawer is open or user is typing in form inputs, do nothing
       if (document.body.style.overflow === 'hidden') return
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
 
@@ -67,9 +113,12 @@ export function useScrollSnap() {
       }
     }
 
+    window.addEventListener('scroll', handleScroll, { passive: true })
     window.addEventListener('keydown', handleKeyDown)
 
     return () => {
+      clearTimeout(scrollTimeout)
+      window.removeEventListener('scroll', handleScroll)
       window.removeEventListener('keydown', handleKeyDown)
     }
   }, [])

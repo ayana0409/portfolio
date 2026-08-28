@@ -9,12 +9,12 @@
   html {
     scroll-behavior: smooth;
     scroll-snap-type: y mandatory;
+    overflow-y: scroll;
     scrollbar-width: thin;
     scrollbar-color: #334155 transparent;
   }
 
   body {
-    scroll-snap-type: y mandatory;
     overscroll-behavior-y: none;
   }
 
@@ -23,6 +23,7 @@
     scroll-snap-stop: always;
     height: 100vh;
     height: 100dvh;
+    min-height: 100vh;
   }
 
   /* ─── Global Ultra-Sleek Custom Scrollbar ────────────────────────────────── */
