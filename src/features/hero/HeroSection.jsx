@@ -86,12 +86,12 @@ export default function HeroSection({ onExploreClick }) {
   return (
     <section
       ref={heroRef}
-      className="relative h-screen w-full overflow-hidden bg-slate-950 text-white select-none flex flex-col justify-between"
+      className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-slate-950 text-white select-none flex flex-col justify-between"
     >
       {/* ─── Layered Cosmic & Tech Backgrounds ─────────────────────────────── */}
       {/* 1. Deep Space Nebula Radial Gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/30 via-slate-950 to-black" />
-      <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
 
       {/* 2. SpaceX Rocket Wallpaper (Optional external layer with graceful fallback) */}
       <div
@@ -109,25 +109,25 @@ export default function HeroSection({ onExploreClick }) {
       <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#60a5fa_1px,transparent_1px)] [background-size:28px_28px] pointer-events-none" />
 
       {/* Top spacer for navbar clearance */}
-      <div className="relative z-10 w-full h-20" />
+      <div className="relative z-10 w-full h-16 sm:h-20" />
 
       {/* ─── Content: SpaceX Bottom-Left Positioning ──────────────────────── */}
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-12 md:px-20 pb-28 md:pb-32 flex flex-col items-start text-left space-y-4"
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 lg:px-20 pb-20 sm:pb-28 md:pb-32 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto md:my-0"
       >
         {/* Mission Subtitle */}
-        <p className="text-xs sm:text-sm font-mono tracking-[0.3em] uppercase text-blue-400 font-semibold">
+        <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.2em] sm:tracking-[0.3em] uppercase text-blue-400 font-semibold">
           {roleText}
         </p>
 
         {/* Main Headline */}
-        <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-[0.12em] text-white leading-none drop-shadow-lg">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-[0.06em] sm:tracking-[0.12em] text-white leading-tight drop-shadow-lg break-words max-w-full">
           {heroHeading}
         </h1>
 
         {/* Mission / Bio statement */}
-        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.2em] text-slate-300 max-w-2xl uppercase leading-relaxed pb-2">
+        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.1em] sm:tracking-[0.2em] text-slate-300 max-w-2xl uppercase leading-relaxed pb-1 sm:pb-2">
           {missionText}
         </p>
       </div>
@@ -136,7 +136,7 @@ export default function HeroSection({ onExploreClick }) {
       <div
         ref={scrollIndicatorRef}
         onClick={handleScrollDown}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 cursor-pointer p-2 text-white/80 hover:text-white transition-colors"
+        className="absolute bottom-4 sm:bottom-8 left-1/2 -translate-x-1/2 z-20 cursor-pointer p-2 text-white/80 hover:text-white transition-colors"
         role="button"
         tabIndex={0}
         aria-label="Scroll to content"
@@ -146,7 +146,7 @@ export default function HeroSection({ onExploreClick }) {
             SCROLL
           </span>
           <svg
-            className="w-6 h-6 animate-pulse"
+            className="w-5 h-5 sm:w-6 sm:h-6 animate-pulse"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"

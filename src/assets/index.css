@@ -5,25 +5,45 @@
 
 /* --- Base layer overrides --- */
 @layer base {
-  /* Smooth scrolling & Full-page Section Snapping */
+  /* Smooth scrolling & Adaptive Section Snapping */
   html {
     scroll-behavior: smooth;
-    scroll-snap-type: y mandatory;
-    overflow-y: scroll;
+    overflow-y: auto;
     scrollbar-width: thin;
     scrollbar-color: #334155 transparent;
   }
 
+  /* Default (Mobile & Small/Landscape screens): Natural smooth scrolling, auto height */
   body {
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   section {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    height: 100vh;
-    height: 100dvh;
     min-height: 100vh;
+    min-height: 100dvh;
+    height: auto;
+    scroll-snap-align: none;
+    scroll-snap-stop: normal;
+  }
+
+  /* Desktop Viewports (>=768px width and >=680px height): Fullscreen Magnetic Snapping */
+  @media (min-width: 768px) and (min-height: 680px) {
+    html {
+      scroll-snap-type: y mandatory;
+      overflow-y: scroll;
+    }
+
+    body {
+      overscroll-behavior-y: none;
+    }
+
+    section {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      height: 100vh;
+      height: 100dvh;
+    }
   }
 
   /* ─── Global Ultra-Sleek Custom Scrollbar ────────────────────────────────── */

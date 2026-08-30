@@ -94,10 +94,10 @@ export default function ExperienceSection() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative h-screen h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-4 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto snap-start snap-always select-none"
+      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto select-none"
     >
       {/* Background Ambient Glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[250px] sm:h-[350px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
 
       {/* ─── Section Header ─────────────────────────────────────────────────── */}
       <div className="text-center space-y-1 mb-2 relative z-10 w-full">
@@ -106,11 +106,11 @@ export default function ExperienceSection() {
           <span>03 / CAREER & WORK EXPERIENCE</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-[0.12em] text-white">
+        <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-[0.08em] sm:tracking-[0.12em] text-white">
           {currentLang === 'vi' ? 'KINH NGHIỆM LÀM VIỆC' : 'WORK EXPERIENCE'}
         </h2>
 
-        <p className="text-[11px] sm:text-xs font-mono tracking-wider uppercase text-slate-400 max-w-lg mx-auto leading-relaxed">
+        <p className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-slate-400 max-w-lg mx-auto leading-relaxed px-2">
           {currentLang === 'vi'
             ? 'HÀNH TRÌNH PHÁT TRIỂN NĂNG LỰC KỸ THUẬT VÀ ĐÓNG GÓP THỰC TẾ TRONG DOANH NGHIỆP'
             : 'PROFESSIONAL ENGINEERING JOURNEY & MEASURABLE BUSINESS IMPACT'}
@@ -118,63 +118,63 @@ export default function ExperienceSection() {
       </div>
 
       {/* ─── Interactive Career Showcase Book Card ───────────────────────────── */}
-      <div className="w-full relative z-10 my-auto">
-        <div className="relative w-full rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-5 sm:p-7 md:p-8 flex flex-col justify-between">
+      <div className="w-full relative z-10 my-auto py-1">
+        <div className="relative w-full rounded-2xl bg-slate-900/85 backdrop-blur-md border border-slate-800 shadow-[0_20px_50px_rgba(0,0,0,0.6)] p-4 sm:p-7 md:p-8 flex flex-col justify-between">
           {/* Header Metadata */}
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
-            <div className="flex items-center gap-2.5">
-              <span className="px-2.5 py-0.5 rounded-full text-xs font-mono font-semibold uppercase bg-blue-950/80 text-blue-300 border border-blue-800/80">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3 mb-3.5 sm:mb-4 flex-wrap gap-2">
+            <div className="flex items-center gap-2 sm:gap-2.5">
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-semibold uppercase bg-blue-950/80 text-blue-300 border border-blue-800/80">
                 {currentExp.type?.toUpperCase()}
               </span>
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-400">
                 {period}
               </span>
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono text-slate-400">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-400">
                 {location}
               </span>
-              <span className="text-xs font-mono text-slate-600">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-500">
                 ({currentIndex + 1}/{totalExperiences})
               </span>
             </div>
           </div>
 
           {/* Main 2-Column Grid (2/3 Info + 1/3 Visual Preview) */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 sm:gap-6 items-center">
             {/* Left Column (2/3): Role, Company, Summary, Tech Stack & CTA */}
-            <div className="md:col-span-8 space-y-3.5 text-left">
+            <div className="md:col-span-8 space-y-3 sm:space-y-3.5 text-left">
               <div>
-                <span className="text-xs font-mono text-blue-400 font-semibold tracking-wider uppercase block">
+                <span className="text-[11px] sm:text-xs font-mono text-blue-400 font-semibold tracking-wider uppercase block">
                   {company}
                 </span>
-                <h3 className="text-xl sm:text-2xl font-black uppercase text-white tracking-tight leading-snug">
+                <h3 className="text-lg sm:text-2xl font-black uppercase text-white tracking-tight leading-snug">
                   {role}
                 </h3>
               </div>
 
               {/* Summary */}
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans line-clamp-3">
+              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans line-clamp-2 sm:line-clamp-3">
                 {summary}
               </p>
 
               {/* Technologies */}
-              <div className="space-y-1.5 pt-1">
-                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block">
+              <div className="space-y-1.5 pt-0.5 sm:pt-1">
+                <span className="text-[10px] font-mono text-slate-500 uppercase tracking-wider block font-semibold">
                   CORE TECHNOLOGIES:
                 </span>
-                <div className="flex flex-wrap gap-1.5">
+                <div className="flex flex-wrap gap-1 sm:gap-1.5">
                   {currentExp.technologies?.slice(0, 6).map((tech) => (
                     <span
                       key={tech}
-                      className="text-[11px] font-mono px-2.5 py-1 rounded-md bg-slate-950 text-slate-300 border border-slate-800"
+                      className="text-[10px] sm:text-[11px] font-mono px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md bg-slate-950 text-slate-300 border border-slate-800"
                     >
                       {tech}
                     </span>
                   ))}
                   {currentExp.technologies?.length > 6 && (
-                    <span className="text-[11px] font-mono px-2 py-1 rounded-md bg-slate-950 text-blue-400 border border-blue-900/50">
+                    <span className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 sm:py-1 rounded-md bg-slate-950 text-blue-400 border border-blue-900/50">
                       +{currentExp.technologies.length - 6} more
                     </span>
                   )}
@@ -182,11 +182,11 @@ export default function ExperienceSection() {
               </div>
 
               {/* Action Buttons */}
-              <div className="pt-3 flex items-center gap-3">
+              <div className="pt-2 sm:pt-3 flex items-center gap-3">
                 <button
                   type="button"
                   onClick={() => handleOpenDetail(currentExp)}
-                  className="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-semibold tracking-wider uppercase shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
+                  className="w-full sm:w-auto justify-center px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-semibold tracking-wider uppercase shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
                 >
                   <span>{currentLang === 'vi' ? 'XEM CHI TIẾT' : 'VIEW FULL'}</span>
                   <span>→</span>
@@ -197,15 +197,15 @@ export default function ExperienceSection() {
             {/* Right Column (1/3): Visual Card / Timeline Graphic */}
             <div
               onClick={() => handleOpenDetail(currentExp)}
-              className="md:col-span-4 relative group cursor-pointer w-full"
+              className="md:col-span-4 relative group cursor-pointer w-full mt-2 md:mt-0"
             >
-              <div className="relative aspect-[4/3] max-h-[240px] w-full rounded-2xl bg-gradient-to-tr from-slate-950 via-slate-900 to-blue-950 border border-slate-800 group-hover:border-blue-500/60 overflow-hidden shadow-xl group-hover:shadow-[0_0_30px_rgba(59,130,246,0.35)] transition-all duration-300 transform group-hover:scale-[1.02] flex flex-col justify-between p-4">
+              <div className="relative aspect-[16/9] sm:aspect-[4/3] max-h-[180px] sm:max-h-[240px] w-full rounded-2xl bg-gradient-to-tr from-slate-950 via-slate-900 to-blue-950 border border-slate-800 group-hover:border-blue-500/60 overflow-hidden shadow-xl group-hover:shadow-[0_0_30px_rgba(59,130,246,0.35)] transition-all duration-300 transform group-hover:scale-[1.02] flex flex-col justify-between p-3.5 sm:p-4">
                 {coverUrl && (
                   <div className="absolute inset-0 z-0">
                     <img
                       src={coverUrl}
                       alt={role}
-                      className="w-full h-full object-cover opacity-35 group-hover:opacity-60 transition-opacity duration-500"
+                      className="w-full h-full object-cover opacity-40 group-hover:opacity-65 transition-opacity duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
                   </div>
@@ -223,9 +223,9 @@ export default function ExperienceSection() {
                 </div>
 
                 {/* Bottom Tag */}
-                <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800/80 pt-2 bg-slate-950/75 backdrop-blur-md -mx-4 -mb-4 px-4 pb-2.5">
-                  <span className="uppercase text-slate-400">{period}</span>
-                  <span className="text-blue-400 font-bold">CHI TIẾT →</span>
+                <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-slate-400 border-t border-slate-800/80 pt-2 bg-slate-950/75 backdrop-blur-md -mx-3.5 -mb-3.5 sm:-mx-4 sm:-mb-4 px-3.5 sm:px-4 pb-2.5">
+                  <span className="uppercase text-slate-400 truncate max-w-[120px]">{period}</span>
+                  <span className="text-blue-400 font-bold flex-shrink-0">CHI TIẾT →</span>
                 </div>
               </div>
             </div>
@@ -238,17 +238,17 @@ export default function ExperienceSection() {
             <button
               type="button"
               onClick={handlePrev}
-              className="px-4 py-1.5 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer"
+              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[38px] flex items-center"
             >
               ← {t('ui.buttons.prevPage', 'PREV')}
             </button>
-            <span className="text-xs font-mono text-slate-500">
+            <span className="text-xs font-mono text-slate-400">
               {currentIndex + 1} / {totalExperiences}
             </span>
             <button
               type="button"
               onClick={handleNext}
-              className="px-4 py-1.5 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer"
+              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[38px] flex items-center"
             >
               {t('ui.buttons.nextPage', 'NEXT')} →
             </button>
@@ -256,7 +256,7 @@ export default function ExperienceSection() {
         )}
       </div>
 
-      {/* ─── Experience Details Deep-Dive Drawer (2/3 screen width) ─────────── */}
+      {/* ─── Experience Details Deep-Dive Drawer (2/3 screen width on desktop, 100% on mobile) ─── */}
       {selectedExperience && (
         <div
           onClick={handleCloseDetail}
@@ -269,14 +269,14 @@ export default function ExperienceSection() {
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="relative w-full md:w-2/3 lg:w-2/3 h-full bg-slate-950 border-l border-slate-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-6 sm:p-10 custom-scrollbar animate-fade-in-up"
+            className="relative w-full md:w-2/3 lg:w-2/3 h-full bg-slate-950 border-l border-slate-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 custom-scrollbar animate-fade-in-up"
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between pb-6 border-b border-slate-800 sticky top-0 bg-slate-950/90 backdrop-blur-md z-20">
+            <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-slate-800 sticky top-0 bg-slate-950/95 backdrop-blur-md z-20">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-blue-500" />
-                <span className="text-xs font-mono uppercase tracking-widest text-slate-400">
-                  Career Experience Deep Dive
+                <span className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-slate-400">
+                  Career Deep Dive
                 </span>
               </div>
 
@@ -291,30 +291,30 @@ export default function ExperienceSection() {
             </div>
 
             {/* Drawer Body Content */}
-            <div className="py-6 space-y-6 flex-1 text-slate-100">
+            <div className="py-4 sm:py-6 space-y-5 sm:space-y-6 flex-1 text-slate-100">
               {/* Type, Period & Role */}
               <div className="space-y-2 border-b border-slate-800 pb-4">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-semibold bg-blue-950/80 text-blue-300 border border-blue-800/80">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-semibold bg-blue-950/80 text-blue-300 border border-blue-800/80">
                     <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
                     TYPE: {selectedExperience.type?.toUpperCase()}
                   </span>
-                  <span className="text-xs font-mono text-slate-400">
+                  <span className="text-[11px] sm:text-xs font-mono text-slate-400">
                     {selectedExperience.period?.[currentLang] || selectedExperience.period?.vi} | {selectedExperience.location?.[currentLang] || selectedExperience.location?.vi}
                   </span>
                 </div>
 
-                <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
+                <h2 className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
                   {selectedExperience.role?.[currentLang] || selectedExperience.role?.vi}
                 </h2>
-                <p className="text-sm font-mono text-blue-400 font-semibold">
+                <p className="text-xs sm:text-sm font-mono text-blue-400 font-semibold">
                   {selectedExperience.company?.[currentLang] || selectedExperience.company?.vi}
                 </p>
               </div>
 
               {/* Summary Callout */}
-              <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-900/60 shadow-inner">
-                <p className="text-xs md:text-sm text-slate-200 leading-relaxed italic">
+              <div className="p-3.5 sm:p-4 rounded-xl bg-blue-950/40 border border-blue-900/60 shadow-inner">
+                <p className="text-xs sm:text-sm md:text-base text-slate-200 leading-relaxed italic">
                   "{selectedExperience.summary?.[currentLang] || selectedExperience.summary?.vi}"
                 </p>
               </div>
@@ -325,11 +325,11 @@ export default function ExperienceSection() {
                   <h3 className="text-xs font-mono font-bold tracking-wider text-slate-400 uppercase">
                     {currentLang === 'vi' ? 'Công nghệ áp dụng' : 'Technologies Used'}
                   </h3>
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-1.5 sm:gap-2">
                     {selectedExperience.technologies.map((tech) => (
                       <span
                         key={tech}
-                        className="text-xs font-mono px-3 py-1 rounded-md bg-slate-900 text-slate-200 border border-slate-700 hover:border-blue-500/50 transition-colors"
+                        className="text-xs font-mono px-2.5 sm:px-3 py-1 rounded-md bg-slate-900 text-slate-200 border border-slate-700 hover:border-blue-500/50 transition-colors"
                       >
                         {tech}
                       </span>
@@ -340,7 +340,7 @@ export default function ExperienceSection() {
 
               {/* Responsibilities */}
               {responsibilities.length > 0 && (
-                <div className="space-y-2.5 pt-2">
+                <div className="space-y-2 sm:space-y-2.5 pt-2">
                   <h3 className="text-xs font-mono font-bold tracking-wider text-blue-400 uppercase flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -360,7 +360,7 @@ export default function ExperienceSection() {
 
               {/* Key Achievements */}
               {achievements.length > 0 && (
-                <div className="space-y-2.5 pt-2">
+                <div className="space-y-2 sm:space-y-2.5 pt-2">
                   <h3 className="text-xs font-mono font-bold tracking-wider text-emerald-400 uppercase flex items-center gap-2">
                     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
@@ -380,8 +380,8 @@ export default function ExperienceSection() {
             </div>
 
             {/* Drawer Footer */}
-            <div className="pt-6 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-500">
-              <span>Press ESC to exit</span>
+            <div className="pt-4 sm:pt-6 border-t border-slate-800 flex items-center justify-between text-xs font-mono text-slate-500">
+              <span className="hidden sm:inline">Press ESC to exit</span>
               <button
                 type="button"
                 onClick={handleCloseDetail}
@@ -395,7 +395,7 @@ export default function ExperienceSection() {
       )}
 
       {/* ─── Bottom Footer Bar ──────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-500">
+      <div className="relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex flex-col xs:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center">
         <span>CAREER TRACK: BACKEND DEVELOPER</span>
         <span>EXPERIENCE SHOWCASE</span>
       </div>

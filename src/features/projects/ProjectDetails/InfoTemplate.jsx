@@ -42,7 +42,7 @@ function normalizeProjectLinks(links, currentLang) {
   // Example: { demo: "https...", demo2: { label: { vi: "...", en: "..." }, url: "..." } }
   if (typeof links === 'object' && links !== null) {
     return Object.entries(links)
-      .filter(([_, val]) => Boolean(val))
+      .filter(([, val]) => Boolean(val))
       .map(([key, val]) => {
         let url = ''
         let label = ''
@@ -191,7 +191,7 @@ function getLinkButtonStyles(type) {
  * @param {Object} props.project - The project data object from portfolioData.json
  */
 export default function InfoTemplate({ project }) {
-  const { t, i18n } = useTranslation('portfolio')
+  const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeLightboxImg, setActiveLightboxImg] = useState(null)
 
@@ -221,13 +221,13 @@ export default function InfoTemplate({ project }) {
   }, [activeLightboxImg])
 
   return (
-    <div className="space-y-6 animate-fade-in text-slate-100 pb-4">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in text-slate-100 pb-4">
       {/* ─── 1. Header: Type Badge, ID & Order ───────────────────────────────── */}
-      <div className="space-y-2 border-b border-slate-800 pb-4">
+      <div className="space-y-2 border-b border-slate-800 pb-3 sm:pb-4">
         <div className="flex items-center justify-between gap-2 flex-wrap">
           <div className="flex items-center gap-2">
             <span
-              className={`inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono font-semibold uppercase ${
+              className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-semibold uppercase ${
                 project.type === 'gallery'
                   ? 'bg-purple-950/80 text-purple-300 border border-purple-800/80'
                   : 'bg-blue-950/80 text-blue-300 border border-blue-800/80'
@@ -237,19 +237,19 @@ export default function InfoTemplate({ project }) {
               TYPE: {project.type?.toUpperCase()}
             </span>
             {project.order && (
-              <span className="text-xs font-mono text-slate-500">
+              <span className="text-[11px] sm:text-xs font-mono text-slate-500">
                 ORDER: #{project.order}
               </span>
             )}
           </div>
 
-          <span className="text-xs font-mono text-slate-400">
+          <span className="text-[11px] sm:text-xs font-mono text-slate-400">
             ID: #{project.id}
           </span>
         </div>
 
         {/* ─── 2. Title ──────────────────────────────────────────────────────── */}
-        <h2 className="text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
+        <h2 className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
           {title}
         </h2>
       </div>
@@ -275,11 +275,11 @@ export default function InfoTemplate({ project }) {
             }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-          <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-[11px] font-mono text-slate-300 pointer-events-none">
-            <span className="px-2.5 py-1 rounded bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-blue-400 font-semibold shadow">
+          <div className="absolute bottom-2.5 sm:bottom-3 left-3 sm:left-4 right-3 sm:right-4 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-300 pointer-events-none">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-blue-400 font-semibold shadow">
               COVER IMAGE
             </span>
-            <span className="px-2.5 py-1 rounded bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-slate-300 font-semibold shadow flex items-center gap-1">
+            <span className="px-2 sm:px-2.5 py-0.5 sm:py-1 rounded bg-slate-950/80 backdrop-blur-sm border border-slate-800 text-slate-300 font-semibold shadow flex items-center gap-1">
               <span>BẤM ĐỂ PHÓNG TO</span>
               <span>↗</span>
             </span>
@@ -289,15 +289,15 @@ export default function InfoTemplate({ project }) {
 
       {/* ─── 4. Technologies (Tech Stack Pills) ───────────────────────────────── */}
       {project.technologies && project.technologies.length > 0 && (
-        <div className="space-y-2 pt-1">
+        <div className="space-y-1.5 sm:space-y-2 pt-1">
           <h3 className="text-xs font-mono font-bold tracking-wider text-slate-400 uppercase">
             {currentLang === 'vi' ? 'Công nghệ sử dụng' : 'Technologies'}
           </h3>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {project.technologies.map((tech) => (
               <span
                 key={tech}
-                className="text-xs font-mono px-3 py-1 rounded-md
+                className="text-xs font-mono px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-md
                   bg-slate-900 text-slate-200
                   border border-slate-700 hover:border-blue-500/50 transition-colors"
               >
@@ -310,8 +310,8 @@ export default function InfoTemplate({ project }) {
 
       {/* ─── 5. Summary (Executive Brief) ─────────────────────────────────────── */}
       {summary && (
-        <div className="p-4 rounded-xl bg-blue-950/40 border border-blue-900/60 shadow-inner">
-          <p className="text-xs md:text-sm text-slate-200 leading-relaxed italic whitespace-pre-line">
+        <div className="p-3.5 sm:p-4 rounded-xl bg-blue-950/40 border border-blue-900/60 shadow-inner">
+          <p className="text-xs sm:text-sm md:text-base text-slate-200 leading-relaxed italic whitespace-pre-line">
             "{summary}"
           </p>
         </div>
@@ -326,7 +326,7 @@ export default function InfoTemplate({ project }) {
             </svg>
             <span>{currentLang === 'vi' ? 'Kiến trúc & Giải pháp Chi tiết' : 'Architecture & Solution'}</span>
           </h3>
-          <div className="text-xs md:text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-line space-y-2">
+          <div className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-line space-y-2">
             {description}
           </div>
         </div>
@@ -334,7 +334,7 @@ export default function InfoTemplate({ project }) {
 
       {/* ─── 7. Features (Key Capabilities) ──────────────────────────────────── */}
       {features && features.length > 0 && (
-        <div className="space-y-2.5 pt-1">
+        <div className="space-y-2 sm:space-y-2.5 pt-1">
           <h3 className="text-xs font-mono font-bold tracking-wider text-blue-400 uppercase flex items-center gap-2">
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -343,7 +343,7 @@ export default function InfoTemplate({ project }) {
           </h3>
           <ul className="space-y-2 text-xs text-slate-300">
             {features.map((feature, idx) => (
-              <li key={idx} className="flex items-start gap-2.5 bg-slate-900/60 p-3 rounded-xl border border-slate-800/80">
+              <li key={idx} className="flex items-start gap-2.5 bg-slate-900/60 p-2.5 sm:p-3 rounded-xl border border-slate-800/80">
                 <span className="mt-1 w-1.5 h-1.5 rounded-full bg-blue-400 flex-shrink-0" />
                 <span className="leading-relaxed font-sans">{feature}</span>
               </li>
@@ -362,13 +362,13 @@ export default function InfoTemplate({ project }) {
               </svg>
               <span>{currentLang === 'vi' ? 'Bộ sưu tập ảnh & Giao diện' : 'Gallery & Screenshots'}</span>
             </h3>
-            <span className="text-[11px] font-mono text-slate-400">
-              {gallery.length} PHOTOS (CLICK ĐỂ PHÓNG TO)
+            <span className="text-[10px] sm:text-[11px] font-mono text-slate-400">
+              {gallery.length} PHOTOS (BẤM ĐỂ PHÓNG TO)
             </span>
           </div>
 
-          {/* Responsive Gallery Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+          {/* Responsive Gallery Grid: 1 col on mobile, 2 col on tablet/desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             {gallery.map((img, idx) => {
               const caption = img.caption?.[currentLang] || img.caption?.vi || ''
               const resolvedSrc = resolveProjectImage(img.src)
@@ -391,7 +391,7 @@ export default function InfoTemplate({ project }) {
                     />
                   ) : null}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent p-3 flex flex-col justify-between">
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
                     <div className="flex items-center justify-between text-[10px] font-mono text-blue-400">
                       <span className="px-1.5 py-0.5 rounded bg-slate-950/80 border border-slate-800">
                         #{idx + 1}
@@ -416,7 +416,7 @@ export default function InfoTemplate({ project }) {
 
       {/* ─── 9. Links (Universal Dynamic Multi-Demo & Repos) ─────────────────── */}
       {normalizedLinks.length > 0 && (
-        <div className="pt-5 flex flex-wrap items-center gap-3 border-t border-slate-800">
+        <div className="pt-4 sm:pt-5 flex flex-wrap items-center gap-2 sm:gap-3 border-t border-slate-800">
           {normalizedLinks.map((linkItem, idx) => {
             const { className, icon } = getLinkButtonStyles(linkItem.type)
             return (
@@ -425,7 +425,7 @@ export default function InfoTemplate({ project }) {
                 href={linkItem.url}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${className}`}
+                className={`inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-semibold transition-all ${className}`}
               >
                 {icon}
                 <span>{linkItem.label}</span>
@@ -440,17 +440,17 @@ export default function InfoTemplate({ project }) {
         createPortal(
           <div
             onClick={() => setActiveLightboxImg(null)}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-8 bg-black/92 backdrop-blur-lg animate-fade-in"
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/92 backdrop-blur-lg animate-fade-in"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-5xl w-full bg-slate-900/95 border border-slate-700/80 rounded-2xl p-4 sm:p-6 shadow-2xl text-white space-y-4 animate-fade-in-up"
+              className="relative max-w-5xl w-full bg-slate-900/95 border border-slate-700/80 rounded-2xl p-3 sm:p-5 md:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 animate-fade-in-up"
             >
               {/* Modal Top Header */}
-              <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-2.5 sm:pb-3">
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                  <span className="text-xs font-mono font-semibold text-blue-400 uppercase tracking-wider">
+                  <span className="text-[11px] sm:text-xs font-mono font-semibold text-blue-400 uppercase tracking-wider">
                     {activeLightboxImg.id || 'Photo Preview'}
                   </span>
                 </div>
@@ -458,7 +458,7 @@ export default function InfoTemplate({ project }) {
                 <button
                   type="button"
                   onClick={() => setActiveLightboxImg(null)}
-                  className="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 border border-slate-700"
+                  className="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-mono transition-all cursor-pointer flex items-center gap-1.5 border border-slate-700"
                 >
                   <span>✕</span>
                   <span>ĐÓNG</span>
@@ -466,12 +466,12 @@ export default function InfoTemplate({ project }) {
               </div>
 
               {/* Large Image Container */}
-              <div className="w-full max-h-[75vh] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-2">
+              <div className="w-full max-h-[65vh] sm:max-h-[75vh] rounded-xl overflow-hidden bg-slate-950 border border-slate-800 flex items-center justify-center p-1 sm:p-2">
                 {activeLightboxImg.resolvedSrc ? (
                   <img
                     src={activeLightboxImg.resolvedSrc}
                     alt={activeLightboxImg.caption || 'Preview'}
-                    className="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl"
+                    className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain rounded-lg shadow-2xl"
                   />
                 ) : (
                   <span className="font-mono text-xs text-slate-500 py-12">
@@ -482,7 +482,7 @@ export default function InfoTemplate({ project }) {
 
               {/* Caption */}
               {activeLightboxImg.caption && (
-                <div className="p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-center">
+                <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 text-center">
                   <p className="text-xs sm:text-sm text-slate-200 font-sans">
                     {activeLightboxImg.caption}
                   </p>

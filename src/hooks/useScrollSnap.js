@@ -60,10 +60,13 @@ export function useScrollSnap() {
 
     // ── 1. MAGNETIC AUTO-FIX TO NEAREST SECTION ─────────────────────────────
     // When the user stops scrolling or lands near a section, automatically
-    // magnetic-snap strictly to that section top.
+    // magnetic-snap strictly to that section top (desktop only).
     const handleScroll = () => {
-      // If modal drawer is open, let inner container scroll naturally
+      // If modal drawer is open or already snapping, let scroll flow naturally
       if (document.body.style.overflow === 'hidden' || isSnapping) return
+
+      // Disable magnetic snapping on mobile / small screens to allow smooth touch scrolling
+      if (window.innerWidth < 768 || window.innerHeight < 680) return
 
       clearTimeout(scrollTimeout)
       scrollTimeout = setTimeout(() => {
@@ -83,8 +86,8 @@ export function useScrollSnap() {
           }
         })
 
-        // If the page is slightly off (between 3px and 60% of viewport height), magnetic-snap into place!
-        if (closestSection && minDiff > 4 && minDiff < window.innerHeight * 0.6) {
+        // If the page is slightly off (between 4px and 50% of viewport height), magnetic-snap into place!
+        if (closestSection && minDiff > 4 && minDiff < window.innerHeight * 0.5) {
           isSnapping = true
           closestSection.scrollIntoView({
             behavior: 'smooth',
@@ -94,7 +97,7 @@ export function useScrollSnap() {
             isSnapping = false
           }, 350)
         }
-      }, 100)
+      }, 120)
     }
 
     // ── 2. KEYBOARD NAVIGATION ───────────────────────────────────────────────
