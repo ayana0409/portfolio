@@ -91,7 +91,11 @@ ${portfolioContext}`;
  * @returns {Record<string, string>}
  */
 function getCorsHeaders(requestOrigin) {
-  const isAllowed = requestOrigin && ALLOWED_ORIGINS.includes(requestOrigin);
+  const isAllowed =
+    requestOrigin &&
+    (ALLOWED_ORIGINS.includes(requestOrigin) ||
+      requestOrigin.startsWith("http://localhost:") ||
+      requestOrigin.startsWith("http://127.0.0.1:"));
   const allowOriginHeader = isAllowed ? requestOrigin : ALLOWED_ORIGINS[0];
 
   return {

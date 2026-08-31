@@ -77,9 +77,10 @@ export default function ChatBot() {
     setInputMessage('')
     setIsLoading(true)
 
-    // API URL from env or default local worker endpoint
+    // API URL from env or deployed Cloudflare Worker endpoint
     const API_ENDPOINT =
-      import.meta.env.VITE_API_CHAT_URL || 'http://localhost:8787/api/chat'
+      import.meta.env.VITE_API_CHAT_URL ||
+      'https://portfolio-gemini-worker.ayana0409-porfolio.workers.dev/api/chat'
 
     try {
       const response = await fetch(API_ENDPOINT, {
