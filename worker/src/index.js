@@ -270,8 +270,8 @@ export default {
         if (geminiResponse.status === 400 || geminiResponse.status === 403) {
           return createJsonResponse(
             {
-              error: "Invalid API key or bad request.",
-              reply: "Không thể xác thực API Key của hệ thống AI. Vui lòng kiểm tra lại cấu hình.",
+              error: errorMessage,
+              reply: `Không thể kết nối đến Gemini AI (${errorMessage}). Vui lòng kiểm tra lại API Key hoặc Model.`,
             },
             geminiResponse.status,
             corsHeaders
