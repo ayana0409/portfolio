@@ -31,20 +31,6 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
-
-    <!-- Route Normalization to canonical /portfolio/ -->
-    <script>
-      (function () {
-        var pathname = window.location.pathname;
-        var hostname = window.location.hostname;
-        if (hostname.endsWith('github.io')) {
-          // Normalize /Portfolio, /Portfolio/, /, or uppercase variants to /portfolio/
-          if (pathname === '/Portfolio' || pathname === '/Portfolio/' || pathname === '/' || pathname === '') {
-            window.history.replaceState(null, '', '/portfolio/' + window.location.search + window.location.hash);
-          }
-        }
-      })();
-    </script>
   </head>
   <body class="bg-slate-950 text-slate-100 font-sans antialiased">
     <div id="root"></div>
