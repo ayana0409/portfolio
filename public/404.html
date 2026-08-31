@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <title>Redirecting to Portfolio...</title>
+    <script>
+      (function () {
+        var path = window.location.pathname;
+        // Normalize any path variation (/Portfolio, /portfolio, root /) to canonical /portfolio/
+        var targetPath = '/portfolio/';
+        if (path && path !== '/' && !path.toLowerCase().startsWith('/portfolio')) {
+          targetPath = '/portfolio' + (path.startsWith('/') ? path : '/' + path);
+        }
+        window.location.replace(window.location.origin + targetPath + window.location.search + window.location.hash);
+      })();
+    </script>
+  </head>
+  <body style="background-color: #020617; color: #94a3b8; font-family: system-ui, -apple-system, sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+    <p>Đang chuyển hướng đến Portfolio...</p>
+  </body>
+</html>

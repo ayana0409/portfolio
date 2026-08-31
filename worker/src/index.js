@@ -8,7 +8,8 @@ import localPortfolioData from "../../src/data/portfolioData.json";
 // List of allowed origins for CORS
 const ALLOWED_ORIGINS = [
   "https://ayana0409.github.io",
-  "https://ayana0409.github.io/Portfolio"
+  "https://ayana0409.github.io/Portfolio",
+  "https://ayana0409.github.io/portfolio"
 ];
 
 // Default GitHub Raw URL for dynamic live data fetching
