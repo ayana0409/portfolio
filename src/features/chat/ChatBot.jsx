@@ -35,17 +35,17 @@ export default function ChatBot() {
   // Quick suggestions based on active language
   const suggestions = isEn
     ? [
-        "What are Thuận's core skills?",
-        "Tell me about his experience at FPT",
-        "What key projects has he built?",
-        "How can I contact Thuận?",
-      ]
+      "What are Thuận's core skills?",
+      "Tell me about his experience at FPT",
+      "What key projects has he built?",
+      "How can I contact Thuận?",
+    ]
     : [
-        "Thuận có những kỹ năng chính nào?",
-        "Kinh nghiệm làm việc tại FPT Software?",
-        "Các dự án tiêu biểu của Thuận?",
-        "Thông tin liên hệ với Thuận?",
-      ]
+      "Thuận có những kỹ năng chính nào?",
+      "Kinh nghiệm làm việc tại FPT Software?",
+      "Các dự án tiêu biểu của Thuận?",
+      "Thông tin liên hệ với Thuận?",
+    ]
 
   // Auto scroll to bottom whenever messages update
   useEffect(() => {
@@ -328,13 +328,12 @@ export default function ChatBot() {
                   )}
 
                   <div
-                    className={`max-w-[84%] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${
-                      isUser
+                    className={`max-w-[84%] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${isUser
                         ? 'bg-blue-600 text-white rounded-tr-none font-normal'
                         : msg.isError
-                        ? 'bg-red-950/40 text-red-200 border border-red-800/50 rounded-tl-none'
-                        : 'bg-slate-800/90 text-slate-100 border border-slate-700/60 rounded-tl-none'
-                    }`}
+                          ? 'bg-red-950/40 text-red-200 border border-red-800/50 rounded-tl-none'
+                          : 'bg-slate-800/90 text-slate-100 border border-slate-700/60 rounded-tl-none'
+                      }`}
                   >
                     {renderFormattedText(msg.text)}
                   </div>
@@ -440,7 +439,7 @@ export default function ChatBot() {
               <svg className="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
-              <span>{isEn ? 'Ask AI Assistant' : 'Hỏi AI về Thuận'}</span>
+              <span>{isEn ? 'Assistant' : 'Hỗ trợ'}</span>
             </>
           )}
         </span>
