@@ -14,7 +14,7 @@ const ALLOWED_ORIGINS = [
 
 // Default GitHub Raw URL for dynamic live data fetching
 const DEFAULT_DATA_URL =
-  "https://raw.githubusercontent.com/ayana0409/Portfolio/main/src/data/portfolioData.json";
+  "https://raw.githubusercontent.com/ayana0409/portfolio/main/src/data/portfolioData.json";
 
 // In-memory cache for ultra-fast Edge response (TTL: 5 minutes)
 let cachedPortfolioData = null;

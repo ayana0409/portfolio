@@ -6,4 +6,4 @@ compatibility_flags = ["nodejs_compat"]
 [vars]
 ENVIRONMENT = "production"
 GEMINI_MODEL = "gemini-3.1-flash-lite"
-PORTFOLIO_DATA_URL = "https://raw.githubusercontent.com/ayana0409/Portfolio/main/src/data/portfolioData.json"
+PORTFOLIO_DATA_URL = "https://raw.githubusercontent.com/ayana0409/portfolio/main/src/data/portfolioData.json"
