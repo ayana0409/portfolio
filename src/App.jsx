@@ -6,6 +6,7 @@ import SkillsSection from './features/skills/SkillsSection'
 import ExperienceSection from './features/experience/ExperienceSection'
 import ProjectBook from './features/projects/ProjectBook'
 import ContactSection from './features/contact/ContactSection'
+import ChatBot from './features/chat/ChatBot'
 import { scrollToElement } from './utils/helpers'
 
 /**
@@ -18,6 +19,7 @@ import { scrollToElement } from './utils/helpers'
  * - ExperienceSection (Career & Work experience showcase with deep-dive drawer)
  * - ProjectBook (3D interactive flipbook for projects)
  * - ContactSection (Direct contact & social links)
+ * - ChatBot (Floating AI assistant powered by Cloudflare Worker + Gemini)
  */
 export default function App() {
   const handleExploreClick = () => {
@@ -43,6 +45,9 @@ export default function App() {
 
       {/* ── 05. Contact & Inquiries ── */}
       <ContactSection />
+
+      {/* ── 06. Floating AI Assistant ChatBot ── */}
+      <ChatBot />
     </MainLayout>
   )
 }
