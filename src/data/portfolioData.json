@@ -384,6 +384,16 @@
         "backend": "https://github.com/ayana0409/shorter-link-api",
         "frontend": "https://github.com/ayana0409/shorter-link-fe",
         "websocket": "https://github.com/ayana0409/shorter-link-websocket"
+      },
+      "technicalSpec": {
+        "architecture": "Modular Monolith với NestJS, tách biệt Controller - Service - Repository, hỗ trợ mở rộng module độc lập.",
+        "cachingStrategy": "Redis Cache-Aside pattern với TTL cho short URLs, giúp giảm 90% truy vấn đọc vào MongoDB; dùng Redis Hash cho session người dùng.",
+        "databaseAndIndexing": "MongoDB (Mongoose) với compound index { shortCode: 1 } để tối ưu tra cứu O(1); index { userId: 1, createdAt: -1 } cho danh sách quản lý.",
+        "securityAndAuth": "JWT Access Token ngắn hạn kết hợp Refresh Token Rotation và Family Revocation; RBAC 3 cấp phân quyền; Sliding window rate-limiting qua Redis chống brute-force.",
+        "tradeoffsAndChallenges": [
+          "Lựa chọn NanoID ngẫu nhiên thay vì mã hóa tuần tự để tránh bị đoán trước URL, chấp nhận kiểm tra trùng lặp mã (retry tối đa 3 lần).",
+          "Đánh đổi lưu trữ tạm thời daily count trên Redis RAM để tối ưu tốc độ ghi thời gian thực, đồng bộ bất đồng bộ về DB định kỳ."
+        ]
       }
     },
     {
@@ -520,7 +530,19 @@
           "url": "https://github.com/ayana0409/QuickBite",
           "type": "repo-blue"
         }
-      ]
+      ],
+      "technicalSpec": {
+        "architecture": "Polyglot Microservices theo Domain-Driven Design (DDD) và Event-Driven Architecture (EDA) qua Apache Kafka. Phân bổ theo thế mạnh domain: .NET 10 (ABP Framework) cho Identity và Order Service (MassTransit Saga State Machine); Spring Boot 3.3 (Hexagonal Ports & Adapters) cho Payment và Inventory Service; NestJS 11 cho Catalog Service và API Gateway BFF; Frontend phân tách thành Next.js 16 (App Router, SSR/RSC tối ưu SEO cho Storefront khách hàng) và React 19 / Vite 8 (SPA hiệu năng cao cho POS Merchant & Admin Portal).",
+        "cachingStrategy": "Đường ống 2 tầng (2-Layer Pipeline) tại Edge API Gateway: Tầng 1 Global HTTP Redis Cache với TTL động (0–120s đồng bộ từ MongoDB) cho phản hồi < 2ms; Tầng 2 Request Coalescing (RxJS shareReplay) gom các request trùng lặp đồng thời để triệt tiêu Thundering Herd; Redis cache cho JWKS public keys và phiên làm việc của người dùng.",
+        "databaseAndIndexing": "Mô hình Database-per-Service hoàn toàn độc lập: MySQL cho Order Service (tối ưu hóa giao dịch ACID và lịch sử trạng thái đơn hàng); PostgreSQL cho Identity, Payment, Inventory và Catalog (hỗ trợ PostGIS định vị GPS, GIN Index cho full-text search, JSONB cho biến thể món/toppings và catalog requests); MongoDB lưu trữ Dynamic Config 3 lớp tại Gateway; Compound unique index (orderId, foodItemId) chống spam đánh giá và unique index cho SKU món ăn.",
+        "securityAndAuth": "Single Sign-On (SSO) tập trung qua OpenIddict 7.2 (.NET ABP) phát hành JWT RS256; xác thực phi tập trung tại Edge Gateway thông qua JWKS (/.well-known/jwks.json) mà không cần truy vấn database Identity Service; Axios Interceptor với cơ chế Silent Refresh Mutex Queue tại client để tự động làm mới token 401 mà không làm ngắt phiên người dùng; RBAC phân quyền đa cấp (Admin, Sub-Admin, Manager, Merchant, Customer); Rate Limiting qua @nestjs/throttler.",
+        "tradeoffsAndChallenges": [
+          "Xây dựng Mock Payment Gateway (Sandbox UI Simulation) thay vì tích hợp cổng thanh toán trực tuyến thực tế (VNPAY, MoMo, Stripe) nhằm phục vụ mục đích demo đồ án, loại bỏ hoàn toàn các rào cản pháp lý, chi phí duy trì giao dịch và thủ tục đăng ký pháp nhân doanh nghiệp, trong khi vẫn mô phỏng đầy đủ kịch bản thành công/thất bại cho luồng Saga compensation.",
+          "Chấp nhận độ trễ khởi động nguội (Cold-Start latency) khi triển khai hệ thống phân tán trên hạ tầng Cloud gói miễn phí (Render/Koyeb); giải quyết trải nghiệm người dùng bằng component <BootScreen /> trực quan hóa topology mạng qua Anime.js kết hợp cơ chế fan-out health ping (GET /api/system/health/wake-up) để đồng loạt đánh thức toàn bộ microservices trước khi chuyển vào ứng dụng.",
+          "Áp dụng MassTransit State Machine Saga kết hợp Transactional Outbox và Idempotent Inbox để đảm bảo tính nhất quán dữ liệu phân tán không cần 2PC giữa Order, Inventory và Payment, chấp nhận độ phức tạp của mô hình Eventual Consistency để đổi lấy tính sẵn sàng và tính độc lập của từng domain.",
+          "Sử dụng Optimistic Locking (@Version trên JPA Hibernate) tại Inventory Service để xử lý tranh chấp giữ chỗ kho (stock reservation) khi đơn hàng tăng đột biến, chấp nhận cơ chế retry giao dịch thay vì Pessimistic Lock làm nghẽn luồng cơ sở dữ liệu."
+        ]
+      }
     }
   ]
 }

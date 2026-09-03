@@ -95,8 +95,9 @@ The UI uses an opinionated, high-contrast dark palette tailored for backend engi
 ### 4.2. Dynamic Grounding & Anti-Hallucination Logic
 - **Single Source of Truth:** The Worker dynamically fetches the latest `portfolioData.json` directly from GitHub Raw (`raw.githubusercontent.com/ayana0409/portfolio/main/src/data/portfolioData.json`).
 - **Edge Caching:** Responses are cached in-memory and via Cloudflare Cache API for 5 minutes (`cf: { cacheTtl: 300 }`), avoiding GitHub rate limits while providing sub-second latency.
-- **Strict Persona Instructions:**
-  - AI is strictly restricted to answering using information present in `portfolioData.json`.
+- **Strict Persona & Technical-First Instructions:**
+  - AI acts as an engineering-focused assistant representing Thuận, prioritizing Architecture patterns (Clean Architecture, CQRS, Modular Monolith), Database & Caching (Redis, indexing), Engineering Trade-offs, and Security/Performance.
+  - Strictly restricted to answering using information present in `portfolioData.json` (including `technicalDetails` and `technicalSpec`).
   - For unlisted private info (e.g. personal phone number or unlisted technologies), the AI politely declines and directs recruiters to Thuận's official Email and GitHub.
 - **Local Fallback:** Bundled local JSON data is preserved as a fallback if GitHub Raw is temporarily unavailable.
 
