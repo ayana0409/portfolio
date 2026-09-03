@@ -41,6 +41,8 @@ graph TD
 Portfolio/
 ├── .github/workflows/
 │   └── deploy.yml              # GitHub Actions CI/CD for GitHub Pages
+├── docs/                       # Deep-dive technical specifications for AI Function Calling
+│   └── projects/               # Project-specific technical markdown specs (shorter-link, quickbite)
 ├── public/                     # Static public assets, favicon, i18n
 ├── src/
 │   ├── assets/                 # Project & experience showcase images
@@ -104,11 +106,26 @@ The UI uses an opinionated, high-contrast dark palette tailored for backend engi
 ### 4.3. Error Handling & Resilience Matrix
 | Error Scenario | HTTP Code | Handled Behavior | User-Facing Message |
 | :--- | :--- | :--- | :--- |
-| **Rate Limit / Quota Exceeded** | `429` | Graceful JSON response | Friendly rate limit notice with retry advice |
+| **Worker Rate Limit (> 10 req/min)** | `429` | Edge Sliding Window check | Friendly rate limit notice with Retry-After advice |
+| **Token Limit Exceeded (> 200k)** | `400` | Token Ceiling Guard verification | Friendly payload error preventing overflow |
+| **Gemini Rate Limit / Quota** | `429` | Graceful JSON response | Notification to retry in a few moments |
 | **Invalid Key / Bad Config** | `400` / `403` | Logs error & returns detailed message | Clear debug notification for configuration check |
 | **Google Server Overload** | `500` / `502` | Catches 5xx status from Gemini | Notification that AI servers are temporarily busy |
 | **Network Timeout (> 15s)** | `504` | `AbortSignal.timeout(15000)` triggered | Informs user of timeout, prevents UI freezing |
 | **Safety Filter Block** | `200` / `400` | Checks `finishReason === 'SAFETY'` | Explains content policy constraint politely |
+
+### 4.4. Gemini Function Calling & On-Demand Docs Retrieval
+- **Tool Definition:** `fetchRepositoryDocument(docPath)` exposes on-demand reading of technical markdown documents (`docs/projects/shorter-link.md`, `docs/projects/quickbite.md`, `Portfolio_Architecture_Spec.md`).
+- **Security & Path Sanitization:** Rejects path traversal (`..`, `\`, leading slashes), disallows external URLs, and restricts access strictly to `.md`, `.txt`, and `.json` documents.
+- **Edge Caching:** Fetched documents are cached at the Edge for 10 minutes (`DOC_CACHE_TTL_MS = 600000`).
+- **Multi-Turn Flow:** When Gemini returns a `functionCall`, the Worker fetches the requested markdown document, constructs a `functionResponse` part, and executes a second turn to generate the final grounded technical analysis.
+
+### 4.5. Rate Limiting & Token Ceiling Guards
+- **Sliding Window Rate Limiter:** Enforces a hard limit of **10 requests per minute** per client IP (`CF-Connecting-IP`). Requests exceeding this quota return HTTP 429 with a dynamic `Retry-After` header.
+- **200,000 Token Ceiling Guard:** 
+  - Validates total token count of system instruction, conversation turns, and retrieved documentation before dispatching to Gemini API.
+  - Automatically truncates fetched documents if they exceed single-document bounds (150,000 chars) to prevent token spikes.
+  - Fixes `generationConfig.maxOutputTokens: 2048` for deterministic output control.
 
 ---
 
