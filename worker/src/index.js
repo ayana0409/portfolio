@@ -186,8 +186,8 @@ async function fetchRepositoryDocument(docPath, env) {
     if (response.ok) {
       let content = await response.text();
 
-      // Guard: Truncate single doc if it exceeds 150,000 characters (~50k tokens)
-      const MAX_DOC_CHARS = 150000;
+      // Guard: Truncate single doc if it exceeds 30,000 characters (~7.5k tokens) to prevent 503 overload
+      const MAX_DOC_CHARS = 30000;
       if (content.length > MAX_DOC_CHARS) {
         content =
           content.slice(0, MAX_DOC_CHARS) +
@@ -203,7 +203,13 @@ async function fetchRepositoryDocument(docPath, env) {
 
   // Local fallback from bundled docs (ensures zero downtime in local dev and offline tests)
   if (localDocsBundle && (localDocsBundle[resolvedPath] || localDocsBundle[cleanPath])) {
-    const content = localDocsBundle[resolvedPath] || localDocsBundle[cleanPath];
+    let content = localDocsBundle[resolvedPath] || localDocsBundle[cleanPath];
+    const MAX_DOC_CHARS = 30000;
+    if (content.length > MAX_DOC_CHARS) {
+      content =
+        content.slice(0, MAX_DOC_CHARS) +
+        "\n\n[Note: Document truncated to maintain safety token ceiling]";
+    }
     docCache.set(resolvedPath, { content, timestamp: now });
     return content;
   }
@@ -327,16 +333,16 @@ ${portfolioContext}`;
 // Tool definitions for Gemini Function Calling
 const GEMINI_TOOLS = [
   {
-    function_declarations: [
+    functionDeclarations: [
       {
         name: "fetchRepositoryDocument",
         description:
           "Fetches comprehensive technical documentation, architecture specifications, or project deep-dive markdown files from the portfolio repository.",
         parameters: {
-          type: "OBJECT",
+          type: "object",
           properties: {
             docPath: {
-              type: "STRING",
+              type: "string",
               description:
                 "Relative file path of the technical document in the repository (e.g., 'docs/projects/shorter-link.md', 'docs/projects/quickbite.md', 'Portfolio_Architecture_Spec.md').",
             },
@@ -521,8 +527,8 @@ export default {
         },
         contents: initialContents,
         tools: GEMINI_TOOLS,
-        tool_config: {
-          function_calling_config: {
+        toolConfig: {
+          functionCallingConfig: {
             mode: "AUTO",
           },
         },
@@ -533,7 +539,7 @@ export default {
         },
       };
 
-      // 9. Send Turn 1 request to Gemini API (15-second timeout)
+      // 9. Send Turn 1 request to Gemini API (20-second timeout with 503 retry)
       let geminiResponse;
       try {
         geminiResponse = await fetch(geminiEndpoint, {
@@ -542,8 +548,22 @@ export default {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(geminiRequestBody),
-          signal: AbortSignal.timeout(15000),
+          signal: AbortSignal.timeout(20000),
         });
+
+        // Auto retry once if temporary 503 high demand occurs
+        if (geminiResponse.status === 503) {
+          console.warn("Gemini 503 on Turn 1, retrying after 1s...");
+          await new Promise((resolve) => setTimeout(resolve, 1000));
+          geminiResponse = await fetch(geminiEndpoint, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(geminiRequestBody),
+            signal: AbortSignal.timeout(20000),
+          });
+        }
       } catch (fetchErr) {
         console.error("Fetch Gemini API failed or timed out:", fetchErr);
         const isTimeout = fetchErr.name === "TimeoutError" || fetchErr.name === "AbortError";
@@ -579,6 +599,16 @@ export default {
               reply: "Hệ thống AI đang nhận được quá nhiều yêu cầu cùng lúc. Vui lòng chờ vài giây rồi thử lại nhé!",
             },
             429,
+            corsHeaders
+          );
+        }
+
+        if (geminiResponse.status === 503) {
+          return createJsonResponse(
+            {
+              reply: "Máy chủ AI của Google đang chịu tải cao tạm thời. Vui lòng gửi lại câu hỏi sau vài giây nhé!",
+            },
+            200,
             corsHeaders
           );
         }
@@ -619,10 +649,10 @@ export default {
           const docPath = args?.docPath;
           const docContent = await fetchRepositoryDocument(docPath, env);
 
-          // Build Turn 2 contents with functionResponse
+          // Build Turn 2 contents with functionResponse preserving model content and thought_signature
           const followUpContents = [
             ...initialContents,
-            candidate.content, // includes functionCall part
+            candidate.content, // includes functionCall and thoughtSignature parts
             {
               role: "user",
               parts: [
@@ -643,45 +673,83 @@ export default {
           const followUpEstimatedTokens = estimateTotalTokens(followUpContents, systemInstruction);
           if (followUpEstimatedTokens > maxAllowedTokens) {
             console.warn(`Follow-up context exceeded ${maxAllowedTokens} tokens, truncating document content...`);
-            // Truncate function response safely
             followUpContents[2].parts[0].functionResponse.response.content =
-              docContent.slice(0, 100000) + "\n\n[Truncated to guarantee 200k token ceiling]";
+              docContent.slice(0, 30000) + "\n\n[Truncated to guarantee safety token ceiling]";
           }
 
+          // In Gemini API, Turn 2 request MUST retain tools and toolConfig declarations
           const followUpRequestBody = {
             system_instruction: geminiRequestBody.system_instruction,
             contents: followUpContents,
+            tools: GEMINI_TOOLS,
+            toolConfig: geminiRequestBody.toolConfig,
             generationConfig: geminiRequestBody.generationConfig,
           };
 
-          // Send Turn 2 request to Gemini API
+          // Send Turn 2 request to Gemini API (25-second timeout with 503 retry)
           try {
-            const secondResponse = await fetch(geminiEndpoint, {
+            let secondResponse = await fetch(geminiEndpoint, {
               method: "POST",
               headers: {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify(followUpRequestBody),
-              signal: AbortSignal.timeout(15000),
+              signal: AbortSignal.timeout(25000),
             });
+
+            // Auto retry once if 503 high demand occurs on Turn 2
+            if (secondResponse.status === 503) {
+              console.warn("Gemini 503 on Turn 2, retrying after 1s...");
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+              secondResponse = await fetch(geminiEndpoint, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+                body: JSON.stringify(followUpRequestBody),
+                signal: AbortSignal.timeout(25000),
+              });
+            }
 
             if (secondResponse.ok) {
               const secondData = await secondResponse.json();
               const secondCandidate = secondData?.candidates?.[0];
               const finalReplyText =
-                secondCandidate?.content?.parts?.[0]?.text?.trim() ||
+                secondCandidate?.content?.parts?.find((p) => p.text)?.text?.trim() ||
                 "Đã tải tài liệu kỹ thuật thành công nhưng không có câu trả lời phù hợp.";
               return createJsonResponse({ reply: finalReplyText }, 200, corsHeaders);
+            } else {
+              const secondErrData = await secondResponse.json().catch(() => ({}));
+              console.error(`Gemini Turn 2 error [Status ${secondResponse.status}]:`, secondErrData);
+              if (secondResponse.status === 503) {
+                return createJsonResponse(
+                  {
+                    reply: "Máy chủ AI của Google đang chịu tải cao tạm thời khi phân tích tài liệu chuyên sâu. Bạn vui lòng thử lại sau vài giây nhé!",
+                  },
+                  200,
+                  corsHeaders
+                );
+              }
             }
           } catch (followUpErr) {
             console.error("Follow-up Gemini API call failed:", followUpErr);
+            const isTimeout = followUpErr.name === "TimeoutError" || followUpErr.name === "AbortError";
+            if (isTimeout) {
+              return createJsonResponse(
+                {
+                  reply: "Quá trình đọc tài liệu kỹ thuật và tổng hợp mất nhiều thời gian hơn dự kiến. Bạn vui lòng thử lại nhé!",
+                },
+                200,
+                corsHeaders
+              );
+            }
           }
         }
       }
 
       // 12. Standard text response (Turn 1 single response)
       const replyText =
-        candidate?.content?.parts?.[0]?.text?.trim() ||
+        candidate?.content?.parts?.find((p) => p.text)?.text?.trim() ||
         "Xin lỗi, hiện tại tôi không thể tìm thấy câu trả lời phù hợp trong Portfolio của Thuận.";
 
       return createJsonResponse({ reply: replyText }, 200, corsHeaders);
