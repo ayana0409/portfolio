@@ -154,25 +154,28 @@ export default function ChatBot() {
   const formatInlineText = (text) => {
     if (!text) return null
 
-    const tokenRegex = /(\[.*?\]\(https?:\/\/[^\s)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s)]+)/g
+    // Regex to detect markdown links [label](url), bold text **text**, inline code `code`, or bare URLs
+    const tokenRegex = /(\[[^\]]+\]\([^\s)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s)]+)/g
     const parts = text.split(tokenRegex)
 
     return parts.map((part, index) => {
       if (!part) return null
 
-      // 1. Markdown link [text](url)
-      const mdLinkMatch = part.match(/^\[(.*?)\]\((https?:\/\/[^\s)]+)\)$/)
+      // 1. Markdown link [text](url) - supports https, http, mailto, etc.
+      const mdLinkMatch = part.match(/^\[([^\]]+)\]\(([^\s)]+)\)$/)
       if (mdLinkMatch) {
         const [, label, url] = mdLinkMatch
+        const isExternal = url.startsWith('http://') || url.startsWith('https://')
         return (
           <a
             key={index}
             href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
+            target={isExternal ? '_blank' : undefined}
+            rel={isExternal ? 'noopener noreferrer' : undefined}
+            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all font-medium inline-flex items-center gap-0.5"
           >
-            {label}
+            <span>{label}</span>
+            {isExternal && <span className="text-[10px] select-none">↗</span>}
           </a>
         )
       }
@@ -203,9 +206,10 @@ export default function ChatBot() {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all"
+            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all inline-flex items-center gap-0.5"
           >
-            {part}
+            <span>{part}</span>
+            <span className="text-[10px] select-none">↗</span>
           </a>
         )
       }
