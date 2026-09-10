@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageToggle from './LanguageToggle'
+import DocumentsModal from './DocumentsModal'
 import portfolioData from '../../data/portfolioData.json'
 
 /**
@@ -13,12 +14,14 @@ import portfolioData from '../../data/portfolioData.json'
  * - Full Responsive Mobile Navigation with animated Hamburger & Slide-down Drawer
  * - Active pill indicator with subtle cyan/blue neon glow
  * - Backdrop blur effect (`backdrop-blur-md`) with glass styling
+ * - Direct access to Master CV and Academic Transcript download modal
  */
 export default function Header() {
   const { t, i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeSection, setActiveSection] = useState('hero')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const [isDocsModalOpen, setIsDocsModalOpen] = useState(false)
 
   const navLinks = [
     { id: 'about', href: '#about', label: t('nav.about', currentLang === 'vi' ? 'Giới thiệu' : 'About') },
@@ -149,70 +152,108 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Language Toggle (Always accessible) */}
-          <div className="flex items-center">
-            <LanguageToggle />
-          </div>
+            {/* Quick Access: Master CV & Academic Transcript Button */}
+            <button
+              type="button"
+              onClick={() => setIsDocsModalOpen(true)}
+              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase font-semibold text-blue-300 bg-blue-950/70 hover:bg-blue-900/80 border border-blue-600/50 hover:border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all duration-300 cursor-pointer focus:outline-none"
+              title={currentLang === 'vi' ? 'Tải Master CV & Bảng điểm' : 'Download Master CV & Transcript'}
+            >
+              <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+              </svg>
+              <span>{currentLang === 'vi' ? 'Hồ sơ & CV' : 'CV & Docs'}</span>
+            </button>
 
-          {/* Mobile Hamburger Toggle Button (md:hidden) */}
-          <button
-            type="button"
-            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
-            aria-label="Toggle navigation menu"
-            aria-expanded={isMobileMenuOpen}
-            className="md:hidden w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex flex-col items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
-          >
-            <span
-              className={`w-5 h-0.5 bg-current rounded-full transition-transform duration-300 ${
-                isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
-              }`}
-            />
-            <span
-              className={`w-5 h-0.5 bg-current rounded-full transition-opacity duration-300 ${
-                isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
-              }`}
-            />
-            <span
-              className={`w-5 h-0.5 bg-current rounded-full transition-transform duration-300 ${
-                isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
-              }`}
-            />
-          </button>
-        </div>
-      </div>
+            {/* Language Toggle (Always accessible) */}
+            <div className="flex items-center">
+              <LanguageToggle />
+            </div>
 
-      {/* ─── Mobile Slide-Down Drawer Navigation ───────────────────────────────── */}
-      <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl ${
-          isMobileMenuOpen ? 'max-h-96 opacity-100 py-4 px-4' : 'max-h-0 opacity-0 py-0 px-4'
-        }`}
-      >
-        <nav className="flex flex-col space-y-1.5 max-w-sm mx-auto">
-          {navLinks.map((link, idx) => {
-            const isActive = activeSection === link.id
-            return (
-              <a
-                key={link.id}
-                href={link.href}
-                onClick={(e) => handleNavClick(e, link.id)}
-                className={`px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase transition-all flex items-center justify-between cursor-pointer ${
-                  isActive
-                    ? 'bg-blue-600/20 text-blue-400 font-bold border border-blue-500/40 shadow-sm'
-                    : 'text-slate-300 hover:text-white hover:bg-slate-900/80 border border-transparent'
+            {/* Mobile Hamburger Toggle Button (md:hidden) */}
+            <button
+              type="button"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={isMobileMenuOpen}
+              className="md:hidden w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex flex-col items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
+            >
+              <span
+                className={`w-5 h-0.5 bg-current rounded-full transition-transform duration-300 ${
+                  isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''
                 }`}
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="text-[10px] font-mono text-slate-500">0{idx + 1}</span>
-                  <span>{link.label}</span>
-                </div>
-                {isActive && (
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
-                )}
-              </a>
-            )
-          })}
-        </nav>
-      </div>
-    </header>
-  )
-}
+              />
+              <span
+                className={`w-5 h-0.5 bg-current rounded-full transition-opacity duration-300 ${
+                  isMobileMenuOpen ? 'opacity-0' : 'opacity-100'
+                }`}
+              />
+              <span
+                className={`w-5 h-0.5 bg-current rounded-full transition-transform duration-300 ${
+                  isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* ─── Mobile Slide-Down Drawer Navigation ───────────────────────────────── */}
+        <div
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl ${
+            isMobileMenuOpen ? 'max-h-96 opacity-100 py-4 px-4' : 'max-h-0 opacity-0 py-0 px-4'
+          }`}
+        >
+          <nav className="flex flex-col space-y-1.5 max-w-sm mx-auto">
+            {navLinks.map((link, idx) => {
+              const isActive = activeSection === link.id
+              return (
+                <a
+                  key={link.id}
+                  href={link.href}
+                  onClick={(e) => handleNavClick(e, link.id)}
+                  className={`px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase transition-all flex items-center justify-between cursor-pointer ${
+                    isActive
+                      ? 'bg-blue-600/20 text-blue-400 font-bold border border-blue-500/40 shadow-sm'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-900/80 border border-transparent'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="text-[10px] font-mono text-slate-500">0{idx + 1}</span>
+                    <span>{link.label}</span>
+                  </div>
+                  {isActive && (
+                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                  )}
+                </a>
+              )
+            })}
+
+            {/* Mobile Master CV & Transcript Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setIsMobileMenuOpen(false)
+                setIsDocsModalOpen(true)
+              }}
+              className="w-full mt-2 px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/50 flex items-center justify-between cursor-pointer transition-colors shadow-sm"
+            >
+              <div className="flex items-center gap-2">
+                <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                <span>{currentLang === 'vi' ? 'TẢI MASTER CV & BẢNG ĐIỂM' : 'DOWNLOAD CV & TRANSCRIPT'}</span>
+              </div>
+              <span>→</span>
+            </button>
+          </nav>
+        </div>
+
+        {/* ─── Master CV & Transcript Modal Dialog ─────────────────────────────── */}
+        <DocumentsModal
+          isOpen={isDocsModalOpen}
+          onClose={() => setIsDocsModalOpen(false)}
+        />
+      </header>
+    )
+  }
+

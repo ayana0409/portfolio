@@ -108,6 +108,85 @@
     "github": "https://github.com/ayana0409",
     "linkedin": ""
   },
+  "documents": {
+    "title": {
+      "vi": "Hồ sơ & Tài liệu",
+      "en": "Documents & Credentials"
+    },
+    "subtitle": {
+      "vi": "Xem và tải trực tiếp Master CV và Bảng điểm đại học",
+      "en": "Preview and download Master CV and verified academic transcript"
+    },
+    "driveFolderUrl": "https://drive.google.com/drive/folders/1n3qmfhgwmzAoxXKkkqPoON6MVk1FHkqS?usp=sharing",
+    "items": [
+      {
+        "id": "master-cv",
+        "type": "cv",
+        "title": {
+          "vi": "Master CV",
+          "en": "Master CV"
+        },
+        "badge": {
+          "vi": "CV TỔNG HỢP",
+          "en": "MASTER CV"
+        },
+        "description": {
+          "vi": "Hồ sơ tổng hợp toàn bộ kỹ năng, kinh nghiệm và các dự án.",
+          "en": "Master resume covering all skills, work experience and projects."
+        },
+        "filename": "Duong_Doan_Thuan_Master_CV.pdf",
+        "url": "https://drive.google.com/file/d/190nlaEjhGogtuD_Il9YwiTWNDqFcRJFR/view?usp=sharing",
+        "fileType": "PDF",
+        "pages": "2 Pages",
+        "updatedAt": "03/2026",
+        "highlights": {
+          "vi": [
+            ".NET / NestJS / Spring Boot",
+            "Clean Architecture & Microservices",
+            "SQL Server, PostgreSQL, Redis, Kafka"
+          ],
+          "en": [
+            ".NET / NestJS / Spring Boot",
+            "Clean Architecture & Microservices",
+            "SQL Server, PostgreSQL, Redis, Kafka"
+          ]
+        }
+      },
+      {
+        "id": "transcript",
+        "type": "transcript",
+        "title": {
+          "vi": "Bảng điểm Đại học Chính quy",
+          "en": "Official Academic Transcript"
+        },
+        "badge": {
+          "vi": "BẢNG ĐIỂM CHÍNH THỨC",
+          "en": "OFFICIAL TRANSCRIPT"
+        },
+        "description": {
+          "vi": "Bảng điểm chính quy kết quả học tập chuyên ngành Kỹ thuật Phần mềm.",
+          "en": "Official university academic records and course grades in Software Engineering."
+        },
+        "filename": "Duong_Doan_Thuan_Transcript.pdf",
+        "url": "https://docs.google.com/spreadsheets/d/1cg5tmADkPFze0n8yk9P3nII5nSt_DxwP/edit?usp=sharing&ouid=106607915636364214108&rtpof=true&sd=true",
+        "fileType": "PDF",
+        "pages": "Official Record",
+        "updatedAt": "2025",
+        "highlights": {
+          "vi": [
+            "Đạt 8.55/10 chuyên ngành Kỹ thuật Phần mềm (Software Engineer)",
+            "Đạt điểm tuyệt đối 10/10 ở các học phần Thực hành Lập trình .NET, Thực hành OOP và Lập trình căn bản",
+            "Đạt 9.7/10 môn Kiến trúc phần mềm cùng chuỗi điểm A+ (9.0 – 9.5/10) cho toàn bộ các môn Cơ sở dữ liệu và Hệ quản trị CSDL"
+          ],
+          "en": [
+            "Achieved 8.55/10 in Software Engineering major",
+            "Achieved perfect score 10/10 in Practical .NET Programming, OOP, and Basic Programming courses",
+            "Achieved 9.7/10 in Software Architecture and maintained A+ range (9.0–9.5/10) across all Database & DBMS courses"
+          ]
+        }
+      }
+    ]
+  },
   "ui": {
     "navItems": {
       "about": {
@@ -129,6 +208,10 @@
       "contact": {
         "vi": "Liên hệ",
         "en": "Contact"
+      },
+      "documents": {
+        "vi": "Hồ sơ & CV",
+        "en": "Resume & Docs"
       }
     },
     "themeToggle": {

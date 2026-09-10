@@ -81,3 +81,45 @@ export function scrollToElement(elementId, offset = 0) {
 export function getCurrentYear() {
   return new Date().getFullYear()
 }
+
+/**
+ * Resolves static document URLs (PDFs, transcripts, master CV) with Vite BASE_URL.
+ * Supports external URLs (https://, http://) or public relative paths (/docs/...).
+ *
+ * @param {string} path - Document path or external URL
+ * @returns {string} - Fully qualified or base-prefixed URL
+ */
+export function resolveDocumentUrl(path) {
+  if (!path) return ''
+  if (path.startsWith('http://') || path.startsWith('https://')) {
+    return path
+  }
+
+  // Normalize leading slashes
+  const cleanPath = path.startsWith('/') ? path.slice(1) : path
+  const baseUrl = import.meta.env.BASE_URL || '/'
+
+  // Ensure single slash joining
+  return baseUrl.endsWith('/') ? `${baseUrl}${cleanPath}` : `${baseUrl}/${cleanPath}`
+}
+
+/**
+ * Resolves document download URL. If a Google Drive file link is provided
+ * (https://drive.google.com/file/d/FILE_ID/...), transforms it to a direct download link.
+ *
+ * @param {string} path - Document path or Google Drive URL
+ * @returns {string} - Direct download URL or resolved URL
+ */
+export function resolveDocumentDownloadUrl(path) {
+  if (!path) return ''
+
+  // If path is a Google Drive file link, extract file ID for direct download
+  const driveMatch = path.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/)
+  if (driveMatch && driveMatch[1]) {
+    return `https://drive.google.com/uc?export=download&id=${driveMatch[1]}`
+  }
+
+  return resolveDocumentUrl(path)
+}
+
+

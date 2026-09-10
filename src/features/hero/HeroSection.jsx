@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { useTranslation } from 'react-i18next'
 import { scrollToElement } from '../../utils/helpers'
+import DocumentsModal from '../../components/common/DocumentsModal'
 
 /**
  * HeroSection Component (SpaceX Aesthetic)
@@ -12,6 +13,7 @@ import { scrollToElement } from '../../utils/helpers'
 export default function HeroSection({ onExploreClick }) {
   const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
+  const [isDocsModalOpen, setIsDocsModalOpen] = useState(false)
 
   const heroRef = useRef(null)
   const contentRef = useRef(null)
@@ -130,6 +132,29 @@ export default function HeroSection({ onExploreClick }) {
         <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.1em] sm:tracking-[0.2em] text-slate-300 max-w-2xl uppercase leading-relaxed pb-1 sm:pb-2">
           {missionText}
         </p>
+
+        {/* Action Buttons: Explore Projects & Download Master CV / Transcript */}
+        <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4 z-20">
+          <button
+            type="button"
+            onClick={handleScrollDown}
+            className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
+          >
+            <span>{currentLang === 'vi' ? 'KHÁM PHÁ DỰ ÁN' : 'EXPLORE PROJECTS'}</span>
+            <span>↓</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setIsDocsModalOpen(true)}
+            className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-blue-300 hover:text-white font-mono text-xs sm:text-sm font-semibold tracking-wider uppercase border border-blue-500/40 hover:border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.15)] active:scale-95 transition-all cursor-pointer flex items-center gap-2 backdrop-blur-md"
+          >
+            <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>{currentLang === 'vi' ? 'TẢI CV & BẢNG ĐIỂM' : 'RESUME & TRANSCRIPT'}</span>
+          </button>
+        </div>
       </div>
 
       {/* ─── Scroll Down Bouncing Arrow (Bottom Center) ─────────────────────── */}
@@ -160,6 +185,12 @@ export default function HeroSection({ onExploreClick }) {
           </svg>
         </div>
       </div>
+
+      {/* ─── Documents Modal ──────────────────────────────────────────────── */}
+      <DocumentsModal
+        isOpen={isDocsModalOpen}
+        onClose={() => setIsDocsModalOpen(false)}
+      />
     </section>
   )
 }

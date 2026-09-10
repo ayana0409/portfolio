@@ -25,9 +25,10 @@ function extractTranslations(locale) {
     'contact.title': data.contact.title[locale],
 
     // Navigation items
-    'nav.about':    data.ui.navItems.about[locale],
-    'nav.projects': data.ui.navItems.projects[locale],
-    'nav.contact':  data.ui.navItems.contact[locale],
+    'nav.about':     data.ui.navItems.about[locale],
+    'nav.projects':  data.ui.navItems.projects[locale],
+    'nav.contact':   data.ui.navItems.contact[locale],
+    'nav.documents': data.ui.navItems.documents[locale],
 
     // Theme toggle
     'theme.light': data.ui.themeToggle.light[locale],

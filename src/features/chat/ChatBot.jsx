@@ -35,12 +35,14 @@ export default function ChatBot() {
   // Quick suggestions based on active language
   const suggestions = isEn
     ? [
+      "Where can I download Master CV and Transcript?",
       "What are Thuận's core skills?",
       "Tell me about his experience at FPT",
       "What key projects has he built?",
       "How can I contact Thuận?",
     ]
     : [
+      "Làm sao để tải Master CV và Bảng điểm của Thuận?",
       "Thuận có những kỹ năng chính nào?",
       "Kinh nghiệm làm việc tại FPT Software?",
       "Các dự án tiêu biểu của Thuận?",
