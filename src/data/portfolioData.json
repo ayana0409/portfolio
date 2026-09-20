@@ -41,8 +41,9 @@
           "WPF",
           "Entity Framework",
           "ABP Framework",
+          "Nest.js",
           "React.js",
-          "Nest.js"
+          "Next.js"
         ]
       },
       "databases": {

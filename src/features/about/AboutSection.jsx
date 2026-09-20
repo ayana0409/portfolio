@@ -55,28 +55,28 @@ export default function AboutSection() {
             </p>
 
             {/* Responsive 3-Column Stats Matrix */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-slate-800/80 text-center">
-              <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
-                <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-slate-800/80 text-center">
+              <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 flex flex-col justify-center items-center overflow-hidden">
+                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">
                   .NET / NestJS
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
+                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
                   Backend Core
                 </span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
-                <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
+              <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 flex flex-col justify-center items-center overflow-hidden">
+                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">
                   Micro & EDA
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
+                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
                   Architecture
                 </span>
               </div>
-              <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
-                <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
+              <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60 flex flex-col justify-center items-center overflow-hidden">
+                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-blue-400 font-mono tracking-tight whitespace-nowrap">
                   React & Next
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
+                <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
                   Modern Frontend
                 </span>
               </div>
