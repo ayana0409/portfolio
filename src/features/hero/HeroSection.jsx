@@ -82,8 +82,8 @@ export default function HeroSection({ onExploreClick }) {
 
   const missionText =
     currentLang === 'vi'
-      ? 'XÂY DỰNG PHẦN MỀM, TỐI ƯU HIỆU NĂNG, MANG GIẢI PHÁP THỰC TẾ'
-      : 'BUILDING SOFTWARE, OPTIMIZING PERFORMANCE, BRINGING PRACTICAL SOLUTIONS TO REALITY.'
+      ? 'PHÁT TRIỂN HỆ THỐNG TOÀN DIỆN: BACKEND HIỆU NĂNG CAO, KIẾN TRÚC PHÂN TÁN VÀ GIAO DIỆN HIỆN ĐẠI, MƯỢT MÀ'
+      : 'END-TO-END SYSTEM ENGINEERING: HIGH-PERFORMANCE BACKEND, DISTRIBUTED ARCHITECTURE & SEAMLESS MODERN FRONTENDS.'
 
   return (
     <section

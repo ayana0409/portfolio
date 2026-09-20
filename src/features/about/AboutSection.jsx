@@ -58,15 +58,15 @@ export default function AboutSection() {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-slate-800/80 text-center">
               <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
                 <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
-                  .NET
+                  .NET / NestJS
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
-                  Primary Stack
+                  Backend Core
                 </span>
               </div>
               <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
                 <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
-                  API & Micro
+                  Micro & EDA
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
                   Architecture
@@ -74,10 +74,10 @@ export default function AboutSection() {
               </div>
               <div className="p-2.5 sm:p-3 rounded-xl bg-slate-950/60 border border-slate-800/60">
                 <span className="block text-xl sm:text-2xl md:text-3xl font-black text-blue-400 font-mono">
-                  ReactJS
+                  React & Next
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-slate-400 uppercase tracking-wider block mt-0.5">
-                  Frontend
+                  Modern Frontend
                 </span>
               </div>
             </div>

@@ -8,12 +8,12 @@
       "en": "About Me"
     },
     "role": {
-      "vi": "Lập trình viên Backend",
-      "en": "Backend Developer"
+      "vi": "Kỹ sư Phần mềm",
+      "en": "Software Engineer"
     },
     "bio": {
-      "vi": "Tôi là một Lập trình viên Backend với kinh nghiệm trong C# và .NET. Nhanh nhạy trong việc tiếp thu và thích ứng, có tinh thần tự cải thiện liên tục. Làm quen với React, NestJS và cơ bản về Spring Boot. Mong muốn trở thành một Chuyên viên Lập trình Phần mềm với kiến thức chuyên sâu về kiến trúc phần mềm và các hệ thống quy mô lớn.",
-      "en": "Backend Developer with experience in building applications using C# and .NET. Quick learner with strong adaptability and continuous self-improvement mindset. Familiar with React, NestJS, and basic Spring Boot. Aspiring to become a Professional Software Developer with expertise in software architecture and large-scale systems."
+      "vi": "Tôi là một Kỹ sư Phần mềm với thế mạnh nòng cốt về Backend (.NET, NestJS, Spring Boot), chuyên sâu về thiết kế kiến trúc phân tán (Microservices, Clean Architecture), tối ưu hóa cơ sở dữ liệu và xử lý hiệu năng cao. Đồng thời, tôi có năng lực xây dựng các ứng dụng Frontend hiện đại (React, Next.js, Redux Toolkit, Tailwind CSS) với trải nghiệm người dùng mượt mà, tối ưu hóa SEO và đồng bộ dữ liệu thời gian thực.",
+      "en": "Software Engineer with core strength in Backend engineering (.NET, NestJS, Spring Boot), specializing in distributed architectures (Microservices, Clean Architecture), database optimization, and high-concurrency systems. Concurrently proficient in delivering modern frontend applications (React, Next.js, Redux Toolkit, Tailwind CSS) with responsive UX, SEO optimization, and real-time state synchronization."
     },
     "skills": {
       "programming-language": {
@@ -131,8 +131,8 @@
           "en": "MASTER CV"
         },
         "description": {
-          "vi": "Hồ sơ tổng hợp toàn bộ kỹ năng, kinh nghiệm và các dự án.",
-          "en": "Master resume covering all skills, work experience and projects."
+          "vi": "Hồ sơ năng lực kỹ sư toàn diện: nòng cốt Backend .NET, NestJS, Spring Boot, Microservices & Clean Architecture, kết hợp Frontend React, Next.js và các dự án thực tế.",
+          "en": "Comprehensive developer resume detailing .NET, NestJS, Spring Boot backend mastery, Microservices & Clean Architecture, paired with modern React and Next.js frontend delivery."
         },
         "filename": "Duong_Doan_Thuan_Master_CV.pdf",
         "url": "https://drive.google.com/file/d/190nlaEjhGogtuD_Il9YwiTWNDqFcRJFR/view?usp=sharing",
