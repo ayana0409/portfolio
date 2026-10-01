@@ -504,13 +504,9 @@ async function handleTrack(request, env, corsHeaders) {
     const userAgent = request.headers.get("User-Agent") || "";
     const { device, browser, os } = parseUserAgent(userAgent);
 
-    // Bot Shield: Drop automated bot / crawler traffic without inserting into D1
-    if (isEdgeBot(userAgent, asnOrg, cf)) {
-      return new Response(null, {
-        status: 204,
-        headers: corsHeaders,
-      });
-    }
+    // Relaxed Logging: Tag bot visits as 'bot' without dropping any traffic
+    const isBot = isEdgeBot(userAgent, asnOrg, cf) || payload.is_bot;
+    const recordedDevice = isBot ? "bot" : device;
 
     const path = payload.path || "/";
     const referrer = payload.referrer || request.headers.get("Referer") || "Direct";
@@ -526,7 +522,7 @@ async function handleTrack(request, env, corsHeaders) {
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `).bind(
         ip, country, city, region, asnOrg, userAgent,
-        device, browser, os, path, referrer, screenRes, language
+        recordedDevice, browser, os, path, referrer, screenRes, language
       ).run();
     } else {
       console.warn("D1 Database binding 'DB' not detected in environment.");

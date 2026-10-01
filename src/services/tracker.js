@@ -78,7 +78,7 @@ export function isAutomatedBot() {
 
 /**
  * Records a visitor access event to Cloudflare D1 (portfolio_access_history).
- * Deduplicates multiple pings within the same session/tab.
+ * Relaxed logging: records all visits and page refreshes (with 3s debounce to avoid React double-mount).
  * 
  * @param {object} [customData] - Optional extra metadata
  */
@@ -88,24 +88,19 @@ export function trackVisit(customData = {}) {
     return
   }
 
-  // Bot guard: immediately halt tracking if an automated bot/crawler is detected
-  if (isAutomatedBot()) {
-    return
-  }
-
-  // Session deduplication: track once per session path to prevent spam on rapid refresh / re-render
-  const currentPath = window.location.pathname || '/'
-  const sessionKey = `track_${currentPath}`
-  
+  // Short 3-second cooldown to prevent double-firing on React StrictMode mount
+  const now = Date.now()
   try {
-    const alreadyTracked = sessionStorage.getItem(sessionKey)
-    if (alreadyTracked) {
+    const lastTrackTime = Number(sessionStorage.getItem('last_track_timestamp') || '0')
+    if (now - lastTrackTime < 3000) {
       return
     }
-    sessionStorage.setItem(sessionKey, String(Date.now()))
+    sessionStorage.setItem('last_track_timestamp', String(now))
   } catch {
     // Ignore private browsing sessionStorage restrictions
   }
+
+  const currentPath = window.location.pathname || '/'
 
   const endpoint = getTrackEndpoint()
   const payload = {
