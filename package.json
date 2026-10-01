@@ -9,7 +9,9 @@
     "lint": "eslint .",
     "preview": "node node_modules/vite/bin/vite.js preview",
     "worker:dev": "wrangler dev --config worker/wrangler.toml",
-    "worker:deploy": "wrangler deploy --config worker/wrangler.toml"
+    "worker:deploy": "wrangler deploy --config worker/wrangler.toml",
+    "logs": "wrangler d1 execute portfolio-db --remote --config worker/wrangler.toml --command=\"SELECT id, ip, country, city, asn_org, device_type, path, referrer, created_at FROM portfolio_access_history ORDER BY id DESC LIMIT 15\"",
+    "secret:logs": "wrangler secret put LOGS_ADMIN_SECRET --config worker/wrangler.toml"
   },
   "dependencies": {
     "@gsap/react": "^2.1.2",

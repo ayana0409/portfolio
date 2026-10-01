@@ -411,6 +411,51 @@ function parseUserAgent(ua) {
 }
 
 /**
+ * Detects whether the tracking request originates from an automated bot, crawler, or cloud datacenter.
+ * @param {string} userAgent
+ * @param {string} asnOrg
+ * @param {object} cf
+ * @returns {boolean}
+ */
+function isEdgeBot(userAgent, asnOrg, cf = {}) {
+  const ua = (userAgent || "").toLowerCase();
+
+  // 1. Crawler / Bot signature tokens in User-Agent
+  const botKeywords = [
+    "bot", "spider", "crawl", "slurp", "headless", "phantom",
+    "bingpreview", "facebookexternalhit", "whatsapp", "telegrambot",
+    "twitterbot", "linkedinbot", "discordbot", "curl", "wget", "python",
+    "postman", "go-http-client", "apache-httpclient", "java/", "node-fetch",
+    "axios", "lighthouse", "google-inspectiontool", "bytespider", "petalbot",
+    "semrush", "ahrefs", "screaming frog", "dotbot"
+  ];
+  if (botKeywords.some((kw) => ua.includes(kw))) {
+    return true;
+  }
+
+  // 2. Known Datacenter / Cloud Hosting ASNs (Real visitors browse from residential or mobile ISPs)
+  const org = (asnOrg || "").toLowerCase();
+  const datacenterKeywords = [
+    "microsoft", "amazon", "google llc", "digitalocean", "hetzner",
+    "ovh", "linode", "oracle", "alibaba", "tencent", "vultr",
+    "leaseweb", "choopa", "m247", "fastly", "cloudflare"
+  ];
+  if (datacenterKeywords.some((dc) => org.includes(dc))) {
+    return true;
+  }
+
+  // 3. Cloudflare verified bot or low bot score (if enabled on zone)
+  if (
+    cf?.botManagement?.verifiedBot ||
+    (typeof cf?.botManagement?.score === "number" && cf.botManagement.score < 30)
+  ) {
+    return true;
+  }
+
+  return false;
+}
+
+/**
  * Handles visitor tracking endpoint (POST /api/track)
  * Persists rich edge analytics into Cloudflare D1 (portfolio_access_history)
  * @param {Request} request
@@ -445,6 +490,14 @@ async function handleTrack(request, env, corsHeaders) {
 
     const userAgent = request.headers.get("User-Agent") || "";
     const { device, browser, os } = parseUserAgent(userAgent);
+
+    // Bot Shield: Drop automated bot / crawler traffic without inserting into D1
+    if (isEdgeBot(userAgent, asnOrg, cf)) {
+      return new Response(null, {
+        status: 204,
+        headers: corsHeaders,
+      });
+    }
 
     const path = payload.path || "/";
     const referrer = payload.referrer || request.headers.get("Referer") || "Direct";

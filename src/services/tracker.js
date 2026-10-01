@@ -26,6 +26,57 @@ export function getTrackEndpoint() {
 }
 
 /**
+ * Detects whether the client is an automated bot, web crawler, or headless browser.
+ * @returns {boolean}
+ */
+export function isAutomatedBot() {
+  if (typeof window === 'undefined' || typeof navigator === 'undefined') {
+    return true
+  }
+
+  // 1. Standard automation flag (Selenium, Puppeteer, Playwright, Chrome DevTools Protocol)
+  if (navigator.webdriver) {
+    return true
+  }
+
+  const ua = (navigator.userAgent || '').toLowerCase()
+
+  // 2. Headless Chrome explicit token
+  if (ua.includes('headlesschrome') || ua.includes('phantomjs')) {
+    return true
+  }
+
+  // 3. Known crawler, bot, and search engine signatures
+  const botSignatures = [
+    'bot', 'crawl', 'spider', 'slurp', 'bingpreview',
+    'facebookexternalhit', 'whatsapp', 'telegrambot', 'twitterbot',
+    'linkedinbot', 'discordbot', 'embedly', 'quora link preview',
+    'outbrain', 'pinterest', 'vkshare', 'w3c_validator', 'lighthouse',
+    'google-inspectiontool', 'petalbot', 'yandex', 'duckduckbot',
+    'bytespider', 'ahrefs', 'semrush'
+  ]
+  if (botSignatures.some(sig => ua.includes(sig))) {
+    return true
+  }
+
+  // 4. Headless viewport and display signatures (e.g. 0x0 outer dimensions)
+  if (window.outerWidth === 0 && window.outerHeight === 0) {
+    return true
+  }
+
+  // 5. Automated default 800x600 resolution without user languages
+  if (
+    window.screen?.width === 800 &&
+    window.screen?.height === 600 &&
+    (!navigator.languages || navigator.languages.length === 0)
+  ) {
+    return true
+  }
+
+  return false
+}
+
+/**
  * Records a visitor access event to Cloudflare D1 (portfolio_access_history).
  * Deduplicates multiple pings within the same session/tab.
  * 
@@ -34,6 +85,11 @@ export function getTrackEndpoint() {
 export function trackVisit(customData = {}) {
   // Prevent execution on server-side rendering or non-browser environments
   if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return
+  }
+
+  // Bot guard: immediately halt tracking if an automated bot/crawler is detected
+  if (isAutomatedBot()) {
     return
   }
 
