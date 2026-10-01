@@ -16,9 +16,6 @@ binding = "DB"
 database_name = "portfolio-db"
 database_id = "d5b4953e-5d98-4697-a4c7-967528d74fb5"
 
-[observability.logs]
+[observability]
 enabled = true
-invocation_logs = true
 
-[observability.traces]
-enabled = false
