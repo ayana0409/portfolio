@@ -113,19 +113,7 @@ export function trackVisit(customData = {}) {
 
   const jsonPayload = JSON.stringify(payload)
 
-  // 1. Primary method: navigator.sendBeacon (ideal for analytics, fire-and-forget)
-  if (typeof navigator !== 'undefined' && typeof navigator.sendBeacon === 'function') {
-    try {
-      const blob = new Blob([jsonPayload], { type: 'application/json' })
-      const sent = navigator.sendBeacon(endpoint, blob)
-      if (sent) return
-    } catch (err) {
-      // Fallback to fetch if sendBeacon fails
-      console.debug('sendBeacon failed, falling back to fetch', err)
-    }
-  }
-
-  // 2. Secondary method: keepalive fetch
+  // Reliable cross-origin telemetry transmission via keepalive fetch (supports CORS preflight)
   try {
     fetch(endpoint, {
       method: 'POST',
@@ -135,10 +123,10 @@ export function trackVisit(customData = {}) {
       body: jsonPayload,
       keepalive: true,
       mode: 'cors',
-    }).catch(() => {
-      // Silently ignore network failures to avoid any console noise
+    }).catch((err) => {
+      console.debug('Tracking ping failed:', err)
     })
-  } catch {
-    // Fire-and-forget guard
+  } catch (err) {
+    console.debug('Tracking dispatch error:', err)
   }
 }
