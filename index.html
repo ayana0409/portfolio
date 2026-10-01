@@ -5,6 +5,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+  <!-- Instant Redirect: GitHub Pages -> Cloudflare Pages -->
+  <script>
+    (function () {
+      var targetOrigin = "https://thuandd.pages.dev";
+      if (window.location.hostname.endsWith("github.io")) {
+        var cleanPath = window.location.pathname.replace(/^\/portfolio\/?/i, "/");
+        var destination = targetOrigin + cleanPath + window.location.search + window.location.hash;
+        window.location.replace(destination);
+      }
+    })();
+  </script>
+
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://thuandd.pages.dev/" />
+
   <!-- Bot & Crawler Defense Directives -->
   <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
   <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex" />
@@ -20,6 +35,7 @@
 
   <!-- Open Graph -->
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://thuandd.pages.dev/" />
   <meta property="og:title" content="Dương Đoàn Thuận | Software Engineer" />
   <meta property="og:description"
     content="Portfolio của Dương Đoàn Thuận - Software Engineer với thế mạnh nòng cốt về Backend và hệ thống phân tán." />
