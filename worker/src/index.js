@@ -356,13 +356,25 @@ const GEMINI_TOOLS = [
 
 /**
  * Helper to build CORS headers based on request origin
+ * Supports GitHub Pages, Cloudflare Pages (*.pages.dev), and local development
  * @param {string | null} requestOrigin
  * @returns {Record<string, string>}
  */
 function getCorsHeaders(requestOrigin) {
+  let isPagesDev = false;
+  if (requestOrigin) {
+    try {
+      const hostname = new URL(requestOrigin).hostname;
+      isPagesDev = hostname.endsWith(".pages.dev");
+    } catch {
+      isPagesDev = false;
+    }
+  }
+
   const isAllowed =
     requestOrigin &&
     (ALLOWED_ORIGINS.includes(requestOrigin) ||
+      isPagesDev ||
       requestOrigin.startsWith("http://localhost:") ||
       requestOrigin.startsWith("http://127.0.0.1:"));
   const allowOriginHeader = isAllowed ? requestOrigin : ALLOWED_ORIGINS[0];
