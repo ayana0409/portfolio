@@ -2,9 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // Vite configuration for the portfolio project
-// Base path matches lowercase GitHub repository name ('portfolio')
+// Supports both Cloudflare Pages (root '/') and GitHub Pages ('/portfolio/')
 export default defineConfig({
   plugins: [react()],
-  base: '/portfolio/',
+  base: process.env.CF_PAGES ? '/' : '/portfolio/',
 })
 
