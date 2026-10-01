@@ -10,3 +10,8 @@ PORTFOLIO_DATA_URL = "https://raw.githubusercontent.com/ayana0409/portfolio/main
 GITHUB_DOCS_BASE_URL = "https://raw.githubusercontent.com/ayana0409/portfolio/main"
 MAX_REQUESTS_PER_MINUTE = "10"
 MAX_TOKENS_PER_REQUEST = "200000"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "portfolio-db"
+database_id = "d5b4953e-5d98-4697-a4c7-967528d74fb5"

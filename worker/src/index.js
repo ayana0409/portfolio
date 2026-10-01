@@ -369,10 +369,190 @@ function getCorsHeaders(requestOrigin) {
 
   return {
     "Access-Control-Allow-Origin": allowOriginHeader,
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Max-Age": "86400",
   };
+}
+
+/**
+ * Lightweight User-Agent parser for device, browser, and OS
+ * @param {string | null} ua
+ * @returns {{ device: string, browser: string, os: string }}
+ */
+function parseUserAgent(ua) {
+  if (!ua) return { device: "unknown", browser: "unknown", os: "unknown" };
+
+  // Device
+  let device = "desktop";
+  if (/mobile|android|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua)) {
+    device = "mobile";
+  } else if (/ipad|tablet|(android(?!.*mobile))/i.test(ua)) {
+    device = "tablet";
+  }
+
+  // OS
+  let os = "Other";
+  if (/windows/i.test(ua)) os = "Windows";
+  else if (/macintosh|mac os x/i.test(ua)) os = "macOS";
+  else if (/iphone|ipad|ipod/i.test(ua)) os = "iOS";
+  else if (/android/i.test(ua)) os = "Android";
+  else if (/linux/i.test(ua)) os = "Linux";
+
+  // Browser
+  let browser = "Other";
+  if (/edg/i.test(ua)) browser = "Edge";
+  else if (/chrome|crios/i.test(ua) && !/opr|opera/i.test(ua)) browser = "Chrome";
+  else if (/safari/i.test(ua) && !/chrome|crios/i.test(ua)) browser = "Safari";
+  else if (/firefox|fxios/i.test(ua)) browser = "Firefox";
+  else if (/opr|opera/i.test(ua)) browser = "Opera";
+
+  return { device, browser, os };
+}
+
+/**
+ * Handles visitor tracking endpoint (POST /api/track)
+ * Persists rich edge analytics into Cloudflare D1 (portfolio_access_history)
+ * @param {Request} request
+ * @param {Record<string, any>} env
+ * @param {Record<string, string>} corsHeaders
+ * @returns {Promise<Response>}
+ */
+async function handleTrack(request, env, corsHeaders) {
+  if (request.method !== "POST") {
+    return createJsonResponse({ error: "Method Not Allowed. Use POST." }, 405, corsHeaders);
+  }
+
+  try {
+    let payload = {};
+    try {
+      payload = await request.json();
+    } catch {
+      // payload may be empty or plain text in sendBeacon
+    }
+
+    const ip =
+      request.headers.get("CF-Connecting-IP") ||
+      request.headers.get("x-real-ip") ||
+      request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+      "Unknown";
+
+    const cf = request.cf || {};
+    const country = cf.country || request.headers.get("cf-ipcountry") || "Unknown";
+    const city = cf.city || "Unknown";
+    const region = cf.region || cf.regionCode || "Unknown";
+    const asnOrg = cf.asOrganization || "Unknown";
+
+    const userAgent = request.headers.get("User-Agent") || "";
+    const { device, browser, os } = parseUserAgent(userAgent);
+
+    const path = payload.path || "/";
+    const referrer = payload.referrer || request.headers.get("Referer") || "Direct";
+    const screenRes = payload.screen || "Unknown";
+    const language = payload.lang || request.headers.get("Accept-Language")?.split(",")[0]?.trim() || "Unknown";
+
+    // Insert record into Cloudflare D1 table portfolio_access_history
+    if (env.DB) {
+      await env.DB.prepare(`
+        INSERT INTO portfolio_access_history (
+          ip, country, city, region, asn_org, user_agent,
+          device_type, browser, os, path, referrer, screen_resolution, language
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      `).bind(
+        ip, country, city, region, asnOrg, userAgent,
+        device, browser, os, path, referrer, screenRes, language
+      ).run();
+    } else {
+      console.warn("D1 Database binding 'DB' not detected in environment.");
+    }
+
+    return new Response(null, {
+      status: 204,
+      headers: corsHeaders,
+    });
+  } catch (err) {
+    console.error("Failed to record access log in D1:", err);
+    return createJsonResponse({ error: "Failed to record log" }, 500, corsHeaders);
+  }
+}
+
+/**
+ * Handles protected log retrieval endpoint (GET /api/logs)
+ * @param {Request} request
+ * @param {Record<string, any>} env
+ * @param {Record<string, string>} corsHeaders
+ * @returns {Promise<Response>}
+ */
+async function handleLogs(request, env, corsHeaders) {
+  if (request.method !== "GET") {
+    return createJsonResponse({ error: "Method Not Allowed. Use GET." }, 405, corsHeaders);
+  }
+
+  const url = new URL(request.url);
+  const authHeader = request.headers.get("Authorization");
+  const providedKey =
+    url.searchParams.get("key") ||
+    (authHeader?.startsWith("Bearer ") ? authHeader.slice(7) : null);
+
+  // Validate admin key strictly from Cloudflare Worker Secret / env
+  const adminSecret = env.LOGS_ADMIN_SECRET;
+  if (!adminSecret || !providedKey || providedKey !== adminSecret) {
+    return createJsonResponse({ error: "Unauthorized. Valid admin key required." }, 401, corsHeaders);
+  }
+
+  if (!env.DB) {
+    return createJsonResponse({ error: "D1 Database is not bound." }, 500, corsHeaders);
+  }
+
+  try {
+    const limit = Math.min(parseInt(url.searchParams.get("limit") || "50", 10), 200);
+
+    // Fetch latest entries
+    const latestLogsQuery = await env.DB.prepare(`
+      SELECT id, ip, country, city, region, asn_org, device_type, browser, os, path, referrer, screen_resolution, language, created_at
+      FROM portfolio_access_history
+      ORDER BY id DESC
+      LIMIT ?
+    `).bind(limit).all();
+
+    // Fetch summary statistics
+    const statsTotal = await env.DB.prepare(`
+      SELECT 
+        COUNT(*) as total_visits,
+        COUNT(DISTINCT ip) as unique_ips
+      FROM portfolio_access_history
+    `).first();
+
+    const topCountries = await env.DB.prepare(`
+      SELECT country, COUNT(*) as count
+      FROM portfolio_access_history
+      GROUP BY country
+      ORDER BY count DESC
+      LIMIT 5
+    `).all();
+
+    const topDevices = await env.DB.prepare(`
+      SELECT device_type, COUNT(*) as count
+      FROM portfolio_access_history
+      GROUP BY device_type
+      ORDER BY count DESC
+    `).all();
+
+    return createJsonResponse({
+      success: true,
+      stats: {
+        total_visits: statsTotal?.total_visits || 0,
+        unique_ips: statsTotal?.unique_ips || 0,
+        top_countries: topCountries?.results || [],
+        top_devices: topDevices?.results || [],
+      },
+      count: latestLogsQuery?.results?.length || 0,
+      logs: latestLogsQuery?.results || [],
+    }, 200, corsHeaders);
+  } catch (err) {
+    console.error("Failed to query access logs from D1:", err);
+    return createJsonResponse({ error: "Failed to query database." }, 500, corsHeaders);
+  }
 }
 
 /**
@@ -398,7 +578,7 @@ export default {
   /**
    * Main fetch handler for Cloudflare Worker
    * @param {Request} request
-   * @param {Record<string, string>} env
+   * @param {Record<string, any>} env
    * @param {ExecutionContext} ctx
    * @returns {Promise<Response>}
    */
@@ -415,10 +595,20 @@ export default {
       });
     }
 
-    // 2. Validate endpoint and HTTP method
+    // 2. Routing: Visitor Tracking (POST /api/track)
+    if (url.pathname === "/api/track") {
+      return handleTrack(request, env, corsHeaders);
+    }
+
+    // 3. Routing: Protected Log Inspection (GET /api/logs)
+    if (url.pathname === "/api/logs") {
+      return handleLogs(request, env, corsHeaders);
+    }
+
+    // 4. Validate endpoint and HTTP method for Chat
     if (url.pathname !== "/api/chat" && url.pathname !== "/") {
       return createJsonResponse(
-        { error: "Not Found. Available endpoint is POST /api/chat" },
+        { error: "Not Found. Available endpoints: POST /api/chat, POST /api/track, GET /api/logs" },
         404,
         corsHeaders
       );
