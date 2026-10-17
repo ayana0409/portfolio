@@ -145,6 +145,21 @@ const DOC_ALIASES = {
   "docs/projects/shorter-link-backend.md": "docs/projects/shorter-link-be-readme.md",
   "docs/projects/shorter-link-frontend.md": "docs/projects/shorter-link-fe-readme.md",
   "docs/projects/shorter-link-websocket.md": "docs/projects/shorter-link-ws-readme.md",
+  "docs/projects/quicktest.md": "docs/projects/quick-test-readme.md",
+  "docs/projects/quick-test.md": "docs/projects/quick-test-readme.md",
+  "docs/projects/quicktest-readme.md": "docs/projects/quick-test-readme.md",
+  "docs/projects/quicktest-architecture.md": "docs/projects/quick-test-architecture.md",
+  "docs/projects/quick-test-architecture.md": "docs/projects/quick-test-architecture.md",
+  "docs/projects/quicktest-flows.md": "docs/projects/quick-test-system-flows.md",
+  "docs/projects/quick-test-system-flows.md": "docs/projects/quick-test-system-flows.md",
+  "docs/projects/quicktest-be.md": "docs/projects/quick-test-be-readme.md",
+  "docs/projects/quick-test-be.md": "docs/projects/quick-test-be-readme.md",
+  "docs/projects/quicktest-backend.md": "docs/projects/quick-test-be-readme.md",
+  "docs/projects/quick-test-backend.md": "docs/projects/quick-test-be-readme.md",
+  "docs/projects/quicktest-fe.md": "docs/projects/quick-test-fe-readme.md",
+  "docs/projects/quick-test-fe.md": "docs/projects/quick-test-fe-readme.md",
+  "docs/projects/quicktest-frontend.md": "docs/projects/quick-test-fe-readme.md",
+  "docs/projects/quick-test-frontend.md": "docs/projects/quick-test-fe-readme.md",
 };
 
 /**
@@ -297,6 +312,11 @@ Available documents in repository:
 - docs/projects/shorter-link-ws-readme.md: Shorter Link WebSocket Service (NestJS + Socket.IO real-time notification gateway, room & user broadcasting).
 - docs/projects/shorter-link-readme.md: Shorter Link Architecture & Feature Overview.
 - docs/projects/shorter-link.md: Short Link Management System Technical Specification (Redis Cache-Aside, Mongo indexing, Token rotation).
+- docs/projects/quick-test-readme.md: QuickTest Enterprise AI Online Examination Platform (Spring Boot 3.4.3, Java 21, Next.js 16, Google Gemini Rotation Pool, real-time proctoring telemetry via WebSocket STOMP, server-sync countdown timer, guest access, AI quiz generator from PDF/DOCX, rubric essay grading).
+- docs/projects/quick-test-be-readme.md: QuickTest Backend Engine Architecture & REST API Guide (Spring Boot 3.4.3, Java 21 LTS, Package-by-Feature Modular Monolith, PostgreSQL FTS, Redis Hash Auto-Save buffer & Sliding Window RPM/TPM, RabbitMQ async cloning, Gemini Rotation Pool, AI Rubric Essay Grading, STOMP Telemetry).
+- docs/projects/quick-test-fe-readme.md: QuickTest Frontend Client Architecture & Portals (Next.js 16 App Router, TypeScript, Tailwind CSS v4, Zustand, Axios, STOMP WebSocket, Guest Mode, Fullscreen lock, AI Quiz Generator Modal, Teacher AI Tasks Bento Grid).
+- docs/projects/quick-test-architecture.md: QuickTest Comprehensive Technical Architecture (Package-by-Feature, PostgreSQL 16 schema, Redis 7 sliding window RPM/TPM live metrics, distributed locks, Adaptive Multi-Pass & Rotation Continuation token mitigation).
+- docs/projects/quick-test-system-flows.md: QuickTest System Flows & Telemetry Sequence Diagrams (proctoring violation loops, guest exam sessions, AI background task worker lifecycle).
 - Portfolio_Architecture_Spec.md: Master Architecture Specification for this Portfolio, Edge AI Assistant, and CI/CD.
 
 RULE FOR TOOL USE:
@@ -345,7 +365,7 @@ const GEMINI_TOOLS = [
             docPath: {
               type: "string",
               description:
-                "Relative file path of the technical document in the repository (e.g., 'docs/projects/shorter-link.md', 'docs/projects/quickbite.md', 'Portfolio_Architecture_Spec.md').",
+                "Relative file path of the technical document in the repository (e.g., 'docs/projects/quick-test-readme.md', 'docs/projects/shorter-link.md', 'docs/projects/quickbite.md', 'Portfolio_Architecture_Spec.md').",
             },
           },
           required: ["docPath"],

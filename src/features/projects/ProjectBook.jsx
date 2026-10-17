@@ -386,9 +386,8 @@ export default function ProjectBook() {
                 key={idx}
                 type="button"
                 onClick={() => handleJumpToPage(idx)}
-                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${
-                  idx === currentIndex ? 'w-5 sm:w-6 bg-blue-500' : 'w-1.5 sm:w-2 bg-slate-800 hover:bg-slate-700'
-                }`}
+                className={`h-1.5 transition-all duration-300 rounded-full cursor-pointer ${idx === currentIndex ? 'w-5 sm:w-6 bg-blue-500' : 'w-1.5 sm:w-2 bg-slate-800 hover:bg-slate-700'
+                  }`}
                 aria-label={`Jump to page ${idx + 1}`}
               />
             ))}
@@ -444,11 +443,10 @@ export default function ProjectBook() {
                 <div className="flex items-center justify-between pb-2 sm:pb-3 border-b border-slate-800/80">
                   <div className="flex items-center gap-2">
                     <span
-                      className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider ${
-                        project.type === 'gallery'
+                      className={`inline-flex items-center gap-1 px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-mono font-semibold uppercase tracking-wider ${project.type === 'gallery'
                           ? 'bg-purple-950/80 text-purple-300 border border-purple-800/80'
                           : 'bg-blue-950/80 text-blue-300 border border-blue-800/80'
-                      }`}
+                        }`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
                       TYPE: {project.type}

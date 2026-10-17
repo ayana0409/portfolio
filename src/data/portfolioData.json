@@ -627,6 +627,119 @@
           "Sử dụng Optimistic Locking (@Version trên JPA Hibernate) tại Inventory Service để xử lý tranh chấp giữ chỗ kho (stock reservation) khi đơn hàng tăng đột biến, chấp nhận cơ chế retry giao dịch thay vì Pessimistic Lock làm nghẽn luồng cơ sở dữ liệu."
         ]
       }
+    },
+    {
+      "id": "quicktest",
+      "type": "info",
+      "order": 3,
+      "coverImage": "/assets/images/projects/quick-test/quick-test-cover.png",
+      "title": {
+        "vi": "QuickTest — Nền tảng thi trực tuyến thông minh",
+        "en": "QuickTest — Intelligent Online Examination Platform"
+      },
+      "summary": {
+        "vi": "Hệ thống thi trực tuyến tích hợp giám sát chống gian lận thời gian thực, tự động hóa tạo đề thi thích ứng từ tài liệu giáo trình và chấm thi tự luận.",
+        "en": "Online examination and assessment platform with real-time anti-cheating proctoring, adaptive document-to-quiz generation, and rubric-based AI essay grading."
+      },
+      "technologies": [
+        "Java",
+        "Spring Boot",
+        "Next.js",
+        "PostgreSQL",
+        "Redis",
+        "Google Gemini",
+        "WebSocket",
+        "Cloudinary",
+        "Docker"
+      ],
+      "description": {
+        "vi": "QuickTest là nền tảng thi trực tuyến thông minh, giúp giáo viên và học sinh tổ chức kỳ thi dễ dàng, an toàn và hiệu quả.\n- Thí sinh có thể làm bài bằng tài khoản hoặc chế độ Khách (chỉ cần mã phòng thi). Phòng thi được giám sát liên tục: phát hiện chuyển tab, mở công cụ nhà phát triển và tự động dừng bài khi vi phạm quá nhiều. Hệ thống tự lưu bài và đồng bộ thời gian từ máy chủ để tránh gian lận.\n- Hỗ trợ nhiều dạng câu hỏi: trắc nghiệm một đáp án, nhiều đáp án, nhập số và tự luận. AI có thể tự động tạo câu hỏi từ tài liệu (PDF, Word, TXT) theo độ khó và ngôn ngữ mong muốn, đồng thời hỗ trợ chấm bài tự luận và xuất bảng điểm Excel.\n- Phía quản trị có thể quản lý linh hoạt các khóa AI, theo dõi hoạt động hệ thống và tự động kiểm duyệt nội dung câu hỏi không phù hợp.",
+        "en": "QuickTest is a smart online examination platform that makes it easy and secure for teachers and students to organize exams.\n- Candidates can take exams with an account or as a Guest (just need an access code). The exam room is continuously monitored: it detects tab switching, opening developer tools, and automatically stops the exam if there are too many violations. Answers are auto-saved and the timer is synchronized from the server to prevent cheating.\n- Supports multiple question types: single choice, multiple choice, numeric input, and essay. AI can automatically generate questions from documents (PDF, Word, TXT) based on desired difficulty and language, and also helps grade essays and export grade reports to Excel.\n- Administrators can flexibly manage AI keys, monitor system activity, and automatically scan questions for inappropriate content."
+      },
+      "features": {
+        "vi": [
+          "Phòng thi chống gian lận thời gian thực: phát hiện chuyển tab, mở công cụ nhà phát triển và tự dừng bài khi vi phạm quá mức",
+          "Hỗ trợ thi chế độ Khách không cần đăng nhập, chỉ cần mã phòng thi và thông tin cá nhân",
+          "Tự động lưu bài liên tục và đồng hồ đếm ngược đồng bộ từ máy chủ, giúp không bị mất dữ liệu hoặc gian lận thời gian",
+          "Hệ thống xoay vòng khóa AI thông minh, tự động chuyển đổi giữa nhiều model để luôn sẵn sàng tạo đề và chấm bài",
+          "AI tự động tạo câu hỏi từ tài liệu bài giảng theo độ khó và ngôn ngữ mong muốn",
+          "Chấm bài linh hoạt: chấm theo từng bài làm hoặc theo từng câu hỏi, hỗ trợ AI chấm tự luận và xuất bảng điểm Excel",
+          "Hệ thống ổn định với lưu trữ an toàn, nhật ký hoạt động đầy đủ và theo dõi sức khỏe hệ thống"
+        ],
+        "en": [
+          "Real-time anti-cheating exam room: detects tab switching, opening developer tools, and automatically stops the exam if violations exceed the limit",
+          "Guest mode allows taking exams without an account — just need an access code and personal info",
+          "Continuous auto-save of answers and server-synchronized countdown timer to prevent data loss or time cheating",
+          "Smart AI key rotation system that automatically switches between multiple models to keep quiz generation and grading always available",
+          "AI automatically generates questions from teaching materials based on desired difficulty and language",
+          "Flexible grading: grade by individual submission or by question, with AI essay grading support and Excel grade export",
+          "Stable system with secure storage, complete activity logs, and system health monitoring"
+        ]
+      },
+      "gallery": [
+        {
+          "id": "qt-img-001",
+          "src": "/assets/images/projects/quick-test/quick-test-result.png",
+          "caption": {
+            "vi": "Thống kê của một đề thi",
+            "en": "Statistics of a exam"
+          }
+        },
+        {
+          "id": "qt-img-002",
+          "src": "/assets/images/projects/quick-test/quick-test-ai.png",
+          "caption": {
+            "vi": "Giám sát AI Key và Background Job",
+            "en": "AI Key and Background Job monitoring"
+          }
+        },
+        {
+          "id": "qt-img-003",
+          "src": "/assets/images/projects/quick-test/quick-test-sys.png",
+          "caption": {
+            "vi": "Giám sát tài nguyên hệ thống",
+            "en": "System resources monitoring"
+          }
+        },
+        {
+          "id": "qt-img-004",
+          "src": "/assets/images/projects/quick-test/quick-test-history.png",
+          "caption": {
+            "vi": "Lịch sử làm bài",
+            "en": "Submission history"
+          }
+        }
+      ],
+      "links": [
+        {
+          "label": {
+            "vi": "SOURCE CODE",
+            "en": "SOURCE CODE"
+          },
+          "url": "https://github.com/ayana0409/QuickTest",
+          "type": "repo-blue"
+        },
+        {
+          "label": {
+            "vi": "DEMO",
+            "en": "DEMO"
+          },
+          "url": "https://quicktest-kappa.vercel.app",
+          "type": "link-green"
+        }
+      ],
+      "technicalSpec": {
+        "architecture": "Hệ thống được xây dựng theo mô hình module hóa rõ ràng trên Spring Boot và Java, kết hợp giao diện Next.js. Các phần chính hoạt động độc lập: quản lý tài khoản & đăng nhập, ngân hàng đề thi và câu hỏi, giám sát phòng thi thời gian thực, quản lý phiên làm bài, và bộ máy AI xoay vòng linh hoạt giữa nhiều khóa Google Gemini.",
+        "cachingStrategy": "Redis được dùng đa năng: thu hồi phiên đăng nhập ngay lập tức, theo dõi hạn mức sử dụng AI theo thời gian thực, khóa tạm thời để tránh xung đột khi nhiều giáo viên cùng chấm bài hoặc tạo đề, lưu tạm đáp án thí sinh trước khi ghi vào cơ sở dữ liệu, và lưu tiến độ các tác vụ AI chạy ngầm trong 48 giờ.",
+        "databaseAndIndexing": "PostgreSQL được thiết kế chuẩn hóa, đảm bảo tính toàn vẹn dữ liệu. Có chỉ mục tối ưu cho các truy vấn thường xuyên, ràng buộc chặt chẽ hỗ trợ cả thí sinh có tài khoản lẫn thí sinh vãng lai, đảm bảo mỗi bài nộp chỉ tồn tại một lần, và cơ chế khóa lạc quan để tránh xung đột khi nhiều thao tác xảy ra cùng lúc.",
+        "securityAndAuth": "Bảo mật dựa trên JWT không trạng thái kèm phân quyền theo vai trò (Quản trị, Giáo viên, Học sinh). Sẵn sàng kết nối đăng nhập một lần với hệ thống khác. Phòng thi buộc toàn màn hình, vô hiệu hóa một số phím tắt, phát hiện và ghi lại hành vi chuyển tab hoặc mở công cụ nhà phát triển. Hệ thống còn tự động quét và gắn cờ các câu hỏi có nội dung không phù hợp.",
+        "tradeoffsAndChallenges": [
+          "Xử lý giới hạn độ dài của Google Gemini bằng cách chia nhỏ yêu cầu tạo đề thành nhiều đợt an toàn (khoảng 15 câu mỗi đợt), tự động chuyển sang khóa/model khác khi cần, và nhớ các câu đã tạo để tránh trùng lặp mà vẫn giữ chất lượng.",
+          "Lưu bài thi theo 2 tầng: ghi tạm ngay vào bộ nhớ nhanh (Redis) rồi đồng bộ dần về cơ sở dữ liệu. Cách này giúp thí sinh nhận phản hồi cực nhanh dù hàng nghìn người cùng làm bài, chấp nhận độ trễ ghi vài giây để đổi lấy trải nghiệm mượt mà.",
+          "Khắc phục việc máy tính thí sinh bị chỉnh giờ bằng cách chốt thời gian hết hạn ngay trên máy chủ và đồng bộ đồng hồ đếm ngược xuống phía client định kỳ, triệt tiêu hoàn toàn khả năng gian lận thời gian.",
+          "Thay vì gọi nhiều API AI cùng lúc (dễ bị giới hạn tốc độ), hệ thống dùng hàng đợi xử lý lần lượt kết hợp khóa tạm thời theo từng đề thi và từng giáo viên, giúp kiểm soát chi phí và tránh lỗi quá tải khi nhiều người cùng dùng AI."
+        ]
+      }
     }
   ]
 }
