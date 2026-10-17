@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import LanguageToggle from './LanguageToggle'
 import DocumentsModal from './DocumentsModal'
@@ -10,10 +10,12 @@ import portfolioData from '../../data/portfolioData.json'
  * Features:
  * - Dedicated Dark-Only Aesthetic
  * - Real-time scroll spy: Automatically highlights active section in sync with scroll & snap
+ * - Auto-hide on scroll down, auto-reveal on scroll up
+ * - Desktop: Transparent downward gradient fade with progressive backdrop blur
+ * - Desktop nav: Frosted glass pill with subtle top-to-bottom transparency
  * - Smooth scroll navigation when clicking links
  * - Full Responsive Mobile Navigation with animated Hamburger & Slide-down Drawer
  * - Active pill indicator with subtle cyan/blue neon glow
- * - Backdrop blur effect (`backdrop-blur-md`) with glass styling
  * - Direct access to Master CV and Academic Transcript download modal
  */
 export default function Header() {
@@ -22,6 +24,9 @@ export default function Header() {
   const [activeSection, setActiveSection] = useState('hero')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDocsModalOpen, setIsDocsModalOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const lastScrollY = useRef(0)
+  const lastScrollUpTime = useRef(0)
 
   const navLinks = [
     { id: 'about', href: '#about', label: t('nav.about', currentLang === 'vi' ? 'Giới thiệu' : 'About') },
@@ -54,19 +59,72 @@ export default function Header() {
 
     sections.forEach((sec) => observer.observe(sec))
 
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  // Auto-hide on scroll down, reveal on scroll up
+  useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY < 180) {
+      const currentScrollY = window.scrollY
+
+      // Highlight hero when near top
+      if (currentScrollY < 180) {
         setActiveSection('hero')
+      }
+
+      // Always show when near page top
+      if (currentScrollY < 50) {
+        setIsVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      // Do not auto-hide while mobile drawer is open
+      if (isMobileMenuOpen) {
+        setIsVisible(true)
+        lastScrollY.current = currentScrollY
+        return
+      }
+
+      const diff = currentScrollY - lastScrollY.current
+
+      // Filter out micro-scroll / momentum jitter
+      if (Math.abs(diff) < 10) {
+        return
+      }
+
+      if (diff > 0 && currentScrollY > 80) {
+        // Only hide if not immediately following a scroll-up (prevents scroll-snap bounce from re-hiding)
+        const timeSinceScrollUp = Date.now() - lastScrollUpTime.current
+        if (timeSinceScrollUp > 800) {
+          setIsVisible(false)
+        }
+      } else if (diff < 0) {
+        // Scrolling UP -> reveal header
+        lastScrollUpTime.current = Date.now()
+        setIsVisible(true)
+      }
+
+      lastScrollY.current = currentScrollY
+    }
+
+    // Reveal header when mouse cursor approaches the top edge of the viewport
+    const handleMouseMove = (e) => {
+      if (e.clientY < 45) {
+        setIsVisible(true)
       }
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
 
     return () => {
-      observer.disconnect()
       window.removeEventListener('scroll', handleScroll)
+      window.removeEventListener('mousemove', handleMouseMove)
     }
-  }, [])
+  }, [isMobileMenuOpen])
 
   // Close mobile menu on resize to desktop
   useEffect(() => {
@@ -105,7 +163,23 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-slate-950/90 backdrop-blur-md border-b border-slate-800/80 transition-all duration-300">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ease-in-out will-change-transform ${
+        isVisible ? 'translate-y-0' : '-translate-y-full'
+      } ${
+        isMobileMenuOpen
+          ? 'bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-xl'
+          : 'bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent'
+      }`}
+    >
+      {/* Progressive Backdrop Blur & Gradient Mask for Desktop / Closed Drawer */}
+      {!isMobileMenuOpen && (
+        <div
+          className="absolute inset-0 -z-10 pointer-events-none backdrop-blur-md [mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,black_60%,transparent_100%)]"
+          aria-hidden="true"
+        />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 h-16 flex items-center justify-between">
         {/* Brand / Logo */}
         <a
@@ -129,7 +203,7 @@ export default function Header() {
         {/* Right Side: Desktop Nav + Toggles + Mobile Hamburger */}
         <div className="flex items-center gap-2.5 sm:gap-4 md:gap-6">
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-slate-900/60 border border-slate-800/60">
+          <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-gradient-to-b from-slate-900/70 via-slate-900/35 to-slate-950/20 backdrop-blur-md border border-slate-700/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id
               return (
@@ -139,8 +213,8 @@ export default function Header() {
                   onClick={(e) => handleNavClick(e, link.id)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600/20 text-blue-400 font-semibold border border-blue-500/50 shadow-[0_0_12px_rgba(59,130,246,0.25)]'
-                      : 'text-slate-400 hover:text-white hover:bg-slate-800/50 border border-transparent'
+                      ? 'bg-blue-600/25 text-blue-400 font-semibold border border-blue-500/50 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
+                      : 'text-slate-300 hover:text-white hover:bg-slate-800/40 border border-transparent'
                   }`}
                 >
                   {isActive && (
@@ -152,18 +226,18 @@ export default function Header() {
             })}
           </nav>
 
-            {/* Quick Access: Master CV & Academic Transcript Button */}
-            <button
-              type="button"
-              onClick={() => setIsDocsModalOpen(true)}
-              className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase font-semibold text-blue-300 bg-blue-950/70 hover:bg-blue-900/80 border border-blue-600/50 hover:border-blue-400 shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all duration-300 cursor-pointer focus:outline-none"
-              title={currentLang === 'vi' ? 'Tải Master CV & Bảng điểm' : 'Download Master CV & Transcript'}
-            >
-              <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-              </svg>
-              <span>{currentLang === 'vi' ? 'Hồ sơ & CV' : 'CV & Docs'}</span>
-            </button>
+          {/* Quick Access: Master CV & Academic Transcript Button */}
+          <button
+            type="button"
+            onClick={() => setIsDocsModalOpen(true)}
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase font-semibold text-blue-300 bg-gradient-to-b from-blue-950/80 via-blue-950/40 to-blue-950/10 hover:from-blue-900/80 hover:to-blue-900/40 border border-blue-600/40 hover:border-blue-400 backdrop-blur-md shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all duration-300 cursor-pointer focus:outline-none"
+            title={currentLang === 'vi' ? 'Tải Master CV & Bảng điểm' : 'Download Master CV & Transcript'}
+          >
+            <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+            <span>{currentLang === 'vi' ? 'Hồ sơ & CV' : 'CV & Docs'}</span>
+          </button>
 
             {/* Language Toggle (Always accessible) */}
             <div className="flex items-center">
