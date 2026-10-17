@@ -23,15 +23,15 @@ export default function GalleryTemplate({ project }) {
   const gallery = project.gallery || []
 
   return (
-    <div className="space-y-5 sm:space-y-6 animate-fade-in text-slate-100 pb-4">
+    <div className="space-y-5 sm:space-y-6 animate-fade-in text-zinc-100 pb-4">
       {/* ─── Header: Type badge & Title ──────────────────────────────────────── */}
-      <div className="space-y-2 border-b border-slate-800 pb-3 sm:pb-4">
+      <div className="space-y-2 border-b border-zinc-800 pb-3 sm:pb-4">
         <div className="flex items-center justify-between gap-2 flex-wrap">
-          <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-full text-[11px] sm:text-xs font-mono font-semibold uppercase bg-purple-950/80 text-purple-300 border border-purple-800/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />
+          <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-none text-[10px] sm:text-[11px] font-mono font-bold uppercase tracking-widest bg-white text-black">
+            <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
             TYPE: {project.type?.toUpperCase()}
           </span>
-          <span className="text-[11px] sm:text-xs font-mono text-slate-500">
+          <span className="text-[11px] sm:text-xs font-mono text-zinc-400">
             ID: #{project.id}
           </span>
         </div>
@@ -43,8 +43,8 @@ export default function GalleryTemplate({ project }) {
 
       {/* ─── Summary Callout ─────────────────────────────────────────────────── */}
       {summary && (
-        <div className="p-3.5 sm:p-4 rounded-xl bg-purple-950/30 border border-purple-900/50 shadow-inner">
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed italic whitespace-pre-line">
+        <div className="p-3.5 sm:p-4 rounded-none bg-zinc-950 border border-zinc-800 shadow-inner">
+          <p className="text-xs sm:text-sm text-zinc-200 leading-relaxed italic whitespace-pre-line">
             "{summary}"
           </p>
         </div>
@@ -53,14 +53,14 @@ export default function GalleryTemplate({ project }) {
       {/* ─── Photo Gallery Showcase Grid ─────────────────────────────────────── */}
       {gallery && gallery.length > 0 && (
         <div className="space-y-3 pt-1">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <h3 className="text-xs font-mono font-bold tracking-wider text-purple-400 uppercase flex items-center gap-2">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+            <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+              <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
               <span>{currentLang === 'vi' ? 'Bộ sưu tập ảnh' : 'Photo Gallery'}</span>
             </h3>
-            <span className="text-[10px] sm:text-[11px] font-mono text-slate-400">
+            <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
               {gallery.length} PHOTOS
             </span>
           </div>
@@ -74,30 +74,30 @@ export default function GalleryTemplate({ project }) {
                 <div
                   key={img.id || idx}
                   onClick={() => setActiveImage({ ...img, caption, resolvedSrc })}
-                  className="group relative cursor-pointer overflow-hidden rounded-xl
-                    border border-slate-800 bg-slate-900 aspect-video
-                    hover:border-purple-500/60 transition-all duration-300 shadow-md hover:shadow-[0_0_20px_rgba(168,85,247,0.25)]"
+                  className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
+                    border border-zinc-800 bg-zinc-950 aspect-video
+                    hover:border-white transition-all duration-300 shadow-md"
                 >
                   {resolvedSrc ? (
                     <img
                       src={resolvedSrc}
                       alt={caption || `Gallery ${idx + 1}`}
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
                     />
                   ) : null}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/30 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-purple-400">
-                      <span className="px-1.5 py-0.5 rounded bg-slate-950/80 border border-slate-800">
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300">
+                      <span className="px-1.5 py-0.5 rounded-none bg-black/90 border border-zinc-800">
                         #{idx + 1}
                       </span>
-                      <span className="px-2 py-0.5 rounded bg-slate-950/80 border border-slate-800 text-slate-300 opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-1">
+                      <span className="px-2 py-0.5 rounded-none bg-black/90 border border-zinc-800 text-zinc-300 opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-1 uppercase tracking-wider text-[9px]">
                         <span>ZOOM</span>
                         <span>🔍</span>
                       </span>
                     </div>
                     {caption && (
-                      <p className="text-xs font-medium text-slate-200 line-clamp-2 leading-tight bg-slate-950/85 p-2 rounded backdrop-blur-sm border border-slate-800/80 shadow">
+                      <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-tight bg-black/90 p-2 rounded-none backdrop-blur-sm border border-zinc-800 shadow">
                         {caption}
                       </p>
                     )}
@@ -112,13 +112,13 @@ export default function GalleryTemplate({ project }) {
       {/* ─── Description / Highlights ────────────────────────────────────────── */}
       {description && (
         <div className="space-y-1.5">
-          <h3 className="text-xs font-mono font-bold tracking-wider text-purple-400 uppercase flex items-center gap-1.5">
-            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-1.5">
+            <svg className="w-3.5 h-3.5 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" />
             </svg>
             <span>{currentLang === 'vi' ? 'Lưu trữ & Tối ưu' : 'Storage & Optimization'}</span>
           </h3>
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans whitespace-pre-line">
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans whitespace-pre-line">
             {description}
           </p>
         </div>
@@ -127,16 +127,16 @@ export default function GalleryTemplate({ project }) {
       {/* ─── Tech Stack ───────────────────────────────────────────────────────── */}
       {project.technologies && project.technologies.length > 0 && (
         <div className="space-y-1.5 pt-1">
-          <h3 className="text-xs font-mono font-bold tracking-wider text-slate-400 uppercase">
+          <h3 className="text-xs font-mono font-bold tracking-widest text-zinc-400 uppercase">
             {currentLang === 'vi' ? 'Công nghệ' : 'Tech Stack'}
           </h3>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
             {project.technologies.map((tech) => (
               <span
                 key={tech}
-                className="text-xs font-mono px-2.5 sm:px-3 py-0.5 sm:py-1 rounded-md
-                  bg-slate-900 text-slate-200
-                  border border-slate-700 hover:border-purple-500/50 transition-colors"
+                className="text-xs font-mono px-2.5 sm:px-3 py-1 rounded-none
+                  bg-zinc-950 text-zinc-200
+                  border border-zinc-800 hover:border-white transition-colors"
               >
                 {tech}
               </span>
@@ -146,14 +146,14 @@ export default function GalleryTemplate({ project }) {
       )}
 
       {/* ─── Action Links ─────────────────────────────────────────────────────── */}
-      <div className="pt-4 sm:pt-5 flex flex-wrap items-center gap-2 sm:gap-3 border-t border-slate-800">
+      <div className="pt-4 sm:pt-5 flex flex-wrap items-center gap-2 sm:gap-3 border-t border-zinc-800">
         {project.links?.demo && (
           <a
             href={project.links.demo}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-semibold
-              bg-purple-600 hover:bg-purple-500 text-white shadow-lg shadow-purple-600/30 hover:shadow-purple-500/50 active:scale-95 transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none text-xs font-mono font-bold tracking-widest uppercase
+              border border-white bg-white text-black hover:bg-transparent hover:text-white transition-all active:scale-95"
           >
             <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -168,8 +168,8 @@ export default function GalleryTemplate({ project }) {
             href={project.links.source}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-1.5 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl text-xs font-mono font-semibold
-              border border-slate-800 bg-slate-900/80 hover:bg-slate-800 text-slate-200 hover:text-white transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-none text-xs font-mono font-bold tracking-widest uppercase
+              border border-zinc-700 bg-black hover:bg-white hover:text-black text-white transition-all active:scale-95"
           >
             <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
               <path fillRule="evenodd" clipRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
@@ -187,19 +187,19 @@ export default function GalleryTemplate({ project }) {
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative max-w-xl w-full bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4"
+            className="relative max-w-xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4"
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-              <span className="text-xs font-mono text-purple-400">Photo Details</span>
+            <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+              <span className="text-xs font-mono font-bold tracking-widest text-white uppercase">Photo Details</span>
               <button
                 type="button"
                 onClick={() => setActiveImage(null)}
-                className="text-slate-400 hover:text-white px-2 py-1 text-sm font-mono cursor-pointer"
+                className="text-zinc-400 hover:text-white px-2 py-1 text-sm font-mono cursor-pointer"
               >
                 ✕
               </button>
             </div>
-            <div className="aspect-video w-full rounded-xl overflow-hidden bg-slate-950 flex items-center justify-center border border-slate-700">
+            <div className="aspect-video w-full rounded-none overflow-hidden bg-black flex items-center justify-center border border-zinc-800">
               {activeImage.resolvedSrc ? (
                 <img
                   src={activeImage.resolvedSrc}
@@ -207,13 +207,13 @@ export default function GalleryTemplate({ project }) {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <span className="font-mono text-sm text-purple-300">
+                <span className="font-mono text-sm text-zinc-400">
                   [ Preview: {activeImage.id} ]
                 </span>
               )}
             </div>
             {activeImage.caption && (
-              <p className="text-xs sm:text-sm text-slate-300 italic">
+              <p className="text-xs sm:text-sm text-zinc-300 italic">
                 "{activeImage.caption}"
               </p>
             )}

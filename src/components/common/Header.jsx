@@ -168,8 +168,8 @@ export default function Header() {
         isVisible ? 'translate-y-0' : '-translate-y-full'
       } ${
         isMobileMenuOpen
-          ? 'bg-slate-950/95 border-b border-slate-800/80 backdrop-blur-xl'
-          : 'bg-gradient-to-b from-slate-950/90 via-slate-950/40 to-transparent'
+          ? 'bg-black/95 border-b border-zinc-800 backdrop-blur-xl'
+          : 'bg-gradient-to-b from-black/90 via-black/40 to-transparent'
       }`}
     >
       {/* Progressive Backdrop Blur & Gradient Mask for Desktop / Closed Drawer */}
@@ -192,10 +192,10 @@ export default function Header() {
           }}
           className="flex items-center gap-2.5 sm:gap-3 text-white group focus:outline-none cursor-pointer"
         >
-          <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/40 flex items-center justify-center font-mono font-bold text-blue-400 text-sm shadow-brand-glow group-hover:scale-105 transition-transform">
+          <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center font-mono font-bold text-white text-sm group-hover:scale-105 group-hover:border-white transition-all">
             &lt;/&gt;
           </div>
-          <span className="font-mono font-black text-xs sm:text-sm tracking-[0.15em] sm:tracking-[0.2em] uppercase text-white group-hover:text-blue-400 transition-colors truncate max-w-[170px] sm:max-w-none">
+          <span className="font-mono font-black text-xs sm:text-sm tracking-[0.18em] sm:tracking-[0.24em] uppercase text-white group-hover:text-zinc-300 transition-colors truncate max-w-[170px] sm:max-w-none">
             {portfolioData.about.name}
           </span>
         </a>
@@ -203,7 +203,7 @@ export default function Header() {
         {/* Right Side: Desktop Nav + Toggles + Mobile Hamburger */}
         <div className="flex items-center gap-2.5 sm:gap-4 md:gap-6">
           {/* Desktop Navigation Links */}
-          <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-gradient-to-b from-slate-900/70 via-slate-900/35 to-slate-950/20 backdrop-blur-md border border-slate-700/30 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.5)]">
+          <nav className="hidden md:flex items-center gap-1 p-1 rounded-full bg-black/75 backdrop-blur-md border border-white/20 shadow-none">
             {navLinks.map((link) => {
               const isActive = activeSection === link.id
               return (
@@ -213,12 +213,12 @@ export default function Header() {
                   onClick={(e) => handleNavClick(e, link.id)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-mono tracking-widest uppercase transition-all duration-300 flex items-center gap-1.5 cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600/25 text-blue-400 font-semibold border border-blue-500/50 shadow-[0_0_12px_rgba(59,130,246,0.3)]'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-800/40 border border-transparent'
+                      ? 'bg-white text-black font-bold border border-white shadow-none'
+                      : 'text-zinc-400 hover:text-white hover:bg-white/10 border border-transparent'
                   }`}
                 >
                   {isActive && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+                    <span className="w-1.5 h-1.5 rounded-full bg-black" />
                   )}
                   <span>{link.label}</span>
                 </a>
@@ -226,14 +226,14 @@ export default function Header() {
             })}
           </nav>
 
-          {/* Quick Access: Master CV & Academic Transcript Button */}
+          {/* Quick Access: Master CV & Academic Transcript Button (SpaceX Minimal Pill) */}
           <button
             type="button"
             onClick={() => setIsDocsModalOpen(true)}
-            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase font-semibold text-blue-300 bg-gradient-to-b from-blue-950/80 via-blue-950/40 to-blue-950/10 hover:from-blue-900/80 hover:to-blue-900/40 border border-blue-600/40 hover:border-blue-400 backdrop-blur-md shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all duration-300 cursor-pointer focus:outline-none"
+            className="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono tracking-wider uppercase font-semibold text-white bg-transparent hover:bg-white hover:text-black border border-white/40 hover:border-white transition-all duration-300 cursor-pointer focus:outline-none"
             title={currentLang === 'vi' ? 'Tải Master CV & Bảng điểm' : 'Download Master CV & Transcript'}
           >
-            <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span>{currentLang === 'vi' ? 'Hồ sơ & CV' : 'CV & Docs'}</span>
@@ -250,7 +250,7 @@ export default function Header() {
               onClick={() => setIsMobileMenuOpen((prev) => !prev)}
               aria-label="Toggle navigation menu"
               aria-expanded={isMobileMenuOpen}
-              className="md:hidden w-9 h-9 rounded-lg bg-slate-900/80 border border-slate-800 flex flex-col items-center justify-center gap-1.5 text-slate-300 hover:text-white hover:border-slate-700 transition-all cursor-pointer focus:outline-none"
+              className="md:hidden w-9 h-9 rounded-lg bg-black border border-zinc-800 flex flex-col items-center justify-center gap-1.5 text-zinc-300 hover:text-white hover:border-white transition-all cursor-pointer focus:outline-none"
             >
               <span
                 className={`w-5 h-0.5 bg-current rounded-full transition-transform duration-300 ${
@@ -273,7 +273,7 @@ export default function Header() {
 
         {/* ─── Mobile Slide-Down Drawer Navigation ───────────────────────────────── */}
         <div
-          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-slate-800/80 bg-slate-950/95 backdrop-blur-xl ${
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out border-b border-zinc-800 bg-black/95 backdrop-blur-xl ${
             isMobileMenuOpen ? 'max-h-96 opacity-100 py-4 px-4' : 'max-h-0 opacity-0 py-0 px-4'
           }`}
         >
@@ -287,16 +287,16 @@ export default function Header() {
                   onClick={(e) => handleNavClick(e, link.id)}
                   className={`px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase transition-all flex items-center justify-between cursor-pointer ${
                     isActive
-                      ? 'bg-blue-600/20 text-blue-400 font-bold border border-blue-500/40 shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-slate-900/80 border border-transparent'
+                      ? 'bg-white text-black font-bold border border-white'
+                      : 'text-zinc-400 hover:text-white hover:bg-zinc-900 border border-transparent'
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <span className="text-[10px] font-mono text-slate-500">0{idx + 1}</span>
+                    <span className="text-[10px] font-mono opacity-60">0{idx + 1}</span>
                     <span>{link.label}</span>
                   </div>
                   {isActive && (
-                    <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
+                    <span className="w-2 h-2 rounded-full bg-black" />
                   )}
                 </a>
               )
@@ -309,10 +309,10 @@ export default function Header() {
                 setIsMobileMenuOpen(false)
                 setIsDocsModalOpen(true)
               }}
-              className="w-full mt-2 px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/50 flex items-center justify-between cursor-pointer transition-colors shadow-sm"
+              className="w-full mt-2 px-4 py-3 rounded-xl text-xs font-mono tracking-widest uppercase bg-transparent hover:bg-white hover:text-black text-white border border-white/40 flex items-center justify-between cursor-pointer transition-colors shadow-sm"
             >
               <div className="flex items-center gap-2">
-                <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
                 <span>{currentLang === 'vi' ? 'TẢI MASTER CV & BẢNG ĐIỂM' : 'DOWNLOAD CV & TRANSCRIPT'}</span>

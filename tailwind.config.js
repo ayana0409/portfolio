@@ -24,13 +24,13 @@ export default {
         'brand-accent':     '#2563eb', // blue-600  - accent / primary brand
         'brand-border':     '#e2e8f0', // slate-200 - borders / dividers
 
-        // Dark Mode semantic tokens (used with `dark:` prefix)
-        'brand-bg-dark':    '#020617', // slate-950 - deep dark background
-        'brand-card-dark':  '#0f172a', // slate-900 - card / book page background
-        'brand-text-dark':  '#e2e8f0', // slate-200 - primary text in dark mode
-        'brand-muted-dark': '#94a3b8', // slate-400 - muted text in dark mode
-        'brand-accent-dark':'#60a5fa', // blue-400  - lighter accent for dark mode contrast
-        'brand-border-dark':'#1e293b', // slate-800 - borders in dark mode
+        // Dark Mode semantic tokens (SpaceX High-Contrast Minimal)
+        'brand-bg-dark':    '#000000', // pure black
+        'brand-card-dark':  '#09090b', // zinc-950 - technical surface
+        'brand-text-dark':  '#ffffff', // crisp white
+        'brand-muted-dark': '#a1a1aa', // zinc-400 - high-contrast silver
+        'brand-accent-dark':'#ffffff', // pure white accent
+        'brand-border-dark':'#27272a', // zinc-800 - crisp hairline borders
       },
 
       // --- Typography ---
@@ -63,10 +63,10 @@ export default {
 
       // --- Box Shadow ---
       boxShadow: {
-        // Soft glow for card highlights using brand accent color
-        'brand-glow': '0 0 24px 4px rgba(37, 99, 235, 0.25)',
+        // High-contrast clean highlight
+        'brand-glow': '0 0 24px 2px rgba(255, 255, 255, 0.12)',
         // 3D book page depth shadow for the flipbook
-        'page-flip':  '4px 0 12px rgba(0,0,0,0.2), -4px 0 12px rgba(0,0,0,0.1)',
+        'page-flip':  '4px 0 12px rgba(0,0,0,0.5), -4px 0 12px rgba(0,0,0,0.3)',
       },
 
       // --- Z-Index ---

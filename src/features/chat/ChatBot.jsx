@@ -172,7 +172,7 @@ export default function ChatBot() {
             href={url}
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noopener noreferrer' : undefined}
-            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all font-medium inline-flex items-center gap-0.5"
+            className="text-white hover:underline underline-offset-2 break-all font-mono font-bold inline-flex items-center gap-0.5"
           >
             <span>{label}</span>
             {isExternal && <span className="text-[10px] select-none">↗</span>}
@@ -183,7 +183,7 @@ export default function ChatBot() {
       // 2. Bold **text**
       if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
         return (
-          <strong key={index} className="font-semibold text-blue-300">
+          <strong key={index} className="font-bold text-white">
             {part.slice(2, -2)}
           </strong>
         )
@@ -192,7 +192,7 @@ export default function ChatBot() {
       // 3. Inline code `code`
       if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
         return (
-          <code key={index} className="px-1 py-0.5 rounded bg-slate-950/60 border border-slate-700 text-blue-300 font-mono text-[11px]">
+          <code key={index} className="px-1.5 py-0.5 rounded-none bg-black border border-zinc-700 text-zinc-200 font-mono text-[11px]">
             {part.slice(1, -1)}
           </code>
         )
@@ -206,7 +206,7 @@ export default function ChatBot() {
             href={part}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-blue-400 hover:text-blue-300 underline underline-offset-2 break-all inline-flex items-center gap-0.5"
+            className="text-white hover:underline underline-offset-2 break-all font-mono font-bold inline-flex items-center gap-0.5"
           >
             <span>{part}</span>
             <span className="text-[10px] select-none">↗</span>
@@ -237,7 +237,7 @@ export default function ChatBot() {
         const cleanContent = trimmed.replace(/^(\*|-|•)\s+/, '')
         return (
           <div key={lineIndex} className="flex items-start gap-2 my-0.5 ml-1">
-            <span className="text-blue-400 mt-0.5 text-xs select-none">•</span>
+            <span className="text-white mt-0.5 text-xs select-none">•</span>
             <div className="flex-1">{formatInlineText(cleanContent)}</div>
           </div>
         )
@@ -249,7 +249,7 @@ export default function ChatBot() {
         const [, num, numContent] = numMatch
         return (
           <div key={lineIndex} className="flex items-start gap-1.5 my-1 ml-0.5">
-            <span className="font-semibold text-blue-300 text-xs select-none shrink-0">{num}.</span>
+            <span className="font-bold text-white text-xs select-none shrink-0 font-mono">{num}.</span>
             <div className="flex-1">{formatInlineText(numContent)}</div>
           </div>
         )
@@ -268,27 +268,27 @@ export default function ChatBot() {
     <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
       {/* ─── 1. Chat Window ──────────────────────────────────────────────── */}
       {isOpen && (
-        <div className="w-[92vw] sm:w-[410px] h-[540px] max-h-[82vh] bg-slate-900/95 backdrop-blur-xl border border-slate-700/80 rounded-2xl shadow-2xl flex flex-col overflow-hidden mb-4 transition-all duration-300 animate-in fade-in zoom-in-95">
+        <div className="w-[92vw] sm:w-[410px] h-[540px] max-h-[82vh] bg-black border border-zinc-800 rounded-none sm:rounded-md shadow-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 animate-in fade-in zoom-in-95">
           {/* Header */}
-          <div className="px-4 py-3.5 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-slate-700/60 flex items-center justify-between">
+          <div className="px-4 py-3 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-9 h-9 rounded-full bg-blue-600/20 border border-blue-500/40 flex items-center justify-center text-blue-400">
-                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div className="w-8 h-8 rounded-none bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white">
+                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                 </div>
-                <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-slate-900 animate-pulse"></span>
+                <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-white border border-black animate-pulse"></span>
               </div>
               <div>
-                <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-1.5">
-                  <span>AI Portfolio Assistant</span>
-                  <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
-                    Edge
+                <h3 className="text-xs font-mono font-bold text-white uppercase tracking-wider flex items-center gap-1.5">
+                  <span>AI Assistant</span>
+                  <span className="text-[9px] uppercase font-bold tracking-widest px-1.5 py-0.2 rounded-none bg-white text-black">
+                    EDGE
                   </span>
                 </h3>
-                <p className="text-xs text-slate-400">
-                  {isEn ? 'Instant Q&A grounded in Portfolio' : 'Hỏi đáp tức thì về Thuận'}
+                <p className="text-[10px] font-mono text-zinc-400 uppercase tracking-wider">
+                  {isEn ? 'Instant Q&A' : 'Hỏi đáp tức thì'}
                 </p>
               </div>
             </div>
@@ -299,7 +299,7 @@ export default function ChatBot() {
                 type="button"
                 onClick={handleClearChat}
                 title={isEn ? "Clear conversation" : "Làm mới hội thoại"}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition-colors"
+                className="p-1.5 rounded-none text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors cursor-pointer"
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -309,9 +309,9 @@ export default function ChatBot() {
                 type="button"
                 onClick={() => setIsOpen(false)}
                 title={isEn ? "Close chat" : "Đóng"}
-                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800/80 transition-colors"
+                className="p-1.5 rounded-none text-zinc-400 hover:text-white hover:bg-zinc-900 transition-colors cursor-pointer"
               >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 </svg>
               </button>
@@ -319,7 +319,7 @@ export default function ChatBot() {
           </div>
 
           {/* Messages Container */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 scrollbar-thin scrollbar-thumb-slate-700 scrollbar-track-transparent">
+          <div className="flex-1 overflow-y-auto p-4 space-y-3.5 custom-scrollbar">
             {messages.map((msg) => {
               const isUser = msg.sender === 'user'
               return (
@@ -328,17 +328,17 @@ export default function ChatBot() {
                   className={`flex items-start gap-2.5 ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
                   {!isUser && (
-                    <div className="w-7 h-7 rounded-full bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 text-xs mt-0.5">
+                    <div className="w-6 h-6 rounded-none bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white shrink-0 text-[10px] font-mono font-bold mt-0.5">
                       AI
                     </div>
                   )}
 
                   <div
-                    className={`max-w-[84%] px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm leading-relaxed shadow-sm ${isUser
-                        ? 'bg-blue-600 text-white rounded-tr-none font-normal'
+                    className={`max-w-[85%] px-3.5 py-2.5 rounded-none text-xs leading-relaxed ${isUser
+                        ? 'bg-white text-black font-sans font-medium'
                         : msg.isError
-                          ? 'bg-red-950/40 text-red-200 border border-red-800/50 rounded-tl-none'
-                          : 'bg-slate-800/90 text-slate-100 border border-slate-700/60 rounded-tl-none'
+                          ? 'bg-zinc-950 text-red-300 border border-red-900/60 font-sans'
+                          : 'bg-zinc-950 text-zinc-200 border border-zinc-800 font-sans'
                       }`}
                   >
                     {renderFormattedText(msg.text)}
@@ -350,15 +350,15 @@ export default function ChatBot() {
             {/* Loading Indicator */}
             {isLoading && (
               <div className="flex items-start gap-2.5 justify-start">
-                <div className="w-7 h-7 rounded-full bg-blue-600/30 border border-blue-500/30 flex items-center justify-center text-blue-400 shrink-0 text-xs">
+                <div className="w-6 h-6 rounded-none bg-zinc-900 border border-zinc-700 flex items-center justify-center text-white shrink-0 text-[10px] font-mono font-bold">
                   AI
                 </div>
-                <div className="bg-slate-800/90 border border-slate-700/60 text-slate-400 px-4 py-3 rounded-2xl rounded-tl-none flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.3s]"></span>
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce [animation-delay:-0.15s]"></span>
-                  <span className="w-2 h-2 rounded-full bg-blue-400 animate-bounce"></span>
-                  <span className="text-xs ml-1.5 text-slate-400">
-                    {isEn ? 'Thinking...' : 'Đang suy nghĩ...'}
+                <div className="bg-zinc-950 border border-zinc-800 text-zinc-400 px-3.5 py-2.5 rounded-none flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce [animation-delay:-0.3s]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce [animation-delay:-0.15s]"></span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-bounce"></span>
+                  <span className="text-xs ml-1.5 font-mono text-zinc-400 uppercase tracking-wider">
+                    {isEn ? 'Processing...' : 'Đang xử lý...'}
                   </span>
                 </div>
               </div>
@@ -369,22 +369,22 @@ export default function ChatBot() {
 
           {/* Quick Suggestions (Shown if only 1 welcome message) */}
           {messages.length <= 1 && (
-            <div className="px-3 py-2 bg-slate-950/40 border-t border-slate-800/60 flex flex-wrap gap-1.5">
+            <div className="px-3 py-2 bg-zinc-950 border-t border-zinc-800 flex flex-wrap gap-1.5">
               {suggestions.map((prompt, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => handleSendMessage(prompt)}
-                  className="text-[11px] text-slate-300 bg-slate-800/70 hover:bg-blue-600/30 hover:text-blue-200 border border-slate-700/60 hover:border-blue-500/50 rounded-full px-2.5 py-1 transition-all text-left"
+                  className="text-[10px] font-mono tracking-wider text-zinc-300 bg-black hover:bg-white hover:text-black border border-zinc-800 rounded-none px-2.5 py-1 transition-all text-left cursor-pointer"
                 >
-                  💡 {prompt}
+                  ⚡ {prompt}
                 </button>
               ))}
             </div>
           )}
 
           {/* Input Area */}
-          <div className="p-3 bg-slate-900/90 border-t border-slate-700/60">
+          <div className="p-3 bg-zinc-950 border-t border-zinc-800">
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -404,13 +404,13 @@ export default function ChatBot() {
                     : "Hỏi về kinh nghiệm, kỹ năng của Thuận..."
                 }
                 disabled={isLoading}
-                className="flex-1 bg-slate-800/90 text-slate-100 placeholder-slate-400 text-xs sm:text-sm px-3.5 py-2.5 rounded-xl border border-slate-700 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all disabled:opacity-50"
+                className="flex-1 bg-black text-white placeholder-zinc-500 font-mono text-xs px-3.5 py-2.5 rounded-none border border-zinc-800 focus:outline-none focus:border-white transition-all disabled:opacity-50"
               />
 
               <button
                 type="submit"
                 disabled={!inputMessage.trim() || isLoading}
-                className="bg-blue-600 hover:bg-blue-500 disabled:opacity-40 disabled:hover:bg-blue-600 text-white p-2.5 rounded-xl transition-all shadow-md flex items-center justify-center shrink-0"
+                className="bg-white hover:bg-zinc-200 disabled:opacity-30 disabled:hover:bg-white text-black font-bold p-2.5 rounded-none transition-all flex items-center justify-center shrink-0 cursor-pointer"
                 title={isEn ? "Send message" : "Gửi tin nhắn"}
               >
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -426,26 +426,22 @@ export default function ChatBot() {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="group relative flex items-center gap-2.5 px-4 py-3 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white rounded-full shadow-lg hover:shadow-blue-500/25 transition-all duration-300 hover:scale-105 active:scale-95 border border-blue-400/30"
+        className="group relative flex items-center gap-2 px-4 py-2.5 rounded-none border border-white bg-white text-black hover:bg-zinc-200 transition-all duration-200 active:scale-95 cursor-pointer font-mono font-bold text-xs uppercase tracking-widest shadow-2xl"
         aria-label={isEn ? "Chat with AI" : "Trò chuyện với AI"}
       >
-        {/* Glow pulsing ring behind button */}
-        <span className="absolute -inset-0.5 rounded-full bg-blue-500 opacity-40 blur group-hover:opacity-75 transition duration-300 animate-pulse"></span>
-
-        <span className="relative flex items-center gap-2 text-sm font-medium">
+        <span className="relative flex items-center gap-2">
           {isOpen ? (
             <>
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
-              <span>{isEn ? 'Close AI' : 'Đóng AI'}</span>
+              <span>{isEn ? 'CLOSE AI' : 'ĐÓNG AI'}</span>
             </>
           ) : (
             <>
-              <svg className="w-5 h-5 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="w-4 h-4 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
               </svg>
-              <span>{isEn ? 'Assistant' : 'Hỗ trợ'}</span>
             </>
           )}
         </span>

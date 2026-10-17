@@ -77,14 +77,14 @@ export default function DocumentsModal({ isOpen, onClose }) {
         ref={modalContentRef}
         className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden flex flex-col my-auto animate-fade-in-up"
       >
-        {/* Top Header Glow Accent */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-600" />
+        {/* Top Hairline Accent */}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/40" />
 
         {/* Modal Header */}
-        <div className="flex items-start justify-between p-5 sm:p-7 border-b border-slate-800/80 bg-slate-900/40">
+        <div className="flex items-start justify-between p-5 sm:p-7 border-b border-zinc-800 bg-zinc-950">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-mono font-semibold uppercase bg-blue-950/80 text-blue-300 border border-blue-800/80">
-              <span className="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-none text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase bg-zinc-900 text-white border border-white/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>GOOGLE DRIVE CREDENTIALS</span>
             </div>
             <h2
@@ -93,7 +93,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
             >
               {modalTitle}
             </h2>
-            <p className="text-xs sm:text-sm text-slate-400 font-sans max-w-xl">
+            <p className="text-xs sm:text-sm text-zinc-400 font-sans max-w-xl">
               {modalSubtitle}
             </p>
           </div>
@@ -102,14 +102,14 @@ export default function DocumentsModal({ isOpen, onClose }) {
             type="button"
             onClick={onClose}
             aria-label="Close dialog"
-            className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-700 transition-all cursor-pointer flex-shrink-0"
+            className="w-8 h-8 sm:w-9 sm:h-9 rounded-none bg-zinc-900 border border-zinc-700 flex items-center justify-center text-zinc-300 hover:text-black hover:bg-white hover:border-white transition-all cursor-pointer flex-shrink-0 font-mono"
           >
             ✕
           </button>
         </div>
 
         {/* Modal Body: Document Cards for Master CV & Transcript */}
-        <div className="p-4 sm:p-7 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 bg-slate-950">
+        <div className="p-4 sm:p-7 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 bg-black">
           {docData.items?.map((item) => {
             const title = item.title?.[currentLang] || item.title?.vi
             const badge = item.badge?.[currentLang] || item.badge?.vi
@@ -125,20 +125,14 @@ export default function DocumentsModal({ isOpen, onClose }) {
             return (
               <div
                 key={item.id}
-                className="relative rounded-2xl bg-slate-900/70 border border-slate-800/90 hover:border-blue-500/50 p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 group hover:shadow-[0_0_25px_rgba(59,130,246,0.15)]"
+                className="relative rounded-none bg-zinc-950 border border-zinc-800 hover:border-white p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 group shadow-2xl"
               >
                 {/* Top Badge & Type */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span
-                    className={`text-[10px] sm:text-xs font-mono font-bold px-2.5 py-0.5 rounded-md uppercase border ${
-                      isCv
-                        ? 'bg-blue-950/80 text-blue-300 border-blue-800/80'
-                        : 'bg-emerald-950/80 text-emerald-300 border-emerald-800/80'
-                    }`}
-                  >
+                  <span className="text-[10px] sm:text-xs font-mono font-bold px-2.5 py-0.5 rounded-none uppercase bg-white text-black tracking-widest">
                     {badge || (isCv ? 'MASTER CV' : 'TRANSCRIPT')}
                   </span>
-                  <span className="text-[11px] font-mono text-slate-500 uppercase flex items-center gap-1">
+                  <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-1 font-semibold">
                     <span>Google Drive</span>
                   </span>
                 </div>
@@ -146,13 +140,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
                 {/* Title & Description */}
                 <div className="space-y-2 mb-4 flex-1">
                   <div className="flex items-center gap-2.5">
-                    <div
-                      className={`w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                        isCv
-                          ? 'bg-blue-600/20 text-blue-400 border border-blue-500/30'
-                          : 'bg-emerald-600/20 text-emerald-400 border border-emerald-500/30'
-                      }`}
-                    >
+                    <div className="w-9 h-9 rounded-none bg-zinc-900 text-white border border-zinc-700 flex items-center justify-center flex-shrink-0 group-hover:border-white transition-colors">
                       {isCv ? (
                         <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path
@@ -173,26 +161,26 @@ export default function DocumentsModal({ isOpen, onClose }) {
                         </svg>
                       )}
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight group-hover:text-blue-400 transition-colors">
+                    <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
                       {title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans pt-1">
+                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans pt-1">
                     {description}
                   </p>
 
                   {/* Highlights list */}
                   {highlights && highlights.length > 0 && (
                     <div className="pt-2 space-y-1">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-slate-500 font-semibold block">
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-zinc-400 font-semibold block">
                         {currentLang === 'vi' ? 'ĐIỂM NỔI BẬT:' : 'HIGHLIGHTS:'}
                       </span>
                       <div className="flex flex-wrap gap-1.5">
                         {highlights.map((h, idx) => (
                           <span
                             key={idx}
-                            className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-md bg-slate-950 text-slate-300 border border-slate-800"
+                            className="text-[10px] sm:text-[11px] font-mono px-2 py-0.5 rounded-none bg-black text-zinc-300 border border-zinc-800"
                           >
                             • {h}
                           </span>
@@ -203,8 +191,8 @@ export default function DocumentsModal({ isOpen, onClose }) {
                 </div>
 
                 {/* Footer Actions */}
-                <div className="pt-4 border-t border-slate-800/80 space-y-3">
-                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-500">
+                <div className="pt-4 border-t border-zinc-800 space-y-3">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
                     <span>{item.filename || 'PDF Document'}</span>
                     <span>
                       {currentLang === 'vi' ? 'Cập nhật' : 'Updated'}: {item.updatedAt || '2026'}
@@ -223,9 +211,9 @@ export default function DocumentsModal({ isOpen, onClose }) {
                           alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
                         }
                       }}
-                      className="px-3 py-2 sm:py-2.5 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-200 hover:text-white text-xs font-mono font-semibold tracking-wider uppercase text-center transition-all flex items-center justify-center gap-1.5 border border-slate-700 cursor-pointer"
+                      className="px-3 py-2 sm:py-2.5 rounded-none bg-black hover:bg-white hover:text-black text-white text-xs font-mono font-bold tracking-widest uppercase text-center transition-all flex items-center justify-center gap-1.5 border border-zinc-700 cursor-pointer"
                     >
-                      <svg className="w-3.5 h-3.5 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
@@ -244,7 +232,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
                           alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
                         }
                       }}
-                      className="px-3 py-2 sm:py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-mono font-semibold tracking-wider uppercase text-center shadow-md shadow-blue-600/30 hover:shadow-blue-500/50 transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className="px-3 py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold tracking-widest uppercase text-center transition-all flex items-center justify-center gap-1.5 cursor-pointer"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -260,9 +248,9 @@ export default function DocumentsModal({ isOpen, onClose }) {
 
         {/* Optional Google Drive Shared Folder Link */}
         {docData.driveFolderUrl && (
-          <div className="px-5 py-3.5 border-t border-slate-800/80 bg-slate-900/40 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-            <div className="flex items-center gap-2 text-xs font-mono text-slate-300">
-              <span className="text-amber-400">📁</span>
+          <div className="px-5 py-3.5 border-t border-zinc-800 bg-zinc-950 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+            <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
+              <span className="text-white">📁</span>
               <span>
                 {currentLang === 'vi'
                   ? 'Thư mục Google Drive lưu trữ đầy đủ tài liệu & chứng chỉ:'
@@ -273,7 +261,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
               href={docData.driveFolderUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-3.5 py-1.5 rounded-lg bg-blue-600/20 hover:bg-blue-600/35 text-blue-300 hover:text-white border border-blue-500/40 text-xs font-mono font-semibold transition-all flex items-center gap-1.5"
+              className="px-3.5 py-1.5 rounded-none bg-black hover:bg-white hover:text-black text-white border border-zinc-700 text-xs font-mono font-bold tracking-wider uppercase transition-all flex items-center gap-1.5"
             >
               <span>{currentLang === 'vi' ? 'MỞ THƯ MỤC DRIVE' : 'OPEN DRIVE FOLDER'}</span>
               <span>↗</span>
@@ -282,15 +270,15 @@ export default function DocumentsModal({ isOpen, onClose }) {
         )}
 
         {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-slate-800/80 bg-slate-900/40 flex items-center justify-between text-xs font-mono text-slate-500">
+        <div className="p-4 sm:p-5 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono text-zinc-400 tracking-wider uppercase">
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-blue-400" />
+            <span className="w-2 h-2 rounded-full bg-white" />
             <span>Google Drive Direct Link</span>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-blue-400 hover:underline cursor-pointer"
+            className="text-white hover:underline cursor-pointer font-bold"
           >
             {currentLang === 'vi' ? 'Đóng cửa sổ' : 'Close window'} [ESC]
           </button>

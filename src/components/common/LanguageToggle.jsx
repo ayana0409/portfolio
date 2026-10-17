@@ -20,12 +20,10 @@ export default function LanguageToggle({ className = '' }) {
       type="button"
       onClick={handleToggle}
       aria-label="Toggle Language"
-      className={`px-3 py-1.5 rounded-lg text-xs font-mono font-semibold
-        border border-brand-border dark:border-brand-border-dark
-        bg-brand-card/80 dark:bg-brand-card-dark/80
-        hover:border-brand-accent dark:hover:border-brand-accent-dark
-        text-brand-text dark:text-brand-text-dark
-        transition-all duration-200 active:scale-95 shadow-sm ${className}`}
+      className={`px-3 py-1.5 rounded-full text-xs font-mono font-semibold
+        border border-white/20 hover:border-white
+        bg-black text-white hover:bg-white/10
+        transition-all duration-200 active:scale-95 shadow-none ${className}`}
     >
       🌐 {i18n.language === 'vi' ? 'VI' : 'EN'}
     </button>

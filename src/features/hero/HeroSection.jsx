@@ -88,27 +88,23 @@ export default function HeroSection({ onExploreClick }) {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-slate-950 text-white select-none flex flex-col justify-between"
+      className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-transparent text-white select-none flex flex-col justify-between"
     >
-      {/* ─── Layered Cosmic & Tech Backgrounds ─────────────────────────────── */}
-      {/* 1. Deep Space Nebula Radial Gradients */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-blue-900/30 via-slate-950 to-black" />
-      <div className="absolute top-1/4 left-1/4 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
+      {/* ─── Layered Cosmic & Tech Backgrounds (SpaceX Minimal) ───────────── */}
+      {/* 1. Deep Space Radial Gradients */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-900/30 via-black/50 to-black/80 pointer-events-none" />
 
-      {/* 2. SpaceX Rocket Wallpaper (Optional external layer with graceful fallback) */}
+      {/* 2. SpaceX Rocket Wallpaper */}
       <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-40 mix-blend-screen transform scale-105 transition-transform duration-1000"
+        className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-35 mix-blend-screen transform scale-105 transition-transform duration-1000 pointer-events-none"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1517976487507-5b62b1b38f87?q=80&w=2000&auto=format&fit=crop')`,
         }}
       />
 
       {/* 3. Dark Contrast Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent" />
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/50 to-transparent" />
-
-      {/* 4. Subtle Starfield Grid */}
-      <div className="absolute inset-0 opacity-15 bg-[radial-gradient(#60a5fa_1px,transparent_1px)] [background-size:28px_28px] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
 
       {/* Top spacer for navbar clearance */}
       <div className="relative z-10 w-full h-16 sm:h-20" />
@@ -119,26 +115,26 @@ export default function HeroSection({ onExploreClick }) {
         className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 lg:px-20 pb-20 sm:pb-28 md:pb-32 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto md:my-0"
       >
         {/* Mission Subtitle */}
-        <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.2em] sm:tracking-[0.3em] uppercase text-blue-400 font-semibold">
+        <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.25em] sm:tracking-[0.35em] uppercase text-zinc-400 font-semibold">
           {roleText}
         </p>
 
         {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-[0.06em] sm:tracking-[0.12em] text-white leading-tight drop-shadow-lg break-words max-w-full">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-[0.06em] sm:tracking-[0.14em] text-white leading-tight break-words max-w-full">
           {heroHeading}
         </h1>
 
         {/* Mission / Bio statement */}
-        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.1em] sm:tracking-[0.2em] text-slate-300 max-w-2xl uppercase leading-relaxed pb-1 sm:pb-2">
+        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.12em] sm:tracking-[0.2em] text-zinc-300 max-w-2xl uppercase leading-relaxed pb-1 sm:pb-2">
           {missionText}
         </p>
 
-        {/* Action Buttons: Explore Projects & Download Master CV / Transcript */}
+        {/* Action Buttons: SpaceX Signature High-Contrast Style */}
         <div className="pt-2 sm:pt-4 flex flex-wrap items-center gap-3 sm:gap-4 z-20">
           <button
             type="button"
             onClick={handleScrollDown}
-            className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-mono text-xs sm:text-sm font-semibold tracking-wider uppercase shadow-lg shadow-blue-600/30 hover:shadow-blue-500/50 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
+            className="px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-white hover:bg-zinc-200 text-black font-mono text-xs sm:text-sm font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-2 active:scale-95 shadow-none"
           >
             <span>{currentLang === 'vi' ? 'KHÁM PHÁ DỰ ÁN' : 'EXPLORE PROJECTS'}</span>
             <span>↓</span>
@@ -147,9 +143,9 @@ export default function HeroSection({ onExploreClick }) {
           <button
             type="button"
             onClick={() => setIsDocsModalOpen(true)}
-            className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-xl bg-slate-900/80 hover:bg-slate-800 text-blue-300 hover:text-white font-mono text-xs sm:text-sm font-semibold tracking-wider uppercase border border-blue-500/40 hover:border-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.15)] active:scale-95 transition-all cursor-pointer flex items-center gap-2 backdrop-blur-md"
+            className="px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-transparent hover:bg-white hover:text-black text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border border-white/60 hover:border-white transition-all cursor-pointer flex items-center gap-2 backdrop-blur-sm active:scale-95 shadow-none"
           >
-            <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
             </svg>
             <span>{currentLang === 'vi' ? 'TẢI CV & BẢNG ĐIỂM' : 'RESUME & TRANSCRIPT'}</span>
