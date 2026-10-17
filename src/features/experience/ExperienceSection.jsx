@@ -24,6 +24,8 @@ export default function ExperienceSection() {
 
   const drawerRef = useRef(null)
   const containerRef = useRef(null)
+  const touchStartX = useRef(0)
+  const touchEndX = useRef(0)
 
   const currentExp = experiences[currentIndex] || experiences[0]
 
@@ -41,6 +43,48 @@ export default function ExperienceSection() {
     setCurrentIndex((prev) => (prev - 1 < 0 ? totalExperiences - 1 : prev - 1))
     setTimeout(() => setIsFlipping(false), 250)
   }
+
+  // Touch swipe support for mobile
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.changedTouches[0].screenX
+  }
+
+  const handleTouchEnd = (e) => {
+    touchEndX.current = e.changedTouches[0].screenX
+    const deltaX = touchStartX.current - touchEndX.current
+    if (Math.abs(deltaX) > 45) {
+      if (deltaX > 0) {
+        handleNext()
+      } else {
+        handlePrev()
+      }
+    }
+  }
+
+  // Keyboard navigation (ArrowLeft / ArrowRight) when experience section is in view
+  useEffect(() => {
+    const handleArrowKeys = (e) => {
+      if (selectedExperience) return
+      if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
+
+      const rect = containerRef.current?.getBoundingClientRect()
+      if (!rect) return
+      const isVisibleOnScreen = rect.top < window.innerHeight * 0.6 && rect.bottom > window.innerHeight * 0.4
+
+      if (isVisibleOnScreen) {
+        if (e.key === 'ArrowLeft') {
+          e.preventDefault()
+          handlePrev()
+        } else if (e.key === 'ArrowRight') {
+          e.preventDefault()
+          handleNext()
+        }
+      }
+    }
+
+    window.addEventListener('keydown', handleArrowKeys)
+    return () => window.removeEventListener('keydown', handleArrowKeys)
+  }, [selectedExperience, totalExperiences])
 
   // Open & Close Details Drawer
   const handleOpenDetail = (exp) => {
@@ -94,7 +138,9 @@ export default function ExperienceSection() {
     <section
       id="experience"
       ref={containerRef}
-      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto select-none"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-2 sm:pb-3 px-4 sm:px-8 lg:px-12 max-w-6xl mx-auto select-none"
     >
       {/* Background Ambient Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[250px] sm:h-[350px] bg-blue-600/10 blur-[150px] rounded-full pointer-events-none" />
@@ -230,30 +276,17 @@ export default function ExperienceSection() {
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Pagination Controls */}
-        {totalExperiences > 1 && (
-          <div className="flex items-center justify-center gap-3 mt-3">
-            <button
-              type="button"
-              onClick={handlePrev}
-              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[38px] flex items-center"
-            >
-              ← {t('ui.buttons.prevPage', 'PREV')}
-            </button>
-            <span className="text-xs font-mono text-slate-400">
-              {currentIndex + 1} / {totalExperiences}
+          {/* Card Inner Bottom Footer */}
+          <div className="mt-3 pt-2.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500">
+            <span className="truncate max-w-[200px] sm:max-w-none">
+              {company} / {location}
             </span>
-            <button
-              type="button"
-              onClick={handleNext}
-              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black text-white text-xs font-mono tracking-wider uppercase transition-all cursor-pointer min-h-[38px] flex items-center"
-            >
-              {t('ui.buttons.nextPage', 'NEXT')} →
-            </button>
+            <span>
+              Role {currentIndex + 1} of {totalExperiences}
+            </span>
           </div>
-        )}
+        </div>
       </div>
 
       {/* ─── Experience Details Deep-Dive Drawer (2/3 screen width on desktop, 100% on mobile) ─── */}
@@ -394,10 +427,45 @@ export default function ExperienceSection() {
         </div>
       )}
 
-      {/* ─── Bottom Footer Bar ──────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex flex-col xs:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center">
-        <span>CAREER TRACK: BACKEND DEVELOPER</span>
-        <span>EXPERIENCE SHOWCASE</span>
+      {/* ─── Bottom Navigation Controls (Compact Footer) ────────────────────── */}
+      <div className="relative z-10 max-w-6xl mx-auto w-full flex items-center justify-between pt-2 pb-1 border-t border-slate-800/80">
+        <div className="text-[10px] sm:text-[11px] font-mono text-slate-400">
+          <span className="hidden sm:inline">
+            USE <kbd className="px-1 py-0.5 rounded bg-slate-900 border border-slate-800 text-white">←</kbd> / <kbd className="px-1 py-0.5 rounded bg-slate-900 border border-slate-800 text-white">→</kbd> OR SWIPE
+          </span>
+          <span className="sm:hidden text-slate-500">
+            👈 SWIPE TO NAVIGATE 👉
+          </span>
+        </div>
+
+        {/* Page / Experience Navigation Buttons */}
+        <div className="flex items-center gap-2 sm:gap-2.5">
+          <button
+            type="button"
+            onClick={handlePrev}
+            disabled={isFlipping}
+            aria-label="Previous Experience"
+            className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full
+              border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black
+              text-white text-[11px] font-mono tracking-wider uppercase transition-all active:scale-95 disabled:opacity-40 cursor-pointer min-h-[34px] sm:min-h-[36px]"
+          >
+            <span>← PREV</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleNext}
+            disabled={isFlipping}
+            aria-label={currentIndex >= totalExperiences - 1 ? 'Reset to first experience' : 'Next Experience'}
+            className="flex items-center gap-1.5 px-3.5 sm:px-4 py-1.5 rounded-full
+              border border-slate-800 bg-slate-900/80 hover:bg-white hover:text-black
+              text-white text-[11px] font-mono tracking-wider uppercase transition-all active:scale-95 disabled:opacity-40 cursor-pointer min-h-[34px] sm:min-h-[36px]"
+          >
+            <span>
+              {currentIndex >= totalExperiences - 1 ? 'RESET ↺' : 'NEXT →'}
+            </span>
+          </button>
+        </div>
       </div>
     </section>
   )
