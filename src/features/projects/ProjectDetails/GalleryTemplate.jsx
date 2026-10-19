@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
+import useModalHistory from '../../../hooks/useModalHistory'
 
 /**
  * GalleryTemplate Component
@@ -15,6 +16,9 @@ export default function GalleryTemplate({ project }) {
   const { t, i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeImage, setActiveImage] = useState(null)
+
+  // Intercept mobile back button to close lightbox
+  useModalHistory(Boolean(activeImage), () => setActiveImage(null), 'gallery-lightbox')
 
   // Retrieve bilingual text
   const title = project.title?.[currentLang] || project.title?.vi || ''
@@ -183,7 +187,7 @@ export default function GalleryTemplate({ project }) {
       {activeImage && (
         <div
           onClick={() => setActiveImage(null)}
-          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
+          className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
         >
           <div
             onClick={(e) => e.stopPropagation()}

@@ -10,7 +10,7 @@ import { getCurrentYear } from '../../utils/helpers'
 export default function Footer() {
   return (
     <footer className="w-full border-t border-zinc-800 py-6 text-center text-xs font-mono text-zinc-400 bg-black tracking-wider uppercase">
-      <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-white inline-block" />
           <span>

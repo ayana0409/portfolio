@@ -1,8 +1,9 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { resolveDocumentUrl, resolveDocumentDownloadUrl } from '../../utils/helpers'
+import useModalHistory from '../../hooks/useModalHistory'
 
 /**
  * DocumentsModal Component (Streamlined Google Drive Version)
@@ -32,26 +33,9 @@ export default function DocumentsModal({ isOpen, onClose }) {
     items: [],
   }
 
-  // Handle ESC key press and scroll locking
-  useEffect(() => {
-    if (!isOpen) return
+  // Intercept mobile back button to close modal instead of exiting page, and hide navbar
+  useModalHistory(isOpen, onClose, 'documents')
 
-    const originalOverflow = document.body.style.overflow
-    document.body.style.overflow = 'hidden'
-
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        onClose()
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.body.style.overflow = originalOverflow
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [isOpen, onClose])
 
   if (!isOpen || typeof document === 'undefined') return null
 

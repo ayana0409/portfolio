@@ -60,7 +60,7 @@ export default function SkillsSection() {
     <section
       id="skills"
       ref={containerRef}
-      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 lg:px-12 max-w-5xl mx-auto select-none"
+      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-[1800px] mx-auto select-none"
     >
       {/* ─── Section Header (SpaceX Minimal) ─────────────────────────────────── */}
       <div className="text-center space-y-1 mb-2 relative z-10 w-full">
@@ -69,11 +69,11 @@ export default function SkillsSection() {
           <span>02 / CAPABILITIES & STACK</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
           {currentLang === 'vi' ? 'KỸ NĂNG CHUYÊN MÔN' : 'SKILLS & TECHNOLOGIES'}
         </h2>
 
-        <p className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-zinc-400 max-w-lg mx-auto leading-relaxed px-2">
+        <p className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed px-2">
           {currentLang === 'vi'
             ? 'CHẠM HOẶC RÊ CHUỘT VÀO TỪNG DANH MỤC ĐỂ XEM CHI TIẾT CÔNG NGHỆ'
             : 'TAP OR HOVER OVER EACH CATEGORY TO EXPAND DETAILED TECH STACK'}
@@ -81,7 +81,7 @@ export default function SkillsSection() {
       </div>
 
       {/* ─── Vertical Stack Container (Accordion Flow) ─────────────────────── */}
-      <div className="w-full space-y-2 sm:space-y-2.5 my-auto relative z-10 py-1">
+      <div className="w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto space-y-2 sm:space-y-2.5 my-auto relative z-10 py-1">
         {categories.map((cat) => {
           const isActive = activeKey === cat.key
 

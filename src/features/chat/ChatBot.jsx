@@ -265,10 +265,10 @@ export default function ChatBot() {
   }
 
   return (
-    <div className="fixed bottom-5 right-5 z-50 flex flex-col items-end">
+    <div className="fixed bottom-20 sm:bottom-6 right-3.5 sm:right-6 z-50 flex flex-col items-end">
       {/* ─── 1. Chat Window ──────────────────────────────────────────────── */}
       {isOpen && (
-        <div className="w-[92vw] sm:w-[410px] h-[540px] max-h-[82vh] bg-black border border-zinc-800 rounded-none sm:rounded-md shadow-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 animate-in fade-in zoom-in-95">
+        <div className="w-[92vw] sm:w-[410px] h-[540px] max-h-[78vh] bg-black border border-zinc-800 rounded-none sm:rounded-md shadow-2xl flex flex-col overflow-hidden mb-3 transition-all duration-300 animate-in fade-in zoom-in-95">
           {/* Header */}
           <div className="px-4 py-3 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between">
             <div className="flex items-center gap-3">

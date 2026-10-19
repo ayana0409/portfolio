@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
+import useModalHistory from '../../../hooks/useModalHistory'
 
 /**
  * Normalizes project links into a standardized list supporting both
@@ -179,19 +180,9 @@ export default function InfoTemplate({ project }) {
   // Universal dynamic links normalization
   const normalizedLinks = normalizeProjectLinks(project.links, currentLang)
 
-  // Handle ESC key for Lightbox
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape' && activeLightboxImg) {
-        e.stopPropagation()
-        setActiveLightboxImg(null)
-      }
-    }
-    if (activeLightboxImg) {
-      window.addEventListener('keydown', handleKeyDown)
-    }
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [activeLightboxImg])
+  // Intercept mobile back button to close lightbox instead of navigating away
+  useModalHistory(Boolean(activeLightboxImg), () => setActiveLightboxImg(null), 'lightbox')
+
 
   return (
     <div className="space-y-5 sm:space-y-6 animate-fade-in text-zinc-100 pb-4">

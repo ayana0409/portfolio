@@ -25,36 +25,35 @@ export default function AboutSection() {
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-center items-center pt-20 pb-8 px-4 sm:px-8 md:px-12 max-w-6xl mx-auto select-none"
+      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-[1800px] mx-auto select-none"
     >
-      <div className="relative z-10 w-full grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center my-auto py-2">
-        {/* Left Column: Heading & Role Accent */}
-        <div className="md:col-span-4 space-y-3 sm:space-y-4 text-center md:text-left" data-animate>
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-mono font-medium bg-zinc-900 text-white border border-white/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            <span>01 / ABOUT ME</span>
-          </div>
-
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-tight text-white leading-tight">
-            {t('about.title', 'Giới thiệu về tôi')}
-          </h2>
-
-          <p className="text-xs sm:text-sm md:text-base font-mono text-zinc-400 font-semibold tracking-wider uppercase">
-            {role}
-          </p>
+      {/* ─── Section Header (SpaceX Minimal - Top-Centered) ─────────────────── */}
+      <div className="text-center space-y-1 mb-2 relative z-10 w-full" data-animate>
+        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-mono tracking-widest uppercase bg-zinc-900 text-white border border-white/20">
+          <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+          <span>01 / ABOUT ME</span>
         </div>
 
-        {/* Right Column: Bio Narrative & Stats Card (SpaceX Minimal Technical Optical Lens) */}
-        <div className="md:col-span-8 space-y-4 sm:space-y-6" data-animate>
-          <div data-lens-card="true" className="optical-lens-card p-5 sm:p-7 md:p-8 rounded-2xl">
-            <p className="text-xs sm:text-sm md:text-base leading-relaxed text-zinc-200 font-sans italic">
-              "{bio}"
-            </p>
+        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
+          {t('about.title', 'Giới thiệu về tôi')}
+        </h2>
+
+        <p className="text-[10px] sm:text-xs font-mono tracking-widest uppercase text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed px-2">
+          {role}
+        </p>
+      </div>
+
+      {/* ─── Main Content: Optical Lens Card Centered ─────────────────────────── */}
+      <div className="w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto my-auto relative z-10 py-1" data-animate>
+        <div data-lens-card="true" className="optical-lens-card p-5 sm:p-7 md:p-8 lg:p-9 xl:p-10 rounded-2xl">
+          <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-zinc-200 font-sans italic text-center md:text-left">
+            "{bio}"
+          </p>
 
             {/* Responsive 3-Column Stats Matrix */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 lg:gap-4 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-white/10 text-center">
-              <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-zinc-950/40 border border-white/10 hover:border-white/40 transition-colors flex flex-col justify-center items-center overflow-hidden backdrop-blur-sm">
-                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-white font-mono tracking-tight whitespace-nowrap">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 lg:gap-5 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-white/10 text-center">
+              <div className="p-2.5 sm:p-3 lg:p-4 rounded-xl bg-zinc-950/40 border border-white/10 hover:border-white/40 transition-colors flex flex-col justify-center items-center overflow-hidden backdrop-blur-sm">
+                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl 2xl:text-2xl font-black text-white font-mono tracking-tight whitespace-nowrap">
                   .NET / NestJS
                 </span>
                 <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
@@ -128,7 +127,6 @@ export default function AboutSection() {
             </div>
           </div>
         </div>
-      </div>
 
       {/* ─── Documents Modal ──────────────────────────────────────────────── */}
       <DocumentsModal

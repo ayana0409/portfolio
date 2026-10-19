@@ -90,39 +90,48 @@ export default function HeroSection({ onExploreClick }) {
       ref={heroRef}
       className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-transparent text-white select-none flex flex-col justify-center"
     >
-      {/* ─── Layered Cosmic & Tech Backgrounds (SpaceX Minimal) ───────────── */}
-      {/* 1. Deep Space Radial Gradients */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-zinc-900/30 via-black/50 to-black/80 pointer-events-none" />
+      {/* ─── Layered Cosmic & Tech Backgrounds (SpaceX Minimal with 135° Diagonal Reveal) ── */}
+      {/* 1. Diagonal Translucent Dark Gradient behind Left / Top-Left Typography */}
+      <div
+        className="absolute inset-0 pointer-events-none transition-all duration-700"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.72) 32%, rgba(0,0,0,0.2) 55%, transparent 72%)',
+        }}
+      />
 
-      {/* 2. SpaceX Rocket Wallpaper */}
+      {/* 2. SpaceX Rocket Wallpaper (Fades out diagonally to reveal cosmic background in bottom-right) */}
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-35 mix-blend-screen transform scale-105 transition-transform duration-1000 pointer-events-none"
         style={{
           backgroundImage: `url('https://images.unsplash.com/photo-1517976487507-5b62b1b38f87?q=80&w=2000&auto=format&fit=crop')`,
+          maskImage:
+            'linear-gradient(135deg, black 0%, black 25%, rgba(0,0,0,0.4) 48%, transparent 68%)',
+          WebkitMaskImage:
+            'linear-gradient(135deg, black 0%, black 25%, rgba(0,0,0,0.4) 48%, transparent 68%)',
         }}
       />
 
-      {/* 3. Dark Contrast Overlays */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
+      {/* 3. Subtle Top-Edge Vignette for Clean Navbar Integration */}
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/75 to-transparent pointer-events-none" />
 
       {/* ─── Content: Vertically Centered with SpaceX Left-Aligned Typography ─── */}
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 lg:px-20 py-16 sm:py-20 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto"
+        className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-16 sm:py-20 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto"
       >
         {/* Mission Subtitle */}
         <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.25em] sm:tracking-[0.35em] uppercase text-zinc-400 font-semibold">
           {roleText}
         </p>
 
-        {/* Main Headline */}
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-black uppercase tracking-[0.06em] sm:tracking-[0.14em] text-white leading-tight break-words max-w-full">
+        {/* Main Headline (Scaled down for refined SpaceX editorial typography) */}
+        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-[0.06em] sm:tracking-[0.1em] text-white leading-tight break-words max-w-full">
           {heroHeading}
         </h1>
 
         {/* Mission / Bio statement */}
-        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.12em] sm:tracking-[0.2em] text-zinc-300 max-w-2xl uppercase leading-relaxed pb-1 sm:pb-2">
+        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.12em] sm:tracking-[0.2em] text-zinc-300 max-w-2xl lg:max-w-3xl xl:max-w-4xl uppercase leading-relaxed pb-1 sm:pb-2">
           {missionText}
         </p>
 

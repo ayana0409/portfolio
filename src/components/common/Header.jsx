@@ -25,8 +25,20 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isDocsModalOpen, setIsDocsModalOpen] = useState(false)
   const [isVisible, setIsVisible] = useState(true)
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const lastScrollY = useRef(0)
   const lastScrollUpTime = useRef(0)
+
+  // Listen for data-modal-open on body to immediately hide navbar and prevent overlapping exit buttons
+  useEffect(() => {
+    const checkModalState = () => {
+      setIsModalOpen(document.body.getAttribute('data-modal-open') === 'true')
+    }
+    checkModalState()
+    const observer = new MutationObserver(checkModalState)
+    observer.observe(document.body, { attributes: true, attributeFilter: ['data-modal-open'] })
+    return () => observer.disconnect()
+  }, [])
 
   const navLinks = [
     { id: 'about', href: '#about', label: t('nav.about', currentLang === 'vi' ? 'Giới thiệu' : 'About') },
@@ -164,8 +176,10 @@ export default function Header() {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 w-full transition-transform duration-300 ease-in-out will-change-transform ${
-        isVisible ? 'translate-y-0' : '-translate-y-full'
+      className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ease-in-out will-change-transform ${
+        isVisible && !isModalOpen
+          ? 'translate-y-0 opacity-100 pointer-events-auto'
+          : '-translate-y-full opacity-0 pointer-events-none'
       } ${
         isMobileMenuOpen
           ? 'bg-black/95 border-b border-zinc-800 backdrop-blur-xl'
@@ -180,7 +194,7 @@ export default function Header() {
         />
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-8 md:px-12 h-16 flex items-center justify-between">
+      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 h-16 flex items-center justify-between">
         {/* Brand / Logo */}
         <a
           href="#"

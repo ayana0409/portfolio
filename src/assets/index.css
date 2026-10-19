@@ -134,38 +134,56 @@
            shadow-sm hover:shadow-brand-glow transition-shadow duration-300;
   }
 
-  /* Optical Glassmorphism Lens Card with 1px Reflective Bevel */
+  /* Optical Glassmorphism Lens Card - Organic Cosmic Blend */
   .optical-lens-card {
-    background-color: rgba(9, 9, 11, 0.45);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    background-color: rgba(9, 9, 11, 0.35);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     box-shadow: 
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.32),
-      inset 0 -1px 0 0 rgba(255, 255, 255, 0.04),
-      0 16px 40px -8px rgba(0, 0, 0, 0.65);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.15),
+      inset 0 0 60px rgba(0, 0, 0, 0.6),
+      0 20px 50px -10px rgba(0, 0, 0, 0.85);
     position: relative;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
   }
 
   .optical-lens-card::before {
     content: '';
     position: absolute;
     top: 0;
-    left: 10%;
-    right: 10%;
+    left: 15%;
+    right: 15%;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.22), transparent);
     pointer-events: none;
     z-index: 20;
   }
 
   .optical-lens-card:hover {
-    border-color: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.18);
     box-shadow: 
-      inset 0 1px 0 0 rgba(255, 255, 255, 0.5),
-      inset 0 -1px 0 0 rgba(255, 255, 255, 0.08),
-      0 20px 48px -8px rgba(0, 0, 0, 0.85);
+      inset 0 1px 0 0 rgba(255, 255, 255, 0.25),
+      inset 0 0 70px rgba(0, 0, 0, 0.7),
+      0 24px 60px -10px rgba(0, 0, 0, 0.95);
+  }
+
+  /* Seamless Desktop Card Blend: completely remove borders and container background on desktop */
+  @media (min-width: 768px) {
+    .optical-lens-card.borderless-desktop {
+      border: none !important;
+      background-color: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      box-shadow: none !important;
+    }
+    .optical-lens-card.borderless-desktop::before {
+      display: none !important;
+    }
+    .optical-lens-card.borderless-desktop:hover {
+      border: none !important;
+      box-shadow: none !important;
+    }
   }
 }
 
@@ -208,3 +226,21 @@
     background: #ffffff;
   }
 }
+
+/* Hide navbar and floating chatbot whenever any modal is open to avoid covering the exit button */
+body[data-modal-open="true"] header {
+  transform: translateY(-100%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.3s ease, opacity 0.2s ease !important;
+}
+
+body[data-modal-open="true"] .chatbot-fab,
+body[data-modal-open="true"] button[aria-label="Chat with AI"],
+body[data-modal-open="true"] button[aria-label="Trò chuyện với AI"] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(16px) !important;
+  transition: opacity 0.2s ease, transform 0.3s ease !important;
+}
+

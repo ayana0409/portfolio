@@ -17,12 +17,13 @@ export default function ContactSection() {
 
   const email = portfolioData.contact?.email || 'duongdoanthuan@example.com'
   const githubUrl = portfolioData.contact?.github || 'https://github.com/ayana0409'
+  const linkedinUrl = portfolioData.contact?.linkedin || 'https://www.linkedin.com/in/thuanduongdev/'
 
   return (
     <section
       id="contact"
       ref={sectionRef}
-      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 md:px-12 max-w-5xl mx-auto select-none"
+      className="relative min-h-screen min-h-[100dvh] md:h-[100dvh] w-full overflow-hidden flex flex-col justify-between items-center pt-20 pb-6 px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-[1800px] mx-auto select-none"
     >
       {/* Main Content Area */}
       <div className="text-center space-y-4 sm:space-y-6 md:space-y-8 my-auto relative z-10 w-full py-2">
@@ -37,7 +38,7 @@ export default function ContactSection() {
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-[0.12em] text-white">
             {t('contact.title', 'Liên hệ & Hợp tác')}
           </h2>
-          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-400 max-w-md mx-auto leading-relaxed font-mono uppercase tracking-widest px-2">
+          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed font-mono uppercase tracking-widest px-2">
             {currentLang === 'vi'
               ? 'TÔI LUÔN SẴN SÀNG TRAO ĐỔI VỀ CÁC DỰ ÁN BACKEND .NET, KIẾN TRÚC HỆ THỐNG VÀ MICROSERVICES.'
               : 'ALWAYS OPEN TO DISCUSSING C# / .NET BACKEND ARCHITECTURE, SCALABLE MICROSERVICES, OR COLLABORATION.'}
@@ -45,12 +46,12 @@ export default function ContactSection() {
         </div>
 
         {/* Contact Action Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 max-w-xl mx-auto pt-2" data-animate>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 max-w-xl sm:max-w-2xl lg:max-w-5xl xl:max-w-6xl mx-auto pt-2 w-full" data-animate>
           {/* Email Card (Optical Lens) */}
           <a
             href={`mailto:${email}`}
             data-lens-card="true"
-            className="optical-lens-card p-4 sm:p-6 rounded-none sm:rounded-sm hover:border-white shadow-2xl transition-all duration-300 flex flex-col items-center gap-2.5 sm:gap-3 group cursor-pointer"
+            className="optical-lens-card p-4 sm:p-6 md:p-7 rounded-none sm:rounded-sm hover:border-white shadow-2xl transition-all duration-300 flex flex-col items-center gap-2.5 sm:gap-3 group cursor-pointer"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-none bg-zinc-950/60 text-white border border-white/20 group-hover:border-white group-hover:bg-white group-hover:text-black flex items-center justify-center transition-all duration-200 backdrop-blur-sm">
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -73,7 +74,7 @@ export default function ContactSection() {
             target="_blank"
             rel="noreferrer"
             data-lens-card="true"
-            className="optical-lens-card p-4 sm:p-6 rounded-none sm:rounded-sm hover:border-white shadow-2xl transition-all duration-300 flex flex-col items-center gap-2.5 sm:gap-3 group cursor-pointer"
+            className="optical-lens-card p-4 sm:p-6 md:p-7 rounded-none sm:rounded-sm hover:border-white shadow-2xl transition-all duration-300 flex flex-col items-center gap-2.5 sm:gap-3 group cursor-pointer"
           >
             <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-none bg-zinc-950/60 text-white border border-white/20 group-hover:border-white group-hover:bg-white group-hover:text-black flex items-center justify-center transition-all duration-200 backdrop-blur-sm">
               <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -86,6 +87,29 @@ export default function ContactSection() {
               </span>
               <span className="text-xs sm:text-sm font-semibold text-white font-mono block mt-0.5 tracking-wider">
                 @ayana0409
+              </span>
+            </div>
+          </a>
+
+          {/* LinkedIn Card (Optical Lens) */}
+          <a
+            href={linkedinUrl}
+            target="_blank"
+            rel="noreferrer"
+            data-lens-card="true"
+            className="optical-lens-card p-4 sm:p-6 md:p-7 rounded-none sm:rounded-sm hover:border-white shadow-2xl transition-all duration-300 flex flex-col items-center gap-2.5 sm:gap-3 group cursor-pointer"
+          >
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-none bg-zinc-950/60 text-white border border-white/20 group-hover:border-white group-hover:bg-white group-hover:text-black flex items-center justify-center transition-all duration-200 backdrop-blur-sm">
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.75a1.65 1.65 0 0 0-1.66 1.66 1.66 1.66 0 0 0 1.66 1.66 1.66 1.66 0 0 0 1.66-1.66 1.66 1.66 0 0 0-1.66-1.66Z" />
+              </svg>
+            </div>
+            <div className="text-center w-full px-2">
+              <span className="text-[10px] sm:text-xs font-mono text-zinc-400 font-bold uppercase tracking-widest block">
+                LinkedIn Profile
+              </span>
+              <span className="text-xs sm:text-sm font-semibold text-white font-mono block mt-0.5 tracking-wider">
+                @thuanduongdev
               </span>
             </div>
           </a>
