@@ -88,7 +88,7 @@ export default function HeroSection({ onExploreClick }) {
   return (
     <section
       ref={heroRef}
-      className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-transparent text-white select-none flex flex-col justify-between"
+      className="relative min-h-screen min-h-[100dvh] w-full overflow-hidden bg-transparent text-white select-none flex flex-col justify-center"
     >
       {/* ─── Layered Cosmic & Tech Backgrounds (SpaceX Minimal) ───────────── */}
       {/* 1. Deep Space Radial Gradients */}
@@ -106,13 +106,10 @@ export default function HeroSection({ onExploreClick }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pointer-events-none" />
       <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/40 to-transparent pointer-events-none" />
 
-      {/* Top spacer for navbar clearance */}
-      <div className="relative z-10 w-full h-16 sm:h-20" />
-
-      {/* ─── Content: SpaceX Bottom-Left Positioning ──────────────────────── */}
+      {/* ─── Content: Vertically Centered with SpaceX Left-Aligned Typography ─── */}
       <div
         ref={contentRef}
-        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 lg:px-20 pb-20 sm:pb-28 md:pb-32 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto md:my-0"
+        className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 lg:px-20 py-16 sm:py-20 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto"
       >
         {/* Mission Subtitle */}
         <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.25em] sm:tracking-[0.35em] uppercase text-zinc-400 font-semibold">
