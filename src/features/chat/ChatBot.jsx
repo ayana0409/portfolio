@@ -2,11 +2,114 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 /**
+ * Normalizes Markdown text from AI response before formatting:
+ * 1. Recombines links broken across newlines: [label]\n(url) or **[label]**\n(url)
+ * 2. Cleans up internal bold or extra asterisks inside link brackets
+ * 3. Removes accidental space between [label] and (url)
+ */
+function normalizeMarkdownText(raw) {
+  if (!raw || typeof raw !== 'string') return ''
+  let text = raw
+
+  // 1. **[label]**\n(url) or **[label]**(url) -> [label](url)
+  text = text.replace(/\*\*\[([^\]]+)\]\*\*\s*(\r?\n\s*)?\(([^\s)]+)\)/g, '[$1]($3)')
+
+  // 2. [**label**]\n(url) or [**label**](url) -> [label](url)
+  text = text.replace(/\[\*\*([^\]]+)\*\*\]\s*(\r?\n\s*)?\(([^\s)]+)\)/g, '[$1]($3)')
+
+  // 3. [label]\n(url) -> [label](url) (newlines between ] and ()
+  text = text.replace(/\[([^\]]+)\]\s*\r?\n\s*\(([^\s)]+)\)/g, '[$1]($2)')
+
+  // 4. Accidental spaces between ] and (: [label] (url)
+  text = text.replace(/\[([^\]]+)\]\s+\(([^\s)]+)\)/g, '[$1]($2)')
+
+  return text
+}
+
+/**
+ * TypewriterMessage Component
+ * 
+ * Streams text progressively for a smooth, natural AI typing effect.
+ * Uses adaptive speed so short answers feel snappy and long answers don't drag on.
+ */
+function TypewriterMessage({ text, onFinish, onTick, renderFormattedText }) {
+  const normalizedText = normalizeMarkdownText(text)
+  const [displayedLength, setDisplayedLength] = useState(1)
+  const isFinishedRef = useRef(false)
+
+  useEffect(() => {
+    isFinishedRef.current = false
+    setDisplayedLength(1)
+
+    const fullLength = normalizedText.length
+    if (fullLength <= 1) {
+      onFinish?.()
+      return
+    }
+
+    // Adaptive speed: keeps typing animation between ~0.6s and ~2.2s
+    const targetDuration = Math.min(2200, Math.max(600, fullLength * 7))
+    const intervalMs = 20
+    const totalTicks = Math.max(1, targetDuration / intervalMs)
+    const step = Math.max(1, Math.ceil(fullLength / totalTicks))
+
+    let current = 1
+    const timer = setInterval(() => {
+      current = Math.min(fullLength, current + step)
+      setDisplayedLength(current)
+      onTick?.()
+
+      if (current >= fullLength) {
+        clearInterval(timer)
+        if (!isFinishedRef.current) {
+          isFinishedRef.current = true
+          onFinish?.()
+        }
+      }
+    }, intervalMs)
+
+    return () => {
+      clearInterval(timer)
+    }
+  }, [normalizedText])
+
+  const isStillTyping = displayedLength < normalizedText.length
+  const rawDisplayedText = normalizedText.slice(0, displayedLength)
+
+  // During progressive streaming, if a markdown link is partially typed: [label](incomplete_url
+  // avoid rendering the raw incomplete URL by hiding the unfinished url part and showing the label cleanly
+  const displayedText = isStillTyping
+    ? rawDisplayedText.replace(/\[([^\]]+)\]\s*\([^)]*$/, '$1')
+    : rawDisplayedText
+
+  const handleSkip = () => {
+    if (isStillTyping) {
+      setDisplayedLength(normalizedText.length)
+      if (!isFinishedRef.current) {
+        isFinishedRef.current = true
+        onFinish?.()
+      }
+    }
+  }
+
+  return (
+    <div
+      onClick={handleSkip}
+      className={isStillTyping ? 'cursor-pointer select-text' : undefined}
+      title={isStillTyping ? 'Click to show full text immediately' : undefined}
+    >
+      {renderFormattedText(displayedText, isStillTyping)}
+    </div>
+  )
+}
+
+/**
  * ChatBot Component (Floating AI Assistant for Portfolio)
  * 
  * Features:
  * - Floating action button with pulse animation & glow effect
  * - Responsive glassmorphism popup card (dark slate & blue accent)
+ * - Progressive typewriter effect for smooth streaming AI responses
  * - Quick prompt suggestion chips for fast discovery
  * - Supports markdown-style bold and bullet points formatting
  * - Auto-scroll on new messages
@@ -26,6 +129,7 @@ export default function ChatBot() {
       text: isEn
         ? "Hello! 👋 I'm the AI Assistant for Dương Đoàn Thuận's Portfolio. Feel free to ask me anything about his skills, backend experience, or projects!"
         : "Xin chào! 👋 Tôi là trợ lý AI cho Portfolio của Dương Đoàn Thuận. Bạn có thể hỏi tôi bất kỳ điều gì về kỹ năng, kinh nghiệm backend hoặc các dự án của Thuận!",
+      isTyping: false,
     },
   ])
 
@@ -84,22 +188,43 @@ export default function ChatBot() {
       import.meta.env.VITE_API_CHAT_URL ||
       'https://portfolio-gemini-worker.ayana0409-porfolio.workers.dev/api/chat'
 
-    try {
-      const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: textToSend }),
-      })
+    // Helper to request chat endpoint with 1 automatic retry on transient failure
+    const fetchChatResponse = async (attempt = 1) => {
+      try {
+        const response = await fetch(API_ENDPOINT, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ message: textToSend }),
+        })
 
-      const data = await response.json().catch(() => ({}))
+        const data = await response.json().catch(() => ({}))
 
-      if (!response.ok) {
-        throw new Error(data.reply || data.error || (isEn ? 'Failed to connect to AI assistant' : 'Không thể kết nối đến trợ lý AI'))
+        if (!response.ok) {
+          // If transient error (e.g. 400 location mismatch, 429 rate limit, 503 overloaded), retry once after 1.2s
+          if (attempt === 1 && (response.status === 400 || response.status === 429 || response.status >= 500)) {
+            await new Promise((res) => setTimeout(res, 1200))
+            return fetchChatResponse(2)
+          }
+          throw new Error(data.reply || data.error || (isEn ? 'Failed to connect to AI assistant' : 'Không thể kết nối đến trợ lý AI'))
+        }
+
+        return data
+      } catch (err) {
+        if (attempt === 1) {
+          await new Promise((res) => setTimeout(res, 1200))
+          return fetchChatResponse(2)
+        }
+        throw err
       }
+    }
 
-      const aiReply = data.reply || (isEn ? 'No response received.' : 'Không nhận được phản hồi.')
+    try {
+      const data = await fetchChatResponse(1)
+
+      const rawReply = data.reply || (isEn ? 'No response received.' : 'Không nhận được phản hồi.')
+      const aiReply = normalizeMarkdownText(rawReply)
 
       setMessages((prev) => [
         ...prev,
@@ -107,6 +232,7 @@ export default function ChatBot() {
           id: `ai-${Date.now()}`,
           sender: 'ai',
           text: aiReply,
+          isTyping: true,
         },
       ])
     } catch (error) {
@@ -122,6 +248,7 @@ export default function ChatBot() {
               ? 'Sorry, a temporary issue occurred. Please try again later.'
               : 'Xin lỗi, đã xảy ra sự cố tạm thời. Vui lòng thử lại sau.'),
           isError: true,
+          isTyping: true,
         },
       ])
     } finally {
@@ -155,16 +282,18 @@ export default function ChatBot() {
     if (!text) return null
 
     // Regex to detect markdown links [label](url), bold text **text**, inline code `code`, or bare URLs
-    const tokenRegex = /(\[[^\]]+\]\([^\s)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s)]+)/g
+    const tokenRegex = /(\[[^\]]+\]\s*\([^\)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s<>()]+)/g
     const parts = text.split(tokenRegex)
 
     return parts.map((part, index) => {
       if (!part) return null
 
-      // 1. Markdown link [text](url) - supports https, http, mailto, etc.
-      const mdLinkMatch = part.match(/^\[([^\]]+)\]\(([^\s)]+)\)$/)
+      // 1. Markdown link [text](url) - supports spaces, titles, angle brackets, mailto, https
+      const mdLinkMatch = part.match(/^\[([^\]]+)\]\s*\(([^)]+)\)$/)
       if (mdLinkMatch) {
-        const [, label, url] = mdLinkMatch
+        const label = mdLinkMatch[1].trim()
+        const rawUrl = mdLinkMatch[2].trim().split(/\s+/)[0]
+        const url = rawUrl.replace(/^<|>$/g, '')
         const isExternal = url.startsWith('http://') || url.startsWith('https://')
         return (
           <a
@@ -172,10 +301,14 @@ export default function ChatBot() {
             href={url}
             target={isExternal ? '_blank' : undefined}
             rel={isExternal ? 'noopener noreferrer' : undefined}
-            className="text-white hover:underline underline-offset-2 break-all font-mono font-bold inline-flex items-center gap-0.5"
+            className="text-sky-400 hover:text-sky-300 underline underline-offset-4 decoration-sky-500/50 hover:decoration-sky-300 transition-colors font-medium break-words inline"
           >
-            <span>{label}</span>
-            {isExternal && <span className="text-[10px] select-none">↗</span>}
+            {label}
+            {isExternal && (
+              <span className="inline-block ml-0.5 text-[10px] select-none text-sky-400 no-underline align-baseline">
+                ↗
+              </span>
+            )}
           </a>
         )
       }
@@ -199,18 +332,24 @@ export default function ChatBot() {
       }
 
       // 4. Raw URL https://...
-      if (/^https?:\/\/[^\s)]+$/.test(part)) {
+      if (/^https?:\/\/[^\s<>()]+$/.test(part)) {
+        const cleanUrl = part.replace(/[.,;:!?)]+$/, '')
+        const trailing = part.slice(cleanUrl.length)
         return (
-          <a
-            key={index}
-            href={part}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-white hover:underline underline-offset-2 break-all font-mono font-bold inline-flex items-center gap-0.5"
-          >
-            <span>{part}</span>
-            <span className="text-[10px] select-none">↗</span>
-          </a>
+          <React.Fragment key={index}>
+            <a
+              href={cleanUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sky-400 hover:text-sky-300 underline underline-offset-4 decoration-sky-500/50 hover:decoration-sky-300 transition-colors font-mono text-[11px] break-all inline"
+            >
+              {cleanUrl}
+              <span className="inline-block ml-0.5 text-[10px] select-none text-sky-400 no-underline align-baseline">
+                ↗
+              </span>
+            </a>
+            {trailing}
+          </React.Fragment>
         )
       }
 
@@ -218,18 +357,29 @@ export default function ChatBot() {
     })
   }
 
-  // Formatter for markdown lines (bullet points, numbered lists, paragraphs)
-  const renderFormattedText = (text) => {
+  // Formatter for markdown lines (bullet points, numbered lists, paragraphs) with typewriter cursor support
+  const renderFormattedText = (text, showCursor = false) => {
     if (!text) return null
 
-    const lines = text.split('\n')
+    const normalized = normalizeMarkdownText(text)
+    const lines = normalized.split('\n')
 
     return lines.map((line, lineIndex) => {
       const trimmed = line.trim()
+      const isLastLine = lineIndex === lines.length - 1
+
+      // Cursor element for smooth typewriter indication
+      const cursorElement = showCursor && isLastLine ? (
+        <span className="inline-block w-1.5 h-3 ml-1 bg-white align-baseline animate-pulse select-none" />
+      ) : null
 
       // Empty line -> vertical spacing
       if (!trimmed) {
-        return <div key={lineIndex} className="h-1.5" />
+        return (
+          <div key={lineIndex} className="h-1.5">
+            {cursorElement}
+          </div>
+        )
       }
 
       // Bullet points (* item, - item, • item)
@@ -238,7 +388,10 @@ export default function ChatBot() {
         return (
           <div key={lineIndex} className="flex items-start gap-2 my-0.5 ml-1">
             <span className="text-white mt-0.5 text-xs select-none">•</span>
-            <div className="flex-1">{formatInlineText(cleanContent)}</div>
+            <div className="flex-1">
+              {formatInlineText(cleanContent)}
+              {cursorElement}
+            </div>
           </div>
         )
       }
@@ -250,7 +403,10 @@ export default function ChatBot() {
         return (
           <div key={lineIndex} className="flex items-start gap-1.5 my-1 ml-0.5">
             <span className="font-bold text-white text-xs select-none shrink-0 font-mono">{num}.</span>
-            <div className="flex-1">{formatInlineText(numContent)}</div>
+            <div className="flex-1">
+              {formatInlineText(numContent)}
+              {cursorElement}
+            </div>
           </div>
         )
       }
@@ -259,6 +415,7 @@ export default function ChatBot() {
       return (
         <div key={lineIndex} className="leading-relaxed">
           {formatInlineText(line)}
+          {cursorElement}
         </div>
       )
     })
@@ -341,7 +498,22 @@ export default function ChatBot() {
                           : 'bg-zinc-950 text-zinc-200 border border-zinc-800 font-sans'
                       }`}
                   >
-                    {renderFormattedText(msg.text)}
+                    {msg.isTyping ? (
+                      <TypewriterMessage
+                        text={msg.text}
+                        renderFormattedText={renderFormattedText}
+                        onTick={() => {
+                          messagesEndRef.current?.scrollIntoView({ behavior: 'auto' })
+                        }}
+                        onFinish={() => {
+                          setMessages((prev) =>
+                            prev.map((m) => (m.id === msg.id ? { ...m, isTyping: false } : m))
+                          )
+                        }}
+                      />
+                    ) : (
+                      renderFormattedText(msg.text, false)
+                    )}
                   </div>
                 </div>
               )

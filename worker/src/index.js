@@ -132,6 +132,31 @@ function sanitizeDocPath(rawPath) {
   return normalized;
 }
 
+/**
+ * Normalizes Markdown links in AI response to prevent broken rendering:
+ * Recombines links broken across newlines: [label]\n(url) or **[label]**\n(url) -> [label](url)
+ * @param {string} raw
+ * @returns {string}
+ */
+function normalizeMarkdownLinks(raw) {
+  if (!raw || typeof raw !== "string") return "";
+  let text = raw;
+
+  // 1. **[label]**\n(url) or **[label]**(url) -> [label](url)
+  text = text.replace(/\*\*\[([^\]]+)\]\*\*\s*(\r?\n\s*)?\(([^\s)]+)\)/g, "[$1]($3)");
+
+  // 2. [**label**]\n(url) or [**label**](url) -> [label](url)
+  text = text.replace(/\[\*\*([^\]]+)\*\*\]\s*(\r?\n\s*)?\(([^\s)]+)\)/g, "[$1]($3)");
+
+  // 3. [label]\n(url) -> [label](url) (newlines between ] and ()
+  text = text.replace(/\[([^\]]+)\]\s*\r?\n\s*\(([^\s)]+)\)/g, "[$1]($2)");
+
+  // 4. Accidental spaces between ] and (: [label] (url)
+  text = text.replace(/\[([^\]]+)\]\s+\(([^\s)]+)\)/g, "[$1]($2)");
+
+  return text;
+}
+
 // Map common aliases or fuzzy paths to actual documentation files
 const DOC_ALIASES = {
   "docs/projects/quickbite.md": "docs/projects/quick-bite-readme.md",
@@ -346,6 +371,7 @@ When answering questions regarding Thuan's projects, experience, or skills, proa
 4. Language & Presentation:
    - ALWAYS respond in the SAME language as the user's inquiry (respond in Vietnamese if the user asks in Vietnamese; respond in English if the user asks in English).
    - Use clean Markdown formatting: bullet points, bold key technical terms, and concise paragraphs for readability.
+   - LINK FORMATTING RULE: Always format markdown links strictly on a single line as [Label](URL) without splitting across newlines, spaces between ] and (, or bold tags inside the brackets (e.g. write [Google Drive](https://...) never **[Google Drive]**\n(https://...)).
 
 [PORTFOLIO DATA]:
 ${portfolioContext}`;
@@ -986,9 +1012,10 @@ export default {
             if (secondResponse.ok) {
               const secondData = await secondResponse.json();
               const secondCandidate = secondData?.candidates?.[0];
-              const finalReplyText =
+              const rawReply =
                 secondCandidate?.content?.parts?.find((p) => p.text)?.text?.trim() ||
                 "Đã tải tài liệu kỹ thuật thành công nhưng không có câu trả lời phù hợp.";
+              const finalReplyText = normalizeMarkdownLinks(rawReply);
               return createJsonResponse({ reply: finalReplyText }, 200, corsHeaders);
             } else {
               const secondErrData = await secondResponse.json().catch(() => ({}));
@@ -1020,9 +1047,10 @@ export default {
       }
 
       // 12. Standard text response (Turn 1 single response)
-      const replyText =
+      const rawText =
         candidate?.content?.parts?.find((p) => p.text)?.text?.trim() ||
         "Xin lỗi, hiện tại tôi không thể tìm thấy câu trả lời phù hợp trong Portfolio của Thuận.";
+      const replyText = normalizeMarkdownLinks(rawText);
 
       return createJsonResponse({ reply: replyText }, 200, corsHeaders);
     } catch (error) {
