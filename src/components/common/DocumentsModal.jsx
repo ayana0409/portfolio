@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { resolveDocumentUrl, resolveDocumentDownloadUrl } from '../../utils/helpers'
 import useModalHistory from '../../hooks/useModalHistory'
+import { typography } from '../../config/typography'
 
 /**
  * DocumentsModal Component (Streamlined Google Drive Version)
@@ -67,17 +68,17 @@ export default function DocumentsModal({ isOpen, onClose }) {
         {/* Modal Header */}
         <div className="flex items-start justify-between p-5 sm:p-7 border-b border-zinc-800 bg-zinc-950">
           <div className="space-y-1">
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-none text-[10px] sm:text-xs font-mono font-bold tracking-widest uppercase bg-zinc-900 text-white border border-white/20">
+            <div className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-none bg-zinc-900 border border-white/20 ${typography.documents.headerBadge}`}>
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
               <span>GOOGLE DRIVE CREDENTIALS</span>
             </div>
             <h2
               id="documents-modal-title"
-              className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white pt-1"
+              className={typography.documents.title}
             >
               {modalTitle}
             </h2>
-            <p className="text-xs sm:text-sm text-zinc-400 font-sans max-w-xl">
+            <p className={typography.documents.subtitle}>
               {modalSubtitle}
             </p>
           </div>
@@ -113,7 +114,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
               >
                 {/* Top Badge & Type */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="text-[10px] sm:text-xs font-mono font-bold px-2.5 py-0.5 rounded-none uppercase bg-white text-black tracking-widest">
+                  <span className={`px-2.5 py-0.5 rounded-none uppercase bg-white ${typography.documents.cardBadge}`}>
                     {badge || (isCv ? 'MASTER CV' : 'TRANSCRIPT')}
                   </span>
                   <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-1 font-semibold">
@@ -145,12 +146,12 @@ export default function DocumentsModal({ isOpen, onClose }) {
                         </svg>
                       )}
                     </div>
-                    <h3 className="text-base sm:text-lg font-bold text-white uppercase tracking-tight">
+                    <h3 className={typography.documents.cardTitle}>
                       {title}
                     </h3>
                   </div>
 
-                  <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans pt-1">
+                  <p className={typography.documents.cardDescription}>
                     {description}
                   </p>
 
@@ -195,7 +196,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
                           alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
                         }
                       }}
-                      className="px-3 py-2 sm:py-2.5 rounded-none bg-black hover:bg-white hover:text-black text-white text-xs font-mono font-bold tracking-widest uppercase text-center transition-all flex items-center justify-center gap-1.5 border border-zinc-700 cursor-pointer"
+                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-black hover:bg-white hover:text-black border border-zinc-700 cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 ${typography.documents.actionButton}`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -216,7 +217,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
                           alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
                         }
                       }}
-                      className="px-3 py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 text-black text-xs font-mono font-bold tracking-widest uppercase text-center transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 text-black border border-white cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 ${typography.documents.actionButton}`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />

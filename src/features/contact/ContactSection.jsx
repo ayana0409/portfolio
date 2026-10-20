@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { useGSAPFadeUp } from '../../hooks/useGSAPAnimations'
 import { getCurrentYear } from '../../utils/helpers'
+import { typography } from '../../config/typography'
 
 /**
  * ContactSection Component
@@ -28,17 +29,17 @@ export default function ContactSection() {
       {/* Main Content Area */}
       <div className="text-center space-y-4 sm:space-y-6 md:space-y-8 my-auto relative z-10 w-full py-2">
         {/* Section Pill */}
-        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-mono tracking-widest uppercase bg-zinc-900/90 text-zinc-300 border border-white/20" data-animate>
+        <div className={`inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-zinc-900/90 border border-white/20 ${typography.contact.sectionBadge}`} data-animate>
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span>05 / GET IN TOUCH</span>
         </div>
 
         {/* Heading & Subtitle */}
         <div className="space-y-2 sm:space-y-3" data-animate>
-          <h2 className="text-2xl sm:text-4xl lg:text-5xl font-black uppercase tracking-[0.12em] text-white">
+          <h2 className={typography.contact.sectionTitle}>
             {t('contact.title', 'Liên hệ & Hợp tác')}
           </h2>
-          <p className="text-[11px] sm:text-xs md:text-sm text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed font-mono uppercase tracking-widest px-2">
+          <p className={typography.contact.sectionSubtitle}>
             {currentLang === 'vi'
               ? 'TÔI LUÔN SẴN SÀNG TRAO ĐỔI VỀ CÁC DỰ ÁN BACKEND .NET, KIẾN TRÚC HỆ THỐNG VÀ MICROSERVICES.'
               : 'ALWAYS OPEN TO DISCUSSING C# / .NET BACKEND ARCHITECTURE, SCALABLE MICROSERVICES, OR COLLABORATION.'}
@@ -59,10 +60,10 @@ export default function ContactSection() {
               </svg>
             </div>
             <div className="text-center w-full px-2">
-              <span className="text-[10px] sm:text-xs font-mono text-zinc-400 font-bold uppercase tracking-widest block">
+              <span className={typography.contact.cardLabel}>
                 Email
               </span>
-              <span className="text-xs sm:text-sm font-semibold text-white font-mono break-all block mt-0.5 tracking-wider">
+              <span className={typography.contact.cardValue}>
                 {email}
               </span>
             </div>
@@ -82,10 +83,10 @@ export default function ContactSection() {
               </svg>
             </div>
             <div className="text-center w-full px-2">
-              <span className="text-[10px] sm:text-xs font-mono text-zinc-400 font-bold uppercase tracking-widest block">
+              <span className={typography.contact.cardLabel}>
                 GitHub Profile
               </span>
-              <span className="text-xs sm:text-sm font-semibold text-white font-mono block mt-0.5 tracking-wider">
+              <span className={typography.contact.cardValue}>
                 @ayana0409
               </span>
             </div>
@@ -105,10 +106,10 @@ export default function ContactSection() {
               </svg>
             </div>
             <div className="text-center w-full px-2">
-              <span className="text-[10px] sm:text-xs font-mono text-zinc-400 font-bold uppercase tracking-widest block">
+              <span className={typography.contact.cardLabel}>
                 LinkedIn Profile
               </span>
-              <span className="text-xs sm:text-sm font-semibold text-white font-mono block mt-0.5 tracking-wider">
+              <span className={typography.contact.cardValue}>
                 @thuanduongdev
               </span>
             </div>
@@ -117,12 +118,12 @@ export default function ContactSection() {
       </div>
 
       {/* Integrated Bottom Footer Bar */}
-      <div className="w-full border-t border-zinc-800 pt-3 sm:pt-4 pb-1 sm:pb-0 flex flex-col sm:flex-row items-center justify-between text-[11px] sm:text-xs font-mono text-zinc-400 z-10 gap-2 text-center sm:text-left tracking-wider uppercase">
+      <div className={`w-full border-t border-zinc-800 pt-3 sm:pt-4 pb-1 sm:pb-0 flex flex-col sm:flex-row items-center justify-between z-10 gap-2 text-center sm:text-left ${typography.contact.footerCopyright}`}>
         <div className="flex items-center gap-2">
           <span className="w-2 h-2 rounded-full bg-white" />
           <span>© {getCurrentYear()} {portfolioData.about.name}. All rights reserved.</span>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-[11px] text-zinc-500 font-bold">
+        <div className={`flex items-center gap-2 sm:gap-3 ${typography.contact.footerTech}`}>
           <span>React 19</span>
           <span>•</span>
           <span>Tailwind CSS</span>

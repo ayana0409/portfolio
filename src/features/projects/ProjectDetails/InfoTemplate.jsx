@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
 import useModalHistory from '../../../hooks/useModalHistory'
+import { typography } from '../../../config/typography'
 
 /**
  * Normalizes project links into a standardized list supporting both
@@ -207,7 +208,7 @@ export default function InfoTemplate({ project }) {
         </div>
 
         {/* ─── 2. Title ──────────────────────────────────────────────────────── */}
-        <h2 className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
+        <h2 className={typography.projects.drawer.title}>
           {title}
         </h2>
       </div>
@@ -248,7 +249,7 @@ export default function InfoTemplate({ project }) {
       {/* ─── 4. Technologies (Tech Stack Pills) ───────────────────────────────── */}
       {project.technologies && project.technologies.length > 0 && (
         <div className="space-y-1.5 sm:space-y-2 pt-1">
-          <h3 className="text-xs font-mono font-bold tracking-widest text-zinc-400 uppercase">
+          <h3 className={typography.projects.drawer.sectionHeading}>
             {currentLang === 'vi' ? 'Công nghệ sử dụng' : 'Technologies'}
           </h3>
           <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -269,7 +270,7 @@ export default function InfoTemplate({ project }) {
       {/* ─── 5. Summary (Executive Brief) ─────────────────────────────────────── */}
       {summary && (
         <div className="p-3.5 sm:p-4 rounded-none bg-zinc-950 border border-zinc-800 shadow-inner">
-          <p className="text-xs sm:text-sm md:text-base text-zinc-200 leading-relaxed italic whitespace-pre-line">
+          <p className={`${typography.projects.drawer.summary} whitespace-pre-line`}>
             "{summary}"
           </p>
         </div>
@@ -278,13 +279,13 @@ export default function InfoTemplate({ project }) {
       {/* ─── 6. Description (Architecture & System Workflow) ─────────────────── */}
       {description && (
         <div className="space-y-2">
-          <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+          <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
             <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
             </svg>
             <span>{currentLang === 'vi' ? 'Kiến trúc & Giải pháp Chi tiết' : 'Architecture & Solution'}</span>
           </h3>
-          <div className="text-xs sm:text-sm text-zinc-300 leading-relaxed font-sans whitespace-pre-line space-y-2">
+          <div className={`${typography.projects.drawer.featureDescription} whitespace-pre-line space-y-2`}>
             {description}
           </div>
         </div>
@@ -293,7 +294,7 @@ export default function InfoTemplate({ project }) {
       {/* ─── 7. Features (Key Capabilities) ──────────────────────────────────── */}
       {features && features.length > 0 && (
         <div className="space-y-2 sm:space-y-2.5 pt-1">
-          <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+          <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
             <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -303,7 +304,7 @@ export default function InfoTemplate({ project }) {
             {features.map((feature, idx) => (
               <li key={idx} className="flex items-start gap-2.5 bg-zinc-950 p-2.5 sm:p-3 rounded-none border border-zinc-800">
                 <span className="mt-1 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
-                <span className="leading-relaxed font-sans">{feature}</span>
+                <span className={typography.projects.drawer.featureDescription}>{feature}</span>
               </li>
             ))}
           </ul>
@@ -314,7 +315,7 @@ export default function InfoTemplate({ project }) {
       {gallery && gallery.length > 0 && (
         <div className="space-y-3 pt-2">
           <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-            <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+            <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
               <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>

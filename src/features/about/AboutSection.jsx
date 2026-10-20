@@ -4,6 +4,7 @@ import portfolioData from '../../data/portfolioData.json'
 import { useGSAPFadeUp } from '../../hooks/useGSAPAnimations'
 import { resolveDocumentUrl } from '../../utils/helpers'
 import DocumentsModal from '../../components/common/DocumentsModal'
+import { typography } from '../../config/typography'
 
 /**
  * AboutSection Component
@@ -29,16 +30,16 @@ export default function AboutSection() {
     >
       {/* ─── Section Header (SpaceX Minimal - Top-Centered) ─────────────────── */}
       <div className="text-center space-y-1 mb-2 relative z-10 w-full" data-animate>
-        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-mono tracking-widest uppercase bg-zinc-900 text-white border border-white/20">
+        <div className={`inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-zinc-900 border border-white/20 ${typography.about.sectionBadge}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span>01 / ABOUT ME</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
+        <h2 className={typography.about.sectionTitle}>
           {t('about.title', 'Giới thiệu về tôi')}
         </h2>
 
-        <p className="text-[10px] sm:text-xs font-mono tracking-widest uppercase text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed px-2">
+        <p className={typography.about.sectionSubtitle}>
           {role}
         </p>
       </div>
@@ -46,33 +47,33 @@ export default function AboutSection() {
       {/* ─── Main Content: Optical Lens Card Centered ─────────────────────────── */}
       <div className="w-full max-w-5xl lg:max-w-6xl xl:max-w-7xl mx-auto my-auto relative z-10 py-1" data-animate>
         <div data-lens-card="true" className="optical-lens-card p-5 sm:p-7 md:p-8 lg:p-9 xl:p-10 rounded-2xl">
-          <p className="text-xs sm:text-sm md:text-base lg:text-lg leading-relaxed text-zinc-200 font-sans italic text-center md:text-left">
+          <p className={`${typography.about.bio} text-center md:text-left`}>
             "{bio}"
           </p>
 
             {/* Responsive 3-Column Stats Matrix */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3.5 lg:gap-5 pt-5 mt-5 sm:pt-6 sm:mt-6 border-t border-white/10 text-center">
               <div className="p-2.5 sm:p-3 lg:p-4 rounded-xl bg-zinc-950/40 border border-white/10 hover:border-white/40 transition-colors flex flex-col justify-center items-center overflow-hidden backdrop-blur-sm">
-                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl 2xl:text-2xl font-black text-white font-mono tracking-tight whitespace-nowrap">
+                <span className={`block ${typography.about.statValue}`}>
                   .NET / NestJS
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
+                <span className={typography.about.statLabel}>
                   Backend Core
                 </span>
               </div>
               <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-zinc-950/40 border border-white/10 hover:border-white/40 transition-colors flex flex-col justify-center items-center overflow-hidden backdrop-blur-sm">
-                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-white font-mono tracking-tight whitespace-nowrap">
+                <span className={`block ${typography.about.statValue}`}>
                   Micro & EDA
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
+                <span className={typography.about.statLabel}>
                   Architecture
                 </span>
               </div>
               <div className="p-2 sm:p-2.5 lg:p-3 rounded-xl bg-zinc-950/40 border border-white/10 hover:border-white/40 transition-colors flex flex-col justify-center items-center overflow-hidden backdrop-blur-sm">
-                <span className="block text-base sm:text-lg md:text-sm lg:text-base xl:text-xl font-black text-white font-mono tracking-tight whitespace-nowrap">
+                <span className={`block ${typography.about.statValue}`}>
                   React & Next
                 </span>
-                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider block mt-1 whitespace-nowrap">
+                <span className={typography.about.statLabel}>
                   Modern Frontend
                 </span>
               </div>
@@ -82,7 +83,7 @@ export default function AboutSection() {
             <div className="pt-4 sm:pt-5 mt-4 sm:mt-5 border-t border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-3">
               <div className="flex items-center gap-2 self-start sm:self-center">
                 <span className="w-2 h-2 rounded-full bg-emerald-400" />
-                <span className="text-[10px] sm:text-xs font-mono uppercase tracking-wider text-zinc-400 font-semibold">
+                <span className={typography.about.credentialsLabel}>
                   {currentLang === 'vi' ? 'HỒ SƠ & BẢNG ĐIỂM' : 'CREDENTIALS'}
                 </span>
               </div>
@@ -92,7 +93,7 @@ export default function AboutSection() {
                 <button
                   type="button"
                   onClick={() => setIsDocsModalOpen(true)}
-                  className="flex-1 sm:flex-initial px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-transparent hover:bg-white text-white hover:text-black border border-white/40 hover:border-white text-[11px] sm:text-xs font-mono font-semibold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className={`flex-1 sm:flex-initial px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-transparent hover:bg-white text-white hover:text-black border border-white/40 hover:border-white transition-all flex items-center justify-center gap-1.5 cursor-pointer ${typography.about.credentialsButton}`}
                   title={currentLang === 'vi' ? 'Xem & Tải Master CV' : 'View & Download Master CV'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -105,7 +106,7 @@ export default function AboutSection() {
                 <button
                   type="button"
                   onClick={() => setIsDocsModalOpen(true)}
-                  className="flex-1 sm:flex-initial px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-transparent hover:bg-white text-white hover:text-black border border-white/40 hover:border-white text-[11px] sm:text-xs font-mono font-semibold tracking-wider uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                  className={`flex-1 sm:flex-initial px-3 sm:px-3.5 py-1.5 sm:py-2 rounded-xl bg-transparent hover:bg-white text-white hover:text-black border border-white/40 hover:border-white transition-all flex items-center justify-center gap-1.5 cursor-pointer ${typography.about.credentialsButton}`}
                   title={currentLang === 'vi' ? 'Xem & Tải Bảng điểm đại học' : 'View & Download Transcript'}
                 >
                   <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

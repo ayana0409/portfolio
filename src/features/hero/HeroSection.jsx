@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { useTranslation } from 'react-i18next'
 import { scrollToElement } from '../../utils/helpers'
 import DocumentsModal from '../../components/common/DocumentsModal'
+import { typography } from '../../config/typography'
 
 /**
  * HeroSection Component (SpaceX Aesthetic)
@@ -121,17 +122,17 @@ export default function HeroSection({ onExploreClick }) {
         className="relative z-10 w-full max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 py-16 sm:py-20 flex flex-col items-start text-left space-y-3 sm:space-y-4 my-auto"
       >
         {/* Mission Subtitle */}
-        <p className="text-[11px] sm:text-xs md:text-sm font-mono tracking-[0.25em] sm:tracking-[0.35em] uppercase text-zinc-400 font-semibold">
+        <p className={typography.hero.role}>
           {roleText}
         </p>
 
-        {/* Main Headline (Scaled down for refined SpaceX editorial typography) */}
-        <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-black uppercase tracking-[0.06em] sm:tracking-[0.1em] text-white leading-tight break-words max-w-full">
+        {/* Main Headline (Configured via typography.hero.name) */}
+        <h1 className={typography.hero.name}>
           {heroHeading}
         </h1>
 
-        {/* Mission / Bio statement */}
-        <p className="text-xs sm:text-sm md:text-base font-light tracking-[0.12em] sm:tracking-[0.2em] text-zinc-300 max-w-2xl lg:max-w-3xl xl:max-w-4xl uppercase leading-relaxed pb-1 sm:pb-2">
+        {/* Mission / Bio statement (Configured via typography.hero.slogan) */}
+        <p className={typography.hero.slogan}>
           {missionText}
         </p>
 
@@ -140,7 +141,7 @@ export default function HeroSection({ onExploreClick }) {
           <button
             type="button"
             onClick={handleScrollDown}
-            className="px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-white hover:bg-zinc-200 text-black font-mono text-xs sm:text-sm font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-2 active:scale-95 shadow-none"
+            className={`px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-white hover:bg-zinc-200 ${typography.hero.primaryButton} transition-all cursor-pointer flex items-center gap-2 active:scale-95 shadow-none`}
           >
             <span>{currentLang === 'vi' ? 'KHÁM PHÁ DỰ ÁN' : 'EXPLORE PROJECTS'}</span>
             <span>↓</span>
@@ -149,7 +150,7 @@ export default function HeroSection({ onExploreClick }) {
           <button
             type="button"
             onClick={() => setIsDocsModalOpen(true)}
-            className="px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-transparent hover:bg-white hover:text-black text-white font-mono text-xs sm:text-sm font-bold tracking-widest uppercase border border-white/60 hover:border-white transition-all cursor-pointer flex items-center gap-2 backdrop-blur-sm active:scale-95 shadow-none"
+            className={`px-6 sm:px-8 py-3 rounded-none sm:rounded-sm bg-transparent hover:bg-white hover:text-black ${typography.hero.secondaryButton} border border-white/60 hover:border-white transition-all cursor-pointer flex items-center gap-2 backdrop-blur-sm active:scale-95 shadow-none`}
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -169,7 +170,7 @@ export default function HeroSection({ onExploreClick }) {
         aria-label="Scroll to content"
       >
         <div className="flex flex-col items-center gap-1">
-          <span className="text-[10px] font-mono tracking-[0.3em] uppercase opacity-70">
+          <span className={typography.hero.scrollIndicator}>
             SCROLL
           </span>
           <svg

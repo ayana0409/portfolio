@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
+import { typography } from '../../config/typography'
 
 gsap.registerPlugin(ScrollTrigger)
 
@@ -64,16 +65,16 @@ export default function SkillsSection() {
     >
       {/* ─── Section Header (SpaceX Minimal) ─────────────────────────────────── */}
       <div className="text-center space-y-1 mb-2 relative z-10 w-full">
-        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-mono tracking-widest uppercase bg-zinc-900 text-white border border-white/20">
+        <div className={`inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-zinc-900 border border-white/20 ${typography.skills.sectionBadge}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span>02 / CAPABILITIES & STACK</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
+        <h2 className={typography.skills.sectionTitle}>
           {currentLang === 'vi' ? 'KỸ NĂNG CHUYÊN MÔN' : 'SKILLS & TECHNOLOGIES'}
         </h2>
 
-        <p className="text-[10px] sm:text-xs font-mono tracking-wider uppercase text-zinc-400 max-w-lg lg:max-w-2xl mx-auto leading-relaxed px-2">
+        <p className={typography.skills.sectionSubtitle}>
           {currentLang === 'vi'
             ? 'CHẠM HOẶC RÊ CHUỘT VÀO TỪNG DANH MỤC ĐỂ XEM CHI TIẾT CÔNG NGHỆ'
             : 'TAP OR HOVER OVER EACH CATEGORY TO EXPAND DETAILED TECH STACK'}
@@ -106,10 +107,10 @@ export default function SkillsSection() {
                 <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
                   {/* Category Number Badge */}
                   <span
-                    className={`font-mono text-[11px] sm:text-xs font-bold px-2 sm:px-2.5 py-0.5 rounded-md transition-colors flex-shrink-0 ${
+                    className={`px-2 sm:px-2.5 py-0.5 rounded-md transition-colors flex-shrink-0 ${
                       isActive
-                        ? 'bg-white text-black border border-white'
-                        : 'bg-black text-zinc-500 border border-zinc-800'
+                        ? `${typography.skills.categoryIndex} bg-white text-black border border-white`
+                        : 'font-mono text-[11px] sm:text-xs font-bold bg-black text-zinc-500 border border-zinc-800'
                     }`}
                   >
                     //{cat.indexNumber}
@@ -117,7 +118,7 @@ export default function SkillsSection() {
 
                   {/* Category Title */}
                   <h3
-                    className={`font-bold tracking-wider uppercase transition-colors text-xs sm:text-sm md:text-base truncate ${
+                    className={`transition-colors truncate ${typography.skills.categoryTitle} ${
                       isActive
                         ? 'text-white'
                         : 'text-zinc-300 group-hover:text-white'
@@ -129,7 +130,7 @@ export default function SkillsSection() {
 
                 {/* Right Status / Count Indicator */}
                 <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0 ml-2">
-                  <span className="text-[10px] sm:text-[11px] font-mono tracking-wider sm:tracking-widest text-zinc-500 uppercase">
+                  <span className={typography.skills.categoryCount}>
                     {cat.items.length} {currentLang === 'vi' ? 'MỤC' : 'ITEMS'}
                   </span>
 
@@ -160,9 +161,9 @@ export default function SkillsSection() {
                   {cat.items.map((skill) => (
                     <span
                       key={skill}
-                      className="inline-flex items-center px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[11px] sm:text-xs font-mono font-medium
-                        bg-black text-white border border-zinc-700
-                        hover:border-white transition-all duration-200 select-none cursor-default"
+                      className={`inline-flex items-center px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg
+                        bg-black border border-zinc-700
+                        hover:border-white transition-all duration-200 select-none cursor-default ${typography.skills.skillPill}`}
                     >
                       <span className="w-1.5 h-1.5 rounded-full bg-white mr-1.5 sm:mr-2" />
                       {skill}
@@ -176,7 +177,7 @@ export default function SkillsSection() {
       </div>
 
       {/* ─── Bottom Footer Hint ─────────────────────────────────────────────── */}
-      <div className="relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex flex-col xs:flex-row items-center justify-between text-[10px] sm:text-[11px] font-mono text-slate-500 gap-1 text-center">
+      <div className={`relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex flex-col xs:flex-row items-center justify-between gap-1 text-center ${typography.skills.footerHint}`}>
         <span>6 DOMAINS / TOTAL STACK</span>
         <span>STATUS: ACTIVE & CONTINUOUSLY EVOLVING</span>
       </div>

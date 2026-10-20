@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { resolveProjectImage } from '../../utils/helpers'
 import useModalHistory from '../../hooks/useModalHistory'
+import { typography } from '../../config/typography'
 
 /**
  * ExperienceSection Component (Career & Work Experience Showcase)
@@ -128,16 +129,16 @@ export default function ExperienceSection() {
     >
       {/* ─── Section Header (Always Clear & Uncompressed) ───────────────────── */}
       <div className="text-center space-y-0.5 sm:space-y-1 relative z-10 w-full flex-shrink-0">
-        <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full text-xs font-mono tracking-widest uppercase bg-zinc-900/90 text-zinc-300 border border-white/20">
+        <div className={`inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-zinc-900/90 border border-white/20 ${typography.experience.sectionBadge}`}>
           <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
           <span>03 / CAREER & WORK EXPERIENCE</span>
         </div>
 
-        <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black uppercase tracking-[0.08em] sm:tracking-[0.14em] text-white">
+        <h2 className={typography.experience.sectionTitle}>
           {currentLang === 'vi' ? 'KINH NGHIỆM LÀM VIỆC' : 'WORK EXPERIENCE'}
         </h2>
 
-        <p className="text-xs sm:text-sm font-mono tracking-wider uppercase text-zinc-400 max-w-xl lg:max-w-3xl mx-auto leading-relaxed px-2">
+        <p className={typography.experience.sectionSubtitle}>
           {currentLang === 'vi'
             ? 'HÀNH TRÌNH PHÁT TRIỂN NĂNG LỰC KỸ THUẬT VÀ ĐÓNG GÓP THỰC TẾ TRONG DOANH NGHIỆP'
             : 'PROFESSIONAL ENGINEERING JOURNEY & MEASURABLE BUSINESS IMPACT'}
@@ -209,20 +210,20 @@ export default function ExperienceSection() {
                   {/* Header Metadata (Single source of truth for Location, Company & Period) */}
                   <div className="relative z-10 flex items-center justify-between border-b border-zinc-800/80 pb-2 sm:pb-3 mb-1 sm:mb-2 flex-wrap gap-1.5 sm:gap-2">
                     <div className="flex items-center gap-1.5 sm:gap-3 flex-wrap">
-                      <span className="px-2 sm:px-2.5 py-0.5 rounded-none text-[9px] sm:text-[11px] font-mono font-bold tracking-widest uppercase bg-white text-black">
+                      <span className={`px-2 sm:px-2.5 py-0.5 rounded-none bg-white ${typography.experience.typeBadge}`}>
                         {exp.type?.toUpperCase()}
                       </span>
-                      <span className="text-[10px] sm:text-xs font-mono text-zinc-300 font-bold uppercase tracking-wider">
+                      <span className={typography.experience.company}>
                         {company}
                       </span>
-                      <span className="text-[10px] sm:text-xs font-mono text-zinc-400">
+                      <span className={typography.experience.period}>
                         • {period}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono text-zinc-300">
+                    <div className={`flex items-center gap-1.5 ${typography.experience.location}`}>
                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                      <span className="uppercase tracking-wider">{location}</span>
+                      <span>{location}</span>
                     </div>
                   </div>
 
@@ -231,26 +232,26 @@ export default function ExperienceSection() {
                     {/* Top Half on Mobile / Left Column on Desktop */}
                     <div className="w-full md:w-[56%] lg:w-[54%] xl:w-[50%] space-y-1.5 xs:space-y-2 sm:space-y-3 lg:space-y-3.5 text-left pr-0 md:pr-6 md:pointer-events-auto">
                       <div>
-                        <h3 className="text-base xs:text-lg sm:text-2xl lg:text-3xl xl:text-4xl font-black uppercase text-white tracking-tight leading-tight">
+                        <h3 className={typography.experience.role}>
                           {role}
                         </h3>
                       </div>
 
                       {/* Summary Description */}
-                      <p className="text-xs sm:text-base lg:text-[16px] text-zinc-300 leading-relaxed font-sans line-clamp-2 xs:line-clamp-3 md:line-clamp-4 max-w-2xl">
+                      <p className={typography.experience.summary}>
                         {summary}
                       </p>
 
                       {/* Technologies */}
                       <div className="space-y-1 sm:space-y-1.5 pt-0.5 sm:pt-1">
-                        <span className="text-[9px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-widest block font-semibold">
+                        <span className={typography.experience.techHeading}>
                           CORE TECHNOLOGIES:
                         </span>
                         <div className="flex flex-wrap gap-1 sm:gap-1.5">
                           {exp.technologies?.slice(0, 7).map((tech) => (
                             <span
                               key={tech}
-                              className="text-[9px] sm:text-[11px] font-mono px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-none bg-black/60 text-zinc-200 border border-zinc-800 hover:border-white transition-colors"
+                              className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-none bg-black/60 border border-zinc-800 hover:border-white transition-colors ${typography.experience.techBadge}`}
                             >
                               {tech}
                             </span>
@@ -268,7 +269,7 @@ export default function ExperienceSection() {
                         <button
                           type="button"
                           onClick={() => handleOpenDetail(exp)}
-                          className="w-full sm:w-auto justify-center px-4 sm:px-7 py-1.5 xs:py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 text-black text-[10px] xs:text-[11px] sm:text-sm font-mono font-bold tracking-widest uppercase active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-2"
+                          className={`w-full sm:w-auto justify-center px-4 sm:px-7 py-1.5 xs:py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 active:scale-95 transition-all duration-200 cursor-pointer flex items-center gap-2 ${typography.experience.detailButton}`}
                         >
                           <span>{currentLang === 'vi' ? 'XEM CHI TIẾT' : 'VIEW DETAILS'}</span>
                           <span>→</span>
@@ -316,7 +317,7 @@ export default function ExperienceSection() {
 
         {/* Center: Current / Total Experience + Quick Jump Dots */}
         <div className="flex items-center gap-1.5 sm:gap-3 text-xs font-mono">
-          <span className="text-zinc-400 text-[10px] sm:text-xs tracking-wider uppercase font-semibold">
+          <span className={typography.experience.pagination}>
             EXP <span className="text-white font-bold text-xs sm:text-sm">0{currentIndex + 1}</span> / 0{totalExperiences}
           </span>
           <div className="flex gap-1 sm:gap-1.5 items-center">
@@ -343,9 +344,8 @@ export default function ExperienceSection() {
             onClick={handlePrev}
             disabled={isFlipping}
             aria-label="Previous Experience"
-            className="flex items-center gap-1 px-2.5 sm:px-5 py-1 sm:py-1.5 rounded-none
-              border border-zinc-700 bg-black hover:bg-white hover:text-black
-              text-white text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase transition-all active:scale-95 disabled:opacity-30 cursor-pointer min-h-[30px] sm:min-h-[36px]"
+            className={`flex items-center gap-1 px-2.5 sm:px-5 py-1 sm:py-1.5 rounded-none
+              border border-zinc-700 bg-black hover:bg-white hover:text-black transition-all active:scale-95 disabled:opacity-30 cursor-pointer min-h-[30px] sm:min-h-[36px] ${typography.experience.navButton}`}
           >
             <span>← PREV</span>
           </button>
@@ -355,9 +355,8 @@ export default function ExperienceSection() {
             onClick={handleNext}
             disabled={isFlipping}
             aria-label={currentIndex >= totalExperiences - 1 ? 'Reset to first experience' : 'Next Experience'}
-            className="flex items-center gap-1 px-2.5 sm:px-5 py-1 sm:py-1.5 rounded-none
-              border border-zinc-700 bg-black hover:bg-white hover:text-black
-              text-white text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase transition-all active:scale-95 disabled:opacity-30 cursor-pointer min-h-[30px] sm:min-h-[36px]"
+            className={`flex items-center gap-1 px-2.5 sm:px-5 py-1 sm:py-1.5 rounded-none
+              border border-zinc-700 bg-black hover:bg-white hover:text-black transition-all active:scale-95 disabled:opacity-30 cursor-pointer min-h-[30px] sm:min-h-[36px] ${typography.experience.navButton}`}
           >
             <span>
               {currentIndex >= totalExperiences - 1 ? 'RESET ↺' : 'NEXT →'}
@@ -385,7 +384,7 @@ export default function ExperienceSection() {
             <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black/95 backdrop-blur-md z-30 pt-1">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-white" />
-                <span className="text-[11px] sm:text-xs font-mono uppercase tracking-widest text-zinc-300 font-bold">
+                <span className={typography.experience.drawer.headerBadge}>
                   Career Deep Dive
                 </span>
               </div>
@@ -393,7 +392,7 @@ export default function ExperienceSection() {
               <button
                 type="button"
                 onClick={handleCloseDetail}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-zinc-700 bg-zinc-900 text-zinc-300 hover:bg-white hover:text-black hover:border-white text-xs font-mono font-bold tracking-widest uppercase transition-all cursor-pointer"
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-none border border-zinc-700 bg-zinc-900 hover:bg-white hover:text-black hover:border-white transition-all cursor-pointer ${typography.experience.drawer.closeButton}`}
               >
                 <span>✕</span>
                 <span>{currentLang === 'vi' ? 'ĐÓNG' : 'CLOSE'}</span>
@@ -405,26 +404,26 @@ export default function ExperienceSection() {
               {/* Type, Period & Role */}
               <div className="space-y-2 border-b border-zinc-800 pb-4">
                 <div className="flex items-center justify-between gap-2 flex-wrap">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-none text-[10px] sm:text-[11px] font-mono font-bold tracking-widest uppercase bg-white text-black">
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 sm:px-3 py-0.5 rounded-none bg-white ${typography.experience.drawer.typeBadge}`}>
                     <span className="w-1.5 h-1.5 rounded-full bg-black animate-pulse" />
                     TYPE: {selectedExperience.type?.toUpperCase()}
                   </span>
-                  <span className="text-[11px] sm:text-xs font-mono text-zinc-400 uppercase tracking-wider">
+                  <span className={typography.experience.drawer.meta}>
                     {selectedExperience.period?.[currentLang] || selectedExperience.period?.vi} | {selectedExperience.location?.[currentLang] || selectedExperience.location?.vi}
                   </span>
                 </div>
 
-                <h2 className="text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-white leading-snug pt-1">
+                <h2 className={typography.experience.drawer.role}>
                   {selectedExperience.role?.[currentLang] || selectedExperience.role?.vi}
                 </h2>
-                <p className="text-xs sm:text-sm font-mono text-zinc-400 font-bold tracking-widest uppercase">
+                <p className={typography.experience.drawer.company}>
                   {selectedExperience.company?.[currentLang] || selectedExperience.company?.vi}
                 </p>
               </div>
 
               {/* Summary Callout */}
               <div className="p-3.5 sm:p-4 rounded-none bg-zinc-950 border border-zinc-800">
-                <p className="text-xs sm:text-sm md:text-base text-zinc-200 leading-relaxed italic">
+                <p className={typography.experience.drawer.summary}>
                   "{selectedExperience.summary?.[currentLang] || selectedExperience.summary?.vi}"
                 </p>
               </div>
@@ -432,7 +431,7 @@ export default function ExperienceSection() {
               {/* Technologies */}
               {selectedExperience.technologies && (
                 <div className="space-y-2 pt-1">
-                  <h3 className="text-xs font-mono font-bold tracking-widest text-zinc-400 uppercase">
+                  <h3 className={typography.experience.drawer.sectionHeading}>
                     {currentLang === 'vi' ? 'Công nghệ áp dụng' : 'Technologies Used'}
                   </h3>
                   <div className="flex flex-wrap gap-1.5 sm:gap-2">
@@ -451,7 +450,7 @@ export default function ExperienceSection() {
               {/* Responsibilities */}
               {selectedResponsibilities.length > 0 && (
                 <div className="space-y-2 sm:space-y-2.5 pt-2">
-                  <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+                  <h3 className={`flex items-center gap-2 ${typography.experience.drawer.sectionHeading}`}>
                     <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -461,7 +460,7 @@ export default function ExperienceSection() {
                     {selectedResponsibilities.map((resp, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 bg-zinc-950 p-3 rounded-none border border-zinc-800">
                         <span className="mt-1 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
-                        <span className="leading-relaxed font-sans">{resp}</span>
+                        <span className={typography.experience.drawer.itemText}>{resp}</span>
                       </li>
                     ))}
                   </ul>
@@ -471,7 +470,7 @@ export default function ExperienceSection() {
               {/* Key Achievements */}
               {selectedAchievements.length > 0 && (
                 <div className="space-y-2 sm:space-y-2.5 pt-2">
-                  <h3 className="text-xs font-mono font-bold tracking-widest text-white uppercase flex items-center gap-2">
+                  <h3 className={`flex items-center gap-2 ${typography.experience.drawer.sectionHeading}`}>
                     <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                     </svg>
@@ -481,7 +480,7 @@ export default function ExperienceSection() {
                     {selectedAchievements.map((ach, idx) => (
                       <li key={idx} className="flex items-start gap-2.5 bg-zinc-950 p-3 rounded-none border border-zinc-800">
                         <span className="mt-1 w-1.5 h-1.5 rounded-full bg-white flex-shrink-0" />
-                        <span className="leading-relaxed font-sans">{ach}</span>
+                        <span className={typography.experience.drawer.itemText}>{ach}</span>
                       </li>
                     ))}
                   </ul>
