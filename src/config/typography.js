@@ -168,7 +168,7 @@ export const typographyConfig = {
 
     // Thẻ kỹ năng riêng lẻ (Skill pill item)
     skillPill: {
-      size: 'text-[11px] sm:text-xs',
+      size: 'text-[13px] sm:text-[15px]',
       color: 'text-white',
       style: 'font-mono font-medium',
     },
