@@ -2,8 +2,8 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { useGSAPFadeUp } from '../../hooks/useGSAPAnimations'
-import { getCurrentYear } from '../../utils/helpers'
 import { typography } from '../../config/typography'
+import Footer from '../../components/common/Footer'
 
 /**
  * ContactSection Component
@@ -118,19 +118,7 @@ export default function ContactSection() {
       </div>
 
       {/* Integrated Bottom Footer Bar */}
-      <div className={`w-full border-t border-zinc-800 pt-3 sm:pt-4 pb-1 sm:pb-0 flex flex-col sm:flex-row items-center justify-between z-10 gap-2 text-center sm:text-left ${typography.contact.footerCopyright}`}>
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-white" />
-          <span>© {getCurrentYear()} {portfolioData.about.name}. All rights reserved.</span>
-        </div>
-        <div className={`flex items-center gap-2 sm:gap-3 ${typography.contact.footerTech}`}>
-          <span>React 19</span>
-          <span>•</span>
-          <span>Tailwind CSS</span>
-          <span>•</span>
-          <span>GSAP 3D</span>
-        </div>
-      </div>
+      <Footer />
     </section>
   )
 }

@@ -1,28 +1,29 @@
 import React from 'react'
 import portfolioData from '../../data/portfolioData.json'
 import { getCurrentYear } from '../../utils/helpers'
+import { typography } from '../../config/typography'
 
 /**
  * Footer Component
  * 
- * Reusable footer displaying copyright, tech stack attribution, and quick links.
+ * Reusable bottom footer bar displaying copyright and technical role attribution.
+ * Designed to seamlessly fit into standalone layouts or fullscreen sections like ContactSection.
+ * 
+ * @param {Object} props
+ * @param {string} [props.className] - Optional additional CSS classes
  */
-export default function Footer() {
+export default function Footer({ className = '' }) {
   return (
-    <footer className="w-full border-t border-zinc-800 py-6 text-center text-xs font-mono text-zinc-400 bg-black tracking-wider uppercase">
-      <div className="w-full max-w-[1800px] mx-auto px-4 sm:px-8 md:px-12 lg:px-16 xl:px-20 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-white inline-block" />
-          <span>
-            © {getCurrentYear()} {portfolioData.about.name}. All rights reserved.
-          </span>
-        </div>
+    <footer className={`w-full border-t border-zinc-800 pt-3 sm:pt-4 pb-1 sm:pb-0 flex flex-col sm:flex-row items-center justify-between z-10 gap-2 text-center sm:text-left ${typography.contact.footerCopyright} ${className}`}>
+      <div className="flex items-center gap-2">
+        <span className="w-2 h-2 rounded-full bg-white" />
+        <span>© {getCurrentYear()} {portfolioData.about.name}. All rights reserved.</span>
+      </div>
 
-        <div className="flex items-center gap-4 text-[11px] text-zinc-500 font-bold">
-          <span>React 19 + Tailwind CSS</span>
-          <span>•</span>
-          <span>GSAP + 3D Book</span>
-        </div>
+      <div className={`flex items-center gap-2 sm:gap-3 ${typography.contact.footerTech}`}>
+        <span>SOFTWARE ENGINEER</span>
+        <span>•</span>
+        <span>CAN THO</span>
       </div>
     </footer>
   )

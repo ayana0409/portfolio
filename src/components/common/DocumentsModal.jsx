@@ -70,7 +70,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
           <div className="space-y-1">
             <div className={`inline-flex items-center gap-2 px-2.5 py-0.5 rounded-none bg-zinc-900 border border-white/20 ${typography.documents.headerBadge}`}>
               <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              <span>GOOGLE DRIVE CREDENTIALS</span>
+              <span>CREDENTIALS</span>
             </div>
             <h2
               id="documents-modal-title"
@@ -114,11 +114,11 @@ export default function DocumentsModal({ isOpen, onClose }) {
               >
                 {/* Top Badge & Type */}
                 <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className={`px-2.5 py-0.5 rounded-none uppercase bg-white ${typography.documents.cardBadge}`}>
+                  <span className={`px-2.5 py-0.5 rounded-none uppercase bg-white !text-black ${typography.documents.cardBadge}`}>
                     {badge || (isCv ? 'MASTER CV' : 'TRANSCRIPT')}
                   </span>
                   <span className="text-[11px] font-mono text-zinc-400 uppercase tracking-wider flex items-center gap-1 font-semibold">
-                    <span>Google Drive</span>
+                    <span>FILE</span>
                   </span>
                 </div>
 
@@ -193,10 +193,10 @@ export default function DocumentsModal({ isOpen, onClose }) {
                       onClick={(e) => {
                         if (!fileUrl) {
                           e.preventDefault()
-                          alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
+                          alert(currentLang === 'vi' ? 'Xin lỗi, tạm thời không thể tải nội dung' : 'Sorry, temporary can not load content')
                         }
                       }}
-                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-black hover:bg-white hover:text-black border border-zinc-700 cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 ${typography.documents.actionButton}`}
+                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-black hover:bg-white hover:text-black border border-zinc-700 cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 ${typography.documents.viewButton || typography.documents.actionButton}`}
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -214,15 +214,15 @@ export default function DocumentsModal({ isOpen, onClose }) {
                       onClick={(e) => {
                         if (!downloadUrl && !fileUrl) {
                           e.preventDefault()
-                          alert(currentLang === 'vi' ? 'Vui lòng cập nhật link Google Drive trong src/data/portfolioData.json' : 'Please configure Google Drive link in src/data/portfolioData.json')
+                          alert(currentLang === 'vi' ? 'Xin lỗi, tạm thời không thể tải nội dung' : 'Sorry, temporary can not load content')
                         }
                       }}
-                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 text-black border border-white cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 ${typography.documents.actionButton}`}
+                      className={`px-3 py-2 sm:py-2.5 rounded-none bg-white hover:bg-zinc-200 border border-white cursor-pointer text-center transition-all flex items-center justify-center gap-1.5 !text-black ${typography.documents.downloadButton || typography.documents.actionButton}`}
                     >
-                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <svg className="w-3.5 h-3.5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                       </svg>
-                      <span>{currentLang === 'vi' ? 'TẢI VỀ' : 'DOWNLOAD'}</span>
+                      <span className="text-black">{currentLang === 'vi' ? 'TẢI VỀ' : 'DOWNLOAD'}</span>
                     </a>
                   </div>
                 </div>
@@ -231,39 +231,23 @@ export default function DocumentsModal({ isOpen, onClose }) {
           })}
         </div>
 
-        {/* Optional Google Drive Shared Folder Link */}
-        {docData.driveFolderUrl && (
-          <div className="px-5 py-3.5 border-t border-zinc-800 bg-zinc-950 flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
-            <div className="flex items-center gap-2 text-xs font-mono text-zinc-300">
-              <span className="text-white">📁</span>
-              <span>
-                {currentLang === 'vi'
-                  ? 'Thư mục Google Drive lưu trữ đầy đủ tài liệu & chứng chỉ:'
-                  : 'Google Drive Folder containing all documents:'}
-              </span>
-            </div>
+        {/* Modal Footer */}
+        <div className="p-4 sm:p-5 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono text-zinc-400 tracking-wider uppercase">
+          {docData.driveFolderUrl && (
             <a
               href={docData.driveFolderUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="px-3.5 py-1.5 rounded-none bg-black hover:bg-white hover:text-black text-white border border-zinc-700 text-xs font-mono font-bold tracking-wider uppercase transition-all flex items-center gap-1.5"
             >
-              <span>{currentLang === 'vi' ? 'MỞ THƯ MỤC DRIVE' : 'OPEN DRIVE FOLDER'}</span>
-              <span>↗</span>
-            </a>
-          </div>
-        )}
+              <span>{currentLang === 'vi' ? 'MỞ THƯ MỤC' : 'OPEN FOLDER'}</span>
+            </a>)
+          }
 
-        {/* Modal Footer */}
-        <div className="p-4 sm:p-5 border-t border-zinc-800 bg-zinc-950 flex items-center justify-between text-xs font-mono text-zinc-400 tracking-wider uppercase">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-white" />
-            <span>Google Drive Direct Link</span>
-          </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-white hover:underline cursor-pointer font-bold"
+            className="text-white hover:underline cursor-pointer font-bold items-center text-xs font-mono "
           >
             {currentLang === 'vi' ? 'Đóng cửa sổ' : 'Close window'} [ESC]
           </button>

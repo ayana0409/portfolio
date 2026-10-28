@@ -23,7 +23,7 @@ export default function SkillsSection() {
   const containerRef = useRef(null)
 
   const skillsData = portfolioData.about?.skills || {}
-  
+
   // Transform dynamic skills object to ordered category array
   const categories = Object.entries(skillsData).map(([key, data], idx) => ({
     key,
@@ -96,33 +96,30 @@ export default function SkillsSection() {
                 }
               }}
               onClick={() => setActiveKey(cat.key)}
-              className={`skill-stack-row optical-lens-card group relative rounded-xl transition-all duration-300 cursor-pointer overflow-hidden ${
-                isActive
+              className={`skill-stack-row optical-lens-card group relative rounded-xl transition-all duration-300 cursor-pointer overflow-hidden ${isActive
                   ? 'border-white/40 shadow-[inset_0_1px_0_0_rgba(255,255,255,0.45)] p-3.5 sm:p-4 md:p-5'
                   : 'p-2.5 sm:p-3 md:p-3.5 opacity-85 hover:opacity-100'
-              }`}
+                }`}
             >
               {/* Row Header Bar */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2.5 sm:gap-4 min-w-0">
                   {/* Category Number Badge */}
                   <span
-                    className={`px-2 sm:px-2.5 py-0.5 rounded-md transition-colors flex-shrink-0 ${
-                      isActive
+                    className={`px-2 sm:px-2.5 py-0.5 rounded-md transition-colors flex-shrink-0 ${isActive
                         ? `${typography.skills.categoryIndex} bg-white text-black border border-white`
                         : 'font-mono text-[11px] sm:text-xs font-bold bg-black text-zinc-500 border border-zinc-800'
-                    }`}
+                      }`}
                   >
                     //{cat.indexNumber}
                   </span>
 
                   {/* Category Title */}
                   <h3
-                    className={`transition-colors truncate ${typography.skills.categoryTitle} ${
-                      isActive
+                    className={`transition-colors truncate ${typography.skills.categoryTitle} ${isActive
                         ? 'text-white'
                         : 'text-zinc-300 group-hover:text-white'
-                    }`}
+                      }`}
                   >
                     {cat.title}
                   </h3>
@@ -136,11 +133,10 @@ export default function SkillsSection() {
 
                   {/* Expand/Collapse Chevron Indicator */}
                   <div
-                    className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-transform duration-300 ${
-                      isActive
+                    className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center transition-transform duration-300 ${isActive
                         ? 'bg-white text-black rotate-90'
                         : 'bg-black text-zinc-600 group-hover:text-zinc-300 border border-zinc-800'
-                    }`}
+                      }`}
                   >
                     <svg className="w-3 h-3 sm:w-3.5 sm:h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
@@ -151,11 +147,10 @@ export default function SkillsSection() {
 
               {/* ─── Expandable Details Content Area ───────────────────────── */}
               <div
-                className={`transition-all duration-300 ease-out overflow-hidden ${
-                  isActive
+                className={`transition-all duration-300 ease-out overflow-hidden ${isActive
                     ? 'max-h-60 sm:max-h-48 md:max-h-36 opacity-100 mt-2.5 sm:mt-3 pt-2.5 sm:pt-3 border-t border-zinc-800'
                     : 'max-h-0 opacity-0 mt-0 pt-0'
-                }`}
+                  }`}
               >
                 <div className="flex flex-wrap gap-1.5 sm:gap-2 pt-0.5">
                   {cat.items.map((skill) => (
@@ -178,8 +173,7 @@ export default function SkillsSection() {
 
       {/* ─── Bottom Footer Hint ─────────────────────────────────────────────── */}
       <div className={`relative z-10 w-full pt-2 pb-1 border-t border-slate-800/60 flex flex-col xs:flex-row items-center justify-between gap-1 text-center ${typography.skills.footerHint}`}>
-        <span>6 DOMAINS / TOTAL STACK</span>
-        <span>STATUS: ACTIVE & CONTINUOUSLY EVOLVING</span>
+        <span>CONTINUE TO LEARN</span>
       </div>
     </section>
   )

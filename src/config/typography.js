@@ -569,10 +569,10 @@ export const typographyConfig = {
       style: 'font-sans max-w-xl',
     },
 
-    // Huy hiệu thẻ tài liệu (vd: "VERIFIED PDF", "TRANSCRIPT")
+    // Huy hiệu thẻ tài liệu (vd: "CV TỔNG HỢP", "BẢNG ĐIỂM CHÍNH THỨC")
     cardBadge: {
       size: 'text-[9px] sm:text-[10px]',
-      color: 'text-white',
+      color: 'text-black',
       style: 'font-mono font-bold uppercase tracking-wider',
     },
 
@@ -590,7 +590,21 @@ export const typographyConfig = {
       style: 'leading-relaxed font-sans',
     },
 
-    // Nút mở Google Drive / Tải xuống
+    // Nút xem trực tiếp Google Drive (nền đen chữ trắng)
+    viewButton: {
+      size: 'text-[10px] sm:text-xs',
+      color: 'text-white',
+      style: 'font-mono font-bold tracking-wider uppercase',
+    },
+
+    // Nút tải về Google Drive (nền trắng chữ đen)
+    downloadButton: {
+      size: 'text-[10px] sm:text-xs',
+      color: 'text-black',
+      style: 'font-mono font-bold tracking-wider uppercase',
+    },
+
+    // Nút mở Google Drive / Tải xuống chung (fallback)
     actionButton: {
       size: 'text-[10px] sm:text-xs',
       color: 'text-white',
