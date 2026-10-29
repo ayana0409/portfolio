@@ -175,14 +175,14 @@
         "updatedAt": "2025",
         "highlights": {
           "vi": [
-            "Đạt 8.55/10 chuyên ngành Kỹ thuật Phần mềm (Software Engineer)",
+            "Đạt 8.55/10 chuyên ngành Kỹ thuật Phần mềm",
             "Đạt điểm tuyệt đối 10/10 ở các học phần Thực hành Lập trình .NET, Thực hành OOP và Lập trình căn bản",
-            "Đạt 9.7/10 môn Kiến trúc phần mềm cùng chuỗi điểm A+ (9.0 – 9.5/10) cho toàn bộ các môn Cơ sở dữ liệu và Hệ quản trị CSDL"
+            "Đạt 9.7/10 môn Kiến trúc phần mềm cùng chuỗi điểm A+ (9.0–10) cho toàn bộ các môn Cơ sở dữ liệu và Hệ quản trị CSDL"
           ],
           "en": [
             "Achieved 8.55/10 in Software Engineering major",
             "Achieved perfect score 10/10 in Practical .NET Programming, OOP, and Basic Programming courses",
-            "Achieved 9.7/10 in Software Architecture and maintained A+ range (9.0–9.5/10) across all Database & DBMS courses"
+            "Achieved 9.7/10 in Software Architecture and maintained A+ range (9.0–10) across all Database & DBMS courses"
           ]
         }
       }
@@ -384,7 +384,7 @@
     {
       "id": "shorter-link",
       "type": "info",
-      "order": 1,
+      "order": 3,
       "coverImage": "/assets/images/projects/shorter-link/shorter-link-cover.png",
       "title": {
         "vi": "Hệ thống Quản lý Rút gọn Liên kết",
@@ -401,7 +401,7 @@
         "Mongoose",
         "Redis",
         "JWT",
-        "React 19",
+        "React",
         "Redux Toolkit",
         "Tailwind CSS",
         "Socket.IO"
@@ -463,11 +463,9 @@
         }
       ],
       "links": {
-        "demo": "https://shink.onrender.com/",
-        "source": "https://github.com/ayana0409/shorter-link-api",
+        "demo": "https://link.thuandd.io.vn",
         "backend": "https://github.com/ayana0409/shorter-link-api",
-        "frontend": "https://github.com/ayana0409/shorter-link-fe",
-        "websocket": "https://github.com/ayana0409/shorter-link-websocket"
+        "frontend": "https://github.com/ayana0409/shorter-link-fe"
       },
       "technicalSpec": {
         "architecture": "Modular Monolith với NestJS, tách biệt Controller - Service - Repository, hỗ trợ mở rộng module độc lập.",
@@ -494,12 +492,12 @@
         "en": "Enterprise-grade food delivery platform engineered with a Polyglot Microservices architecture (.NET 10 / ABP Framework, Spring Boot 3.3 / Java 21, NestJS 11), distributed transaction orchestration via Apache Kafka (MassTransit Saga State Machine, Outbox/Inbox patterns), and dual frontends (Next.js 16 Customer Web & React 19 / Vite 8 Admin/Merchant Portal)."
       },
       "technologies": [
-        ".NET 10",
-        "ABP Framework 10",
+        ".NET",
+        "ABP Framework",
         "C#",
-        "Java 21",
-        "Spring Boot 3.3",
-        "NestJS 11",
+        "Java",
+        "Spring Boot",
+        "NestJS",
         "TypeScript",
         "Apache Kafka",
         "PostgreSQL",
@@ -507,11 +505,11 @@
         "Redis",
         "MongoDB",
         "OpenIddict (OAuth2/OIDC)",
-        "Next.js 16",
-        "React 19",
-        "Vite 8",
+        "Next.js",
+        "React",
+        "Vite",
         "Tailwind CSS",
-        "TanStack Query 5",
+        "TanStack Query",
         "Leaflet",
         "Docker"
       ],
@@ -521,22 +519,22 @@
       },
       "features": {
         "vi": [
-          "Kiến trúc Polyglot Microservices chuyên biệt: .NET 10 (IAM, Order Saga), Spring Boot 3.3 (Payment, Inventory), NestJS 11 (Catalog, Gateway BFF)",
+          "Kiến trúc Polyglot Microservices chuyên biệt: .NET 10 (IAM, Order Saga), Spring Boot (Payment, Inventory), NestJS (Catalog, Gateway BFF)",
           "Điều phối giao dịch phân tán (Orchestration Saga) bằng MassTransit State Machine với cơ chế bù trừ (Compensation) tự động khi thất bại",
           "Đảm bảo tin cậy và chống trùng lặp với Transactional Outbox Worker, Idempotent Consumer (Inbox Pattern) và Optimistic Locking JPA",
-          "Xác thực tập trung OIDC / OAuth2 qua OpenIddict 7.2 (RS256 JWT, JWKS discovery), RBAC đa tầng và xác thực ở Edge Gateway",
+          "Xác thực tập trung OIDC / OAuth2 qua OpenIddict (RS256 JWT, JWKS discovery), RBAC đa tầng và xác thực ở Edge Gateway",
           "API Gateway BFF tích hợp Dynamic Config 3 cấp (Redis -> MongoDB -> .env fallback), Rate Limiting, Correlation ID tracing và Wake-up health probe",
-          "Customer Web App (Next.js 16 SSR) hỗ trợ tìm kiếm món ăn, giỏ hàng, đặt hàng và theo dõi lộ trình tài xế thời gian thực với Leaflet GPS",
-          "Admin & Merchant Portal (React 19 + Vite 8) quản lý thực đơn, duyệt yêu cầu mở quán (JSONB), xử lý đơn hàng và thống kê doanh thu với Recharts"
+          "Customer Web App (Next.js SSR) hỗ trợ tìm kiếm món ăn, giỏ hàng, đặt hàng và theo dõi lộ trình tài xế thời gian thực với Leaflet GPS",
+          "Admin & Merchant Portal (ReacT + Vite) quản lý thực đơn, duyệt yêu cầu mở quán, xử lý đơn hàng và thống kê doanh thu với Recharts"
         ],
         "en": [
-          "Domain-driven Polyglot Microservices: .NET 10 (IAM, Order Saga), Spring Boot 3.3 (Payment, Inventory), NestJS 11 (Catalog, Gateway BFF)",
+          "Domain-driven Polyglot Microservices: .NET 10 (IAM, Order Saga), Spring Boot (Payment, Inventory), NestJS 11 (Catalog, Gateway BFF)",
           "Distributed Orchestration Saga via MassTransit State Machine with automated rollback and compensation on payment/inventory failure",
           "Guaranteed data consistency via Transactional Outbox workers, Idempotent Consumer (Inbox Pattern) and JPA Optimistic Locking",
-          "Centralized OIDC / OAuth2 IAM powered by OpenIddict 7.2 (RS256 JWT, JWKS discovery), multi-tenant RBAC, and edge token verification",
+          "Centralized OIDC / OAuth2 IAM powered by OpenIddict (RS256 JWT, JWKS discovery), multi-tenant RBAC, and edge token verification",
           "Resilient API Gateway (BFF) with 3-tier dynamic configuration (Redis -> MongoDB -> .env), rate limiting, correlation tracing and cold-start wake-up probe",
-          "Customer Storefront (Next.js 16 SSR) featuring fast menu search, dynamic checkout, and interactive live GPS delivery tracking with Leaflet",
-          "Admin & Merchant Portal (React 19 + Vite 8) with menu designer, generic JSONB onboarding request approvals, order triage, and Recharts analytics"
+          "Customer Storefront (Next.js SSR) featuring fast menu search, dynamic checkout, and interactive live GPS delivery tracking with Leaflet",
+          "Admin & Merchant Portal (React + Vite) with menu designer, generic JSONB onboarding request approvals, order triage, and Recharts analytics"
         ]
       },
       "gallery": [
@@ -631,7 +629,7 @@
     {
       "id": "quicktest",
       "type": "info",
-      "order": 3,
+      "order": 1,
       "coverImage": "/assets/images/projects/quick-test/quick-test-cover.png",
       "title": {
         "vi": "QuickTest — Nền tảng thi trực tuyến thông minh",
@@ -724,7 +722,7 @@
             "vi": "DEMO",
             "en": "DEMO"
           },
-          "url": "https://quicktest-kappa.vercel.app",
+          "url": "https://quicktest.thuandd.io.vn",
           "type": "link-green"
         }
       ],
