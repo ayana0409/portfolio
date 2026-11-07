@@ -282,7 +282,7 @@ export default function ChatBot() {
     if (!text) return null
 
     // Regex to detect markdown links [label](url), bold text **text**, inline code `code`, or bare URLs
-    const tokenRegex = /(\[[^\]]+\]\s*\([^\)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s<>()]+)/g
+    const tokenRegex = /(\[[^\]]+\]\s*\([^)]+\)|\*\*.*?\*\*|`.*?`|https?:\/\/[^\s<>()]+)/g
     const parts = text.split(tokenRegex)
 
     return parts.map((part, index) => {

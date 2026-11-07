@@ -186,7 +186,10 @@ export default function GalleryTemplate({ project }) {
       {/* ─── Lightbox Modal Preview ─────────────────────────────────────────── */}
       {activeImage && (
         <div
-          onClick={() => setActiveImage(null)}
+          onClick={(e) => {
+            e.stopPropagation()
+            setActiveImage(null)
+          }}
           className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
         >
           <div
@@ -197,7 +200,10 @@ export default function GalleryTemplate({ project }) {
               <span className="text-xs font-mono font-bold tracking-widest text-white uppercase">Photo Details</span>
               <button
                 type="button"
-                onClick={() => setActiveImage(null)}
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setActiveImage(null)
+                }}
                 className="text-zinc-400 hover:text-white px-2 py-1 text-sm font-mono cursor-pointer"
               >
                 ✕

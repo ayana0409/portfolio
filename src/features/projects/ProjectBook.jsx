@@ -285,14 +285,12 @@ export default function ProjectBook() {
     }
   }
 
-  // Keyboard navigation
+  // Keyboard navigation for page flipping (ESC handling is managed by useModalHistory)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA'].includes(e.target.tagName)) return
 
-      if (e.key === 'Escape' && selectedProject) {
-        handleCloseDetail()
-      } else if (!selectedProject) {
+      if (!selectedProject) {
         if (e.key === 'ArrowRight' || e.key === 'PageDown') {
           handleNextPage()
         } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {

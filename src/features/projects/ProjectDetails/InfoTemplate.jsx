@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
@@ -398,7 +398,10 @@ export default function InfoTemplate({ project }) {
       {activeLightboxImg &&
         createPortal(
           <div
-            onClick={() => setActiveLightboxImg(null)}
+            onClick={(e) => {
+              e.stopPropagation()
+              setActiveLightboxImg(null)
+            }}
             className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/92 backdrop-blur-lg animate-fade-in"
           >
             <div
@@ -416,7 +419,10 @@ export default function InfoTemplate({ project }) {
 
                 <button
                   type="button"
-                  onClick={() => setActiveLightboxImg(null)}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setActiveLightboxImg(null)
+                  }}
                   className="px-3 py-1 sm:py-1.5 rounded-none bg-zinc-900 hover:bg-white hover:text-black text-zinc-200 text-xs font-mono font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-1.5 border border-zinc-700"
                 >
                   <span>✕</span>
