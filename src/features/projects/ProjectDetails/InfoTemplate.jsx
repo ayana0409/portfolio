@@ -244,6 +244,8 @@ export default function InfoTemplate({ project }) {
           <img
             src={coverUrl}
             alt={title}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
             onError={(e) => {
               e.currentTarget.style.display = 'none'
@@ -359,6 +361,8 @@ export default function InfoTemplate({ project }) {
                     <img
                       src={resolvedSrc}
                       alt={caption || `Gallery ${idx + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
                       onError={(e) => {
                         e.currentTarget.style.display = 'none'
@@ -418,13 +422,13 @@ export default function InfoTemplate({ project }) {
               e.stopPropagation()
               handleCloseLightbox()
             }}
-            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/92 backdrop-blur-lg ${
+            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/95 md:bg-black/92 md:backdrop-blur-lg ${
               isClosingLightbox ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
             }`}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className={`relative max-w-5xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-3 sm:p-5 md:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 ${
+              className={`relative max-w-5xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-3 sm:p-5 md:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 gpu-accelerated ${
                 isClosingLightbox ? 'animate-zoom-out' : 'animate-zoom-in'
               }`}
             >

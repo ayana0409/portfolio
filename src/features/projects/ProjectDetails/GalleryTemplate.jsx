@@ -103,6 +103,8 @@ export default function GalleryTemplate({ project }) {
                     <img
                       src={resolvedSrc}
                       alt={caption || `Gallery ${idx + 1}`}
+                      loading="lazy"
+                      decoding="async"
                       className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
                     />
                   ) : null}
@@ -209,13 +211,13 @@ export default function GalleryTemplate({ project }) {
               e.stopPropagation()
               handleCloseImage()
             }}
-            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/92 backdrop-blur-lg ${
+            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/95 md:bg-black/92 md:backdrop-blur-lg ${
               isClosingImage ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
             }`}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className={`relative max-w-xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 ${
+              className={`relative max-w-xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 gpu-accelerated ${
                 isClosingImage ? 'animate-zoom-out' : 'animate-zoom-in'
               }`}
             >

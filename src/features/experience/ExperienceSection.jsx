@@ -175,7 +175,7 @@ export default function ExperienceSection() {
               >
                 <div
                   data-lens-card="true"
-                  className="optical-lens-card borderless-desktop relative w-full h-full min-h-[460px] xs:min-h-[500px] sm:min-h-[540px] md:min-h-[440px] max-h-[580px] xs:max-h-[620px] lg:max-h-[640px] xl:max-h-[700px] 2xl:max-h-[760px] rounded-xl sm:rounded-2xl p-3.5 xs:p-4 sm:p-6 md:p-7 lg:p-8 flex flex-col justify-between overflow-hidden shadow-2xl md:shadow-none border border-white/[0.08] md:border-none hover:border-white/20 md:hover:border-none transition-all duration-500 bg-black/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none"
+                  className="optical-lens-card borderless-desktop relative w-full h-full min-h-[460px] xs:min-h-[500px] sm:min-h-[540px] md:min-h-[440px] max-h-[580px] xs:max-h-[620px] lg:max-h-[640px] xl:max-h-[700px] 2xl:max-h-[760px] rounded-xl sm:rounded-2xl p-3.5 xs:p-4 sm:p-6 md:p-7 lg:p-8 flex flex-col justify-between overflow-hidden shadow-2xl md:shadow-none border border-white/[0.08] md:border-none hover:border-white/20 md:hover:border-none transition-all duration-500 bg-zinc-950 md:bg-transparent backdrop-blur-none md:backdrop-blur-none"
                 >
                   {/* Desktop Full-bleed Translucent Cover Image with Diagonal 135deg Mask & Hover Color Trigger */}
                   {coverUrl && (
@@ -378,7 +378,7 @@ export default function ExperienceSection() {
           onClick={handleCloseDetail}
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className={`fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end ${
+          className={`fixed inset-0 z-[70] bg-black/92 md:bg-black/85 md:backdrop-blur-md flex justify-end ${
             isClosingDrawer ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
           }`}
         >
@@ -387,12 +387,12 @@ export default function ExperienceSection() {
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar ${
+            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar gpu-accelerated ${
               isClosingDrawer ? 'animate-slide-out-right' : 'animate-slide-in-right'
             }`}
           >
             {/* Drawer Header */}
-            <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black/95 backdrop-blur-md z-30 pt-1">
+            <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black md:bg-black/95 md:backdrop-blur-md z-30 pt-1">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-white" />
                 <span className={typography.experience.drawer.headerBadge}>

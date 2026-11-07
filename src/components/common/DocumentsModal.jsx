@@ -82,13 +82,13 @@ export default function DocumentsModal({ isOpen, onClose }) {
       aria-modal="true"
       aria-labelledby="documents-modal-title"
       onClick={handleBackdropClick}
-      className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/95 md:bg-black/85 md:backdrop-blur-md overflow-y-auto ${
         isClosing ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
       }`}
     >
       <div
         ref={modalContentRef}
-        className={`relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden flex flex-col my-auto ${
+        className={`relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden flex flex-col my-auto gpu-accelerated ${
           isClosing ? 'animate-zoom-out' : 'animate-zoom-in'
         }`}
       >

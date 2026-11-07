@@ -211,11 +211,22 @@ export default function CosmicBackground() {
       })
     }
 
-    // Retina / High-DPI & Resize handling
+    // Retina / High-DPI & Resize handling (Mobile-optimized against URL bar resizing)
+    let lastWidth = window.innerWidth
     const handleResize = () => {
+      const newWidth = window.innerWidth
+      const newHeight = window.innerHeight
+
+      // On mobile devices, URL bar expanding/shrinking only changes height.
+      // Avoid destroying and re-spawning particles on touch scroll.
+      if (isMobile && Math.abs(newWidth - lastWidth) < 12) {
+        return
+      }
+      lastWidth = newWidth
+
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      width = window.innerWidth
-      height = window.innerHeight
+      width = newWidth
+      height = newHeight
       canvas.width = width * dpr
       canvas.height = height * dpr
       canvas.style.width = `${width}px`
@@ -223,13 +234,24 @@ export default function CosmicBackground() {
       ctx.setTransform(1, 0, 0, 1, 0, 0)
       ctx.scale(dpr, dpr)
       initParticles()
-      updateLensRects()
+      if (!isMobile) updateLensRects()
     }
 
     handleResize()
     window.addEventListener('resize', handleResize)
 
-    const lensCheckInterval = setInterval(updateLensRects, 200)
+    // Check lens cards periodically only on desktop (mobile skips lens calculation)
+    let lensCheckInterval = null
+    if (!isMobile) {
+      lensCheckInterval = setInterval(updateLensRects, 300)
+    }
+
+    // Pause canvas animation while any modal is open to allocate 100% GPU to modal & drawers
+    let isPaused = document.body.getAttribute('data-modal-open') === 'true'
+    const modalObserver = new MutationObserver(() => {
+      isPaused = document.body.getAttribute('data-modal-open') === 'true'
+    })
+    modalObserver.observe(document.body, { attributes: true, attributeFilter: ['data-modal-open'] })
 
     // Parallax tracking states with LERP easing
     let targetMouseX = 0
@@ -246,19 +268,24 @@ export default function CosmicBackground() {
     }
 
     const handleScroll = () => {
+      if (isPaused) return
       const currentScrollY = window.scrollY || document.documentElement.scrollTop || 0
       const delta = Math.abs(currentScrollY - lastScrollY)
       lastScrollY = currentScrollY
       // Gentle, non-aggressive scroll boost
       scrollBoost = Math.min(scrollBoost + delta * 0.035, 3.5)
-      updateLensRects()
+      // Strictly avoid DOM query & getBoundingClientRect during touch scrolling on mobile
+      if (!isMobile) {
+        updateLensRects()
+      }
     }
 
     window.addEventListener('mousemove', handleMouseMove, { passive: true })
     window.addEventListener('scroll', handleScroll, { passive: true })
 
-    // Helper: Check if screen coordinate falls behind a lens card
+    // Helper: Check if screen coordinate falls behind a lens card (desktop only)
     const checkLensInfluence = (px, py) => {
+      if (isMobile || lensRects.length === 0) return null
       for (let i = 0; i < lensRects.length; i++) {
         const r = lensRects[i]
         if (px >= r.left && px <= r.right && py >= r.top && py <= r.bottom) {
@@ -285,6 +312,12 @@ export default function CosmicBackground() {
 
     // Render loop
     const render = () => {
+      // Pause drawing when a modal is open to prevent GPU contention
+      if (isPaused) {
+        animationFrameId = requestAnimationFrame(render)
+        return
+      }
+
       // Smooth LERP steering of the vanishing point by mouse
       mouseX += (targetMouseX - mouseX) * 0.05
       mouseY += (targetMouseY - mouseY) * 0.05
@@ -521,7 +554,8 @@ export default function CosmicBackground() {
 
     return () => {
       cancelAnimationFrame(animationFrameId)
-      clearInterval(lensCheckInterval)
+      if (lensCheckInterval) clearInterval(lensCheckInterval)
+      modalObserver.disconnect()
       window.removeEventListener('resize', handleResize)
       window.removeEventListener('mousemove', handleMouseMove)
       window.removeEventListener('scroll', handleScroll)

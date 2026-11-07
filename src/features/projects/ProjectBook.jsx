@@ -39,6 +39,7 @@ export default function ProjectBook() {
    * Reset all pages to initial state for a target index
    */
   const setPageVisibility = (activeIndex) => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
     pageRefs.current.forEach((el, idx) => {
       if (!el) return
       if (idx === activeIndex) {
@@ -50,24 +51,27 @@ export default function ProjectBook() {
           scale: 1,
           y: 0,
           zIndex: 25,
+          force3D: true,
         })
       } else if (idx < activeIndex) {
         gsap.set(el, {
           visibility: 'hidden',
           opacity: 0,
-          rotateY: -110,
-          x: -40,
+          rotateY: isMobile ? 0 : -110,
+          x: isMobile ? -50 : -40,
           zIndex: 10,
+          force3D: true,
         })
       } else {
         gsap.set(el, {
           visibility: 'hidden',
           opacity: 0,
           rotateY: 0,
-          x: 0,
-          scale: 0.98,
-          y: 10,
+          x: isMobile ? 50 : 0,
+          scale: isMobile ? 1 : 0.98,
+          y: isMobile ? 0 : 10,
           zIndex: 10,
+          force3D: true,
         })
       }
     })
@@ -83,6 +87,7 @@ export default function ProjectBook() {
    */
   const handleNextPage = useCallback(() => {
     if (isFlipping || totalProjects <= 1) return
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
 
     // ── CASE A: LAST PAGE ➔ CLOSE ALL PAGES SEQUENTIALLY TO PAGE 1 ──────────
     if (currentIndex >= totalProjects - 1) {
@@ -100,9 +105,10 @@ export default function ProjectBook() {
           gsap.set(el, {
             visibility: 'visible',
             opacity: 0,
-            rotateY: -110,
-            x: -40,
+            rotateY: isMobile ? 0 : -110,
+            x: isMobile ? -50 : -40,
             zIndex: 30 + idx,
+            force3D: true,
           })
         })
 
@@ -110,9 +116,10 @@ export default function ProjectBook() {
           rotateY: 0,
           x: 0,
           opacity: 1,
-          duration: 0.45,
-          stagger: 0.12,
+          duration: isMobile ? 0.35 : 0.45,
+          stagger: isMobile ? 0.06 : 0.12,
           ease: 'power2.out',
+          force3D: true,
           onComplete: () => {
             setCurrentIndex(0)
             setPageVisibility(0)
@@ -139,16 +146,17 @@ export default function ProjectBook() {
       gsap.set(nextPageEl, {
         visibility: 'visible',
         opacity: 0,
-        scale: 0.98,
-        y: 10,
+        scale: isMobile ? 1 : 0.98,
+        y: isMobile ? 0 : 10,
         rotateY: 0,
-        x: 0,
+        x: isMobile ? 40 : 0,
         zIndex: 15,
+        force3D: true,
       })
     }
 
     if (currentPageEl) {
-      gsap.set(currentPageEl, { zIndex: 25 })
+      gsap.set(currentPageEl, { zIndex: 25, force3D: true })
     }
 
     const tl = gsap.timeline({
@@ -159,20 +167,31 @@ export default function ProjectBook() {
       },
     })
 
-    // 1. Current page flips left
+    // 1. Current page exits
     if (currentPageEl) {
-      tl.to(currentPageEl, {
-        rotateY: -110,
-        x: -40,
-        opacity: 0,
-        transformOrigin: 'left center',
-        duration: 0.6,
-        ease: 'power2.inOut',
-      })
+      if (isMobile) {
+        tl.to(currentPageEl, {
+          x: -50,
+          opacity: 0,
+          duration: 0.35,
+          ease: 'power2.inOut',
+          force3D: true,
+        })
+      } else {
+        tl.to(currentPageEl, {
+          rotateY: -110,
+          x: -40,
+          opacity: 0,
+          transformOrigin: 'left center',
+          duration: 0.6,
+          ease: 'power2.inOut',
+          force3D: true,
+        })
+      }
     }
 
-    // 2. Spine shadow effect
-    if (currentShadowEl) {
+    // 2. Spine shadow effect (desktop only)
+    if (currentShadowEl && !isMobile) {
       tl.to(
         currentShadowEl,
         { opacity: 0.8, duration: 0.25, ease: 'power1.in' },
@@ -180,18 +199,20 @@ export default function ProjectBook() {
       )
     }
 
-    // 3. Next page fades up cleanly from below
+    // 3. Next page enters
     if (nextPageEl) {
       tl.to(
         nextPageEl,
         {
           opacity: 1,
           scale: 1,
+          x: 0,
           y: 0,
-          duration: 0.55,
+          duration: isMobile ? 0.35 : 0.55,
           ease: 'power2.out',
+          force3D: true,
         },
-        0.1
+        isMobile ? 0.05 : 0.1
       )
     }
   }, [currentIndex, isFlipping, totalProjects])
@@ -219,6 +240,8 @@ export default function ProjectBook() {
       return
     }
 
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768
+
     setIsFlipping(true)
     const prevIdx = currentIndex - 1
     const prevPageEl = pageRefs.current[prevIdx]
@@ -228,10 +251,11 @@ export default function ProjectBook() {
       gsap.set(prevPageEl, {
         visibility: 'visible',
         opacity: 0,
-        rotateY: -110,
-        x: -40,
+        rotateY: isMobile ? 0 : -110,
+        x: isMobile ? -40 : -40,
         zIndex: 30,
-        transformOrigin: 'left center',
+        transformOrigin: isMobile ? 'center center' : 'left center',
+        force3D: true,
       })
     }
 
@@ -248,8 +272,9 @@ export default function ProjectBook() {
         rotateY: 0,
         x: 0,
         opacity: 1,
-        duration: 0.6,
+        duration: isMobile ? 0.35 : 0.6,
         ease: 'power2.out',
+        force3D: true,
       })
     }
 
@@ -257,11 +282,13 @@ export default function ProjectBook() {
       tl.to(
         currentPageEl,
         {
-          scale: 0.98,
-          y: 10,
+          scale: isMobile ? 1 : 0.98,
+          x: isMobile ? 40 : 0,
+          y: isMobile ? 0 : 10,
           opacity: 0,
-          duration: 0.5,
+          duration: isMobile ? 0.3 : 0.5,
           ease: 'power2.inOut',
+          force3D: true,
         },
         0
       )
@@ -360,7 +387,7 @@ export default function ProjectBook() {
         className="relative z-10 flex-shrink-0 md:flex-1 w-full flex items-center justify-center my-0 md:my-auto py-0.5 sm:py-1.5 [perspective:2200px] min-h-[460px] xs:min-h-[500px] sm:min-h-[540px] md:min-h-0"
       >
         {/* Book Outer Frame (Optical Lens Stage) */}
-        <div data-lens-card="true" className="optical-lens-card borderless-desktop relative w-full h-full min-h-[460px] xs:min-h-[500px] sm:min-h-[540px] md:min-h-[440px] max-h-[580px] xs:max-h-[620px] lg:max-h-[640px] xl:max-h-[700px] 2xl:max-h-[760px] rounded-xl sm:rounded-2xl p-1 sm:p-1.5 [transform-style:preserve-3d] border border-white/[0.08] md:border-none shadow-2xl md:shadow-none bg-black/40 md:bg-transparent backdrop-blur-md md:backdrop-blur-none">
+        <div data-lens-card="true" className="optical-lens-card borderless-desktop relative w-full h-full min-h-[460px] xs:min-h-[500px] sm:min-h-[540px] md:min-h-[440px] max-h-[580px] xs:max-h-[620px] lg:max-h-[640px] xl:max-h-[700px] 2xl:max-h-[760px] rounded-xl sm:rounded-2xl p-1 sm:p-1.5 [transform-style:preserve-3d] border border-white/[0.08] md:border-none shadow-2xl md:shadow-none bg-zinc-950 md:bg-transparent backdrop-blur-none md:backdrop-blur-none">
           {/* Left Spine Binding (Realistic Book Hinge) */}
           <div className="absolute inset-y-0 left-0 w-4 sm:w-8 md:w-10 bg-gradient-to-r from-black/80 via-zinc-950/60 to-transparent border-r border-white/10 md:border-r-white/5 rounded-l-xl sm:rounded-l-2xl z-40 pointer-events-none flex flex-col justify-between items-center py-3 sm:py-6">
             <div className="w-1 h-3 sm:h-6 bg-white/40 rounded-none" />
@@ -382,7 +409,7 @@ export default function ProjectBook() {
                 key={project.id}
                 ref={(el) => (pageRefs.current[idx] = el)}
                 className={`group absolute inset-1 sm:inset-1.5 pl-6 sm:pl-10 md:pl-14 pr-3.5 sm:pr-6 md:pr-8 py-3 sm:py-5
-                  rounded-xl sm:rounded-2xl bg-black/45 md:bg-transparent backdrop-blur-md md:backdrop-blur-none border border-white/[0.06] md:border-none shadow-2xl md:shadow-none flex flex-col justify-between
+                  rounded-xl sm:rounded-2xl bg-zinc-950 md:bg-transparent backdrop-blur-none md:backdrop-blur-none border border-white/[0.06] md:border-none shadow-2xl md:shadow-none flex flex-col justify-between
                   [transform-style:preserve-3d] select-none overflow-hidden ${isCurrent ? 'pointer-events-auto' : 'pointer-events-none'}`}
                 style={{
                   visibility: isCurrent ? 'visible' : 'hidden',
@@ -620,7 +647,7 @@ export default function ProjectBook() {
           onClick={handleCloseDetail}
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className={`fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end ${
+          className={`fixed inset-0 z-[70] bg-black/92 md:bg-black/85 md:backdrop-blur-md flex justify-end ${
             isClosingDrawer ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
           }`}
         >
@@ -629,12 +656,12 @@ export default function ProjectBook() {
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar ${
+            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar gpu-accelerated ${
               isClosingDrawer ? 'animate-slide-out-right' : 'animate-slide-in-right'
             }`}
           >
             {/* Drawer Top Navigation */}
-            <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black/95 backdrop-blur-md z-30 pt-1">
+            <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black md:bg-black/95 md:backdrop-blur-md z-30 pt-1">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-white" />
                 <span className={typography.projects.drawer.headerBadge}>
