@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
 import { resolveProjectImage } from '../../utils/helpers'
@@ -22,6 +22,7 @@ export default function ExperienceSection() {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedExperience, setSelectedExperience] = useState(null)
+  const [isClosingDrawer, setIsClosingDrawer] = useState(false)
   const [isFlipping, setIsFlipping] = useState(false)
 
   const drawerRef = useRef(null)
@@ -95,14 +96,20 @@ export default function ExperienceSection() {
     return () => window.removeEventListener('keydown', handleArrowKeys)
   }, [selectedExperience, totalExperiences])
 
-  // Open & Close Details Drawer
+  // Open & Close Details Drawer with smooth exit transition
   const handleOpenDetail = (exp) => {
+    setIsClosingDrawer(false)
     setSelectedExperience(exp)
   }
 
-  const handleCloseDetail = () => {
-    setSelectedExperience(null)
-  }
+  const handleCloseDetail = useCallback(() => {
+    if (isClosingDrawer || !selectedExperience) return
+    setIsClosingDrawer(true)
+    setTimeout(() => {
+      setSelectedExperience(null)
+      setIsClosingDrawer(false)
+    }, 250)
+  }, [isClosingDrawer, selectedExperience])
 
   // Intercept mobile back button to close modal instead of exiting page, and hide navbar
   useModalHistory(Boolean(selectedExperience), handleCloseDetail, 'experience')
@@ -371,14 +378,18 @@ export default function ExperienceSection() {
           onClick={handleCloseDetail}
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className="fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end animate-fade-in"
+          className={`fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end ${
+            isClosingDrawer ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
+          }`}
         >
           <div
             ref={drawerRef}
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar animate-fade-in-up"
+            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar ${
+              isClosingDrawer ? 'animate-slide-out-right' : 'animate-slide-in-right'
+            }`}
           >
             {/* Drawer Header */}
             <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black/95 backdrop-blur-md z-30 pt-1">

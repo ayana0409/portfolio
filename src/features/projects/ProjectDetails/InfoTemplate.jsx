@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
@@ -169,6 +169,22 @@ export default function InfoTemplate({ project }) {
   const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeLightboxImg, setActiveLightboxImg] = useState(null)
+  const [isClosingLightbox, setIsClosingLightbox] = useState(false)
+
+  // Open & Close Lightbox with smooth zoom-in and zoom-out transitions
+  const handleOpenLightbox = (imgData) => {
+    setIsClosingLightbox(false)
+    setActiveLightboxImg(imgData)
+  }
+
+  const handleCloseLightbox = useCallback(() => {
+    if (isClosingLightbox || !activeLightboxImg) return
+    setIsClosingLightbox(true)
+    setTimeout(() => {
+      setActiveLightboxImg(null)
+      setIsClosingLightbox(false)
+    }, 220)
+  }, [isClosingLightbox, activeLightboxImg])
 
   // Retrieve bilingual text
   const title = project.title?.[currentLang] || project.title?.vi || ''
@@ -182,7 +198,7 @@ export default function InfoTemplate({ project }) {
   const normalizedLinks = normalizeProjectLinks(project.links, currentLang)
 
   // Intercept mobile back button to close lightbox instead of navigating away
-  useModalHistory(Boolean(activeLightboxImg), () => setActiveLightboxImg(null), 'lightbox')
+  useModalHistory(Boolean(activeLightboxImg), handleCloseLightbox, 'lightbox')
 
 
   return (
@@ -217,7 +233,7 @@ export default function InfoTemplate({ project }) {
       {coverUrl && (
         <div
           onClick={() =>
-            setActiveLightboxImg({
+            handleOpenLightbox({
               id: 'cover',
               resolvedSrc: coverUrl,
               caption: `${title} - Cover Banner`,
@@ -334,7 +350,7 @@ export default function InfoTemplate({ project }) {
               return (
                 <div
                   key={img.id || idx}
-                  onClick={() => setActiveLightboxImg({ ...img, caption, resolvedSrc })}
+                  onClick={() => handleOpenLightbox({ ...img, caption, resolvedSrc })}
                   className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
                     border border-zinc-800 bg-zinc-950 aspect-video
                     hover:border-white transition-all duration-300 shadow-md"
@@ -400,13 +416,17 @@ export default function InfoTemplate({ project }) {
           <div
             onClick={(e) => {
               e.stopPropagation()
-              setActiveLightboxImg(null)
+              handleCloseLightbox()
             }}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/92 backdrop-blur-lg animate-fade-in"
+            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 md:p-8 bg-black/92 backdrop-blur-lg ${
+              isClosingLightbox ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
+            }`}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="relative max-w-5xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-3 sm:p-5 md:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 animate-fade-in-up"
+              className={`relative max-w-5xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-3 sm:p-5 md:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 ${
+                isClosingLightbox ? 'animate-zoom-out' : 'animate-zoom-in'
+              }`}
             >
               {/* Modal Top Header */}
               <div className="flex items-center justify-between border-b border-zinc-800 pb-2.5 sm:pb-3">
@@ -421,9 +441,9 @@ export default function InfoTemplate({ project }) {
                   type="button"
                   onClick={(e) => {
                     e.stopPropagation()
-                    setActiveLightboxImg(null)
+                    handleCloseLightbox()
                   }}
-                  className="px-3 py-1 sm:py-1.5 rounded-none bg-zinc-900 hover:bg-white hover:text-black text-zinc-200 text-xs font-mono font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-1.5 border border-zinc-700"
+                  className="px-3 py-1 sm:py-1.5 rounded-none bg-zinc-900 hover:bg-white hover:text-black text-zinc-200 text-xs font-mono font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-1.5 border border-zinc-700 active:scale-95"
                 >
                   <span>✕</span>
                   <span>ĐÓNG</span>

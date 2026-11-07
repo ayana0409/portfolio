@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import portfolioData from '../../data/portfolioData.json'
@@ -17,12 +17,39 @@ import { typography } from '../../config/typography'
  * - Direct one-click access without any passcodes or captchas
  * - Opens Google Drive viewer or initiates direct download
  * - Teleported to document.body via createPortal
- * - Light-dismiss on backdrop click & ESC key
+ * - Light-dismiss on backdrop click & ESC key with smooth enter/exit animations
  */
 export default function DocumentsModal({ isOpen, onClose }) {
   const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const modalContentRef = useRef(null)
+
+  const [isRendered, setIsRendered] = useState(isOpen)
+  const [isClosing, setIsClosing] = useState(false)
+
+  const handleRequestClose = useCallback(() => {
+    if (isClosing) return
+    setIsClosing(true)
+    setTimeout(() => {
+      onClose()
+      setIsClosing(false)
+      setIsRendered(false)
+    }, 240)
+  }, [isClosing, onClose])
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsRendered(true)
+      setIsClosing(false)
+    } else if (isRendered) {
+      setIsClosing(true)
+      const timer = setTimeout(() => {
+        setIsRendered(false)
+        setIsClosing(false)
+      }, 240)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen, isRendered])
 
   const docData = portfolioData.documents || {
     title: { vi: 'Hồ sơ & Tài liệu', en: 'Documents & Credentials' },
@@ -35,15 +62,14 @@ export default function DocumentsModal({ isOpen, onClose }) {
   }
 
   // Intercept mobile back button to close modal instead of exiting page, and hide navbar
-  useModalHistory(isOpen, onClose, 'documents')
+  useModalHistory(isOpen, handleRequestClose, 'documents')
 
-
-  if (!isOpen || typeof document === 'undefined') return null
+  if (!isRendered || typeof document === 'undefined') return null
 
   // Light dismiss backdrop click handler
   const handleBackdropClick = (e) => {
     if (modalContentRef.current && !modalContentRef.current.contains(e.target)) {
-      onClose()
+      handleRequestClose()
     }
   }
 
@@ -56,11 +82,15 @@ export default function DocumentsModal({ isOpen, onClose }) {
       aria-modal="true"
       aria-labelledby="documents-modal-title"
       onClick={handleBackdropClick}
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto animate-fade-in"
+      className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto ${
+        isClosing ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
+      }`}
     >
       <div
         ref={modalContentRef}
-        className="relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden flex flex-col my-auto animate-fade-in-up"
+        className={`relative w-full max-w-4xl bg-slate-950 border border-slate-800 rounded-2xl sm:rounded-3xl shadow-[0_0_50px_rgba(59,130,246,0.15)] overflow-hidden flex flex-col my-auto ${
+          isClosing ? 'animate-zoom-out' : 'animate-zoom-in'
+        }`}
       >
         {/* Top Hairline Accent */}
         <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/40" />
@@ -85,7 +115,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleRequestClose}
             aria-label="Close dialog"
             className="w-8 h-8 sm:w-9 sm:h-9 rounded-none bg-zinc-900 border border-zinc-700 flex items-center justify-center text-zinc-300 hover:text-black hover:bg-white hover:border-white transition-all cursor-pointer flex-shrink-0 font-mono"
           >
@@ -246,7 +276,7 @@ export default function DocumentsModal({ isOpen, onClose }) {
 
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleRequestClose}
             className="text-white hover:underline cursor-pointer font-bold items-center text-xs font-mono "
           >
             {currentLang === 'vi' ? 'Đóng cửa sổ' : 'Close window'} [ESC]

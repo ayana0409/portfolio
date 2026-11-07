@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
 import { resolveProjectImage } from '../../../utils/helpers'
 import useModalHistory from '../../../hooks/useModalHistory'
@@ -8,7 +9,7 @@ import useModalHistory from '../../../hooks/useModalHistory'
  * 
  * Template for projects with `type: "gallery"`.
  * Focuses on visual presentation, photo gallery preview with captions,
- * lightbox modal support, responsive image grid, and UI architecture.
+ * lightbox modal support with smooth enter/exit animations, responsive image grid, and UI architecture.
  *
  * @param {Object} props.project - The project data object from portfolioData.json
  */
@@ -16,9 +17,25 @@ export default function GalleryTemplate({ project }) {
   const { t, i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
   const [activeImage, setActiveImage] = useState(null)
+  const [isClosingImage, setIsClosingImage] = useState(false)
+
+  // Open & Close Lightbox with smooth zoom-in and zoom-out transitions
+  const handleOpenImage = (imgData) => {
+    setIsClosingImage(false)
+    setActiveImage(imgData)
+  }
+
+  const handleCloseImage = useCallback(() => {
+    if (isClosingImage || !activeImage) return
+    setIsClosingImage(true)
+    setTimeout(() => {
+      setActiveImage(null)
+      setIsClosingImage(false)
+    }, 220)
+  }, [isClosingImage, activeImage])
 
   // Intercept mobile back button to close lightbox
-  useModalHistory(Boolean(activeImage), () => setActiveImage(null), 'gallery-lightbox')
+  useModalHistory(Boolean(activeImage), handleCloseImage, 'gallery-lightbox')
 
   // Retrieve bilingual text
   const title = project.title?.[currentLang] || project.title?.vi || ''
@@ -77,7 +94,7 @@ export default function GalleryTemplate({ project }) {
               return (
                 <div
                   key={img.id || idx}
-                  onClick={() => setActiveImage({ ...img, caption, resolvedSrc })}
+                  onClick={() => handleOpenImage({ ...img, caption, resolvedSrc })}
                   className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
                     border border-zinc-800 bg-zinc-950 aspect-video
                     hover:border-white transition-all duration-300 shadow-md"
@@ -183,53 +200,60 @@ export default function GalleryTemplate({ project }) {
         )}
       </div>
 
-      {/* ─── Lightbox Modal Preview ─────────────────────────────────────────── */}
-      {activeImage && (
-        <div
-          onClick={(e) => {
-            e.stopPropagation()
-            setActiveImage(null)
-          }}
-          className="fixed inset-0 z-[80] flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md animate-fade-in"
-        >
+      {/* ─── Lightbox Modal Preview (Teleported to document.body) ─────────────── */}
+      {activeImage &&
+        typeof document !== 'undefined' &&
+        createPortal(
           <div
-            onClick={(e) => e.stopPropagation()}
-            className="relative max-w-xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4"
+            onClick={(e) => {
+              e.stopPropagation()
+              handleCloseImage()
+            }}
+            className={`fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-6 bg-black/92 backdrop-blur-lg ${
+              isClosingImage ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
+            }`}
           >
-            <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-              <span className="text-xs font-mono font-bold tracking-widest text-white uppercase">Photo Details</span>
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  setActiveImage(null)
-                }}
-                className="text-zinc-400 hover:text-white px-2 py-1 text-sm font-mono cursor-pointer"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="aspect-video w-full rounded-none overflow-hidden bg-black flex items-center justify-center border border-zinc-800">
-              {activeImage.resolvedSrc ? (
-                <img
-                  src={activeImage.resolvedSrc}
-                  alt={activeImage.caption || 'Preview'}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <span className="font-mono text-sm text-zinc-400">
-                  [ Preview: {activeImage.id} ]
-                </span>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className={`relative max-w-xl w-full bg-zinc-950 border border-zinc-800 rounded-none sm:rounded-sm p-4 sm:p-6 shadow-2xl text-white space-y-3 sm:space-y-4 ${
+                isClosingImage ? 'animate-zoom-out' : 'animate-zoom-in'
+              }`}
+            >
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <span className="text-xs font-mono font-bold tracking-widest text-white uppercase">Photo Details</span>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    handleCloseImage()
+                  }}
+                  className="px-2.5 py-1 rounded-none bg-zinc-900 hover:bg-white hover:text-black text-zinc-300 text-xs font-mono font-bold tracking-widest uppercase transition-all cursor-pointer flex items-center gap-1 border border-zinc-700 active:scale-95"
+                >
+                  ✕ ĐÓNG
+                </button>
+              </div>
+              <div className="aspect-video w-full rounded-none overflow-hidden bg-black flex items-center justify-center border border-zinc-800">
+                {activeImage.resolvedSrc ? (
+                  <img
+                    src={activeImage.resolvedSrc}
+                    alt={activeImage.caption || 'Preview'}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="font-mono text-sm text-zinc-400">
+                    [ Preview: {activeImage.id} ]
+                  </span>
+                )}
+              </div>
+              {activeImage.caption && (
+                <p className="text-xs sm:text-sm text-zinc-300 italic">
+                  "{activeImage.caption}"
+                </p>
               )}
             </div>
-            {activeImage.caption && (
-              <p className="text-xs sm:text-sm text-zinc-300 italic">
-                "{activeImage.caption}"
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+          </div>,
+          document.body
+        )}
     </div>
   )
 }

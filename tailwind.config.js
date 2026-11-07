@@ -40,7 +40,7 @@ export default {
       },
 
       // --- Animation / Keyframes ---
-      // Utility animations for micro-interactions (GSAP handles heavy animations)
+      // Utility animations for micro-interactions & smooth modal entry/exit transitions
       keyframes: {
         'fade-in-up': {
           '0%':   { opacity: '0', transform: 'translateY(16px)' },
@@ -50,15 +50,40 @@ export default {
           '0%':   { opacity: '0' },
           '100%': { opacity: '1' },
         },
+        'fade-out': {
+          '0%':   { opacity: '1' },
+          '100%': { opacity: '0' },
+        },
+        'zoom-in': {
+          '0%':   { opacity: '0', transform: 'scale(0.95) translateY(6px)' },
+          '100%': { opacity: '1', transform: 'scale(1) translateY(0)' },
+        },
+        'zoom-out': {
+          '0%':   { opacity: '1', transform: 'scale(1) translateY(0)' },
+          '100%': { opacity: '0', transform: 'scale(0.95) translateY(6px)' },
+        },
+        'slide-in-right': {
+          '0%':   { transform: 'translateX(100%)' },
+          '100%': { transform: 'translateX(0)' },
+        },
+        'slide-out-right': {
+          '0%':   { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
         'spin-slow': {
           '0%':   { transform: 'rotate(0deg)' },
           '100%': { transform: 'rotate(360deg)' },
         },
       },
       animation: {
-        'fade-in-up': 'fade-in-up 0.5s ease-out both',
-        'fade-in':    'fade-in 0.4s ease-out both',
-        'spin-slow':  'spin-slow 8s linear infinite',
+        'fade-in-up':      'fade-in-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'fade-in':         'fade-in 0.25s ease-out both',
+        'fade-out':        'fade-out 0.2s ease-in both',
+        'zoom-in':         'zoom-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'zoom-out':        'zoom-out 0.2s cubic-bezier(0.4, 0, 1, 1) both',
+        'slide-in-right':  'slide-in-right 0.35s cubic-bezier(0.16, 1, 0.3, 1) both',
+        'slide-out-right': 'slide-out-right 0.25s cubic-bezier(0.4, 0, 1, 1) both',
+        'spin-slow':       'spin-slow 8s linear infinite',
       },
 
       // --- Box Shadow ---

@@ -23,6 +23,7 @@ export default function ProjectBook() {
 
   const [currentIndex, setCurrentIndex] = useState(0)
   const [selectedProject, setSelectedProject] = useState(null)
+  const [isClosingDrawer, setIsClosingDrawer] = useState(false)
   const [isFlipping, setIsFlipping] = useState(false)
 
   // Array of page DOM refs
@@ -267,23 +268,20 @@ export default function ProjectBook() {
     }
   }, [currentIndex, handleJumpToPage, isFlipping, totalProjects])
 
-  // Open & Close Details Drawer
+  // Open & Close Details Drawer with smooth exit transition
   const handleOpenDetail = (project) => {
+    setIsClosingDrawer(false)
     setSelectedProject(project)
   }
 
-  const handleCloseDetail = () => {
-    if (drawerRef.current) {
-      gsap.to(drawerRef.current, {
-        x: '100%',
-        duration: 0.3,
-        ease: 'power3.in',
-        onComplete: () => setSelectedProject(null),
-      })
-    } else {
+  const handleCloseDetail = useCallback(() => {
+    if (isClosingDrawer || !selectedProject) return
+    setIsClosingDrawer(true)
+    setTimeout(() => {
       setSelectedProject(null)
-    }
-  }
+      setIsClosingDrawer(false)
+    }, 250)
+  }, [isClosingDrawer, selectedProject])
 
   // Keyboard navigation for page flipping (ESC handling is managed by useModalHistory)
   useEffect(() => {
@@ -622,14 +620,18 @@ export default function ProjectBook() {
           onClick={handleCloseDetail}
           onWheel={(e) => e.stopPropagation()}
           onTouchMove={(e) => e.stopPropagation()}
-          className="fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end animate-fade-in"
+          className={`fixed inset-0 z-[70] bg-black/85 backdrop-blur-md flex justify-end ${
+            isClosingDrawer ? 'animate-fade-out pointer-events-none' : 'animate-fade-in'
+          }`}
         >
           <div
             ref={drawerRef}
             onClick={(e) => e.stopPropagation()}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar animate-fade-in-up"
+            className={`relative w-full md:w-2/3 lg:w-2/3 h-full bg-black border-l border-zinc-800 shadow-2xl overflow-y-auto overscroll-contain flex flex-col justify-between p-4 sm:p-8 md:p-10 pt-[max(1.25rem,env(safe-area-inset-top))] custom-scrollbar ${
+              isClosingDrawer ? 'animate-slide-out-right' : 'animate-slide-in-right'
+            }`}
           >
             {/* Drawer Top Navigation */}
             <div className="flex items-center justify-between pb-4 sm:pb-6 border-b border-zinc-800 sticky top-0 bg-black/95 backdrop-blur-md z-30 pt-1">
