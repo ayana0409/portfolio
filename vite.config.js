@@ -6,5 +6,11 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: process.env.CF_PAGES ? '/' : '/portfolio/',
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 300,
+    },
+  },
 })
 

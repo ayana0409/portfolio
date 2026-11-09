@@ -8,6 +8,27 @@ const localImages = import.meta.glob('/src/assets/images/**/*.{png,jpg,jpeg,svg,
   import: 'default',
 })
 
+// Dynamically bundle and resolve all local videos in src/assets (including videos/ and images/ subdirectories)
+const localVideos = import.meta.glob('/src/assets/**/*.{mp4,webm,ogg,mov,m4v}', {
+  eager: true,
+  import: 'default',
+})
+
+/**
+ * Returns appropriate MIME type for video source.
+ *
+ * @param {string} src - Video URL or path
+ * @returns {string} - MIME type
+ */
+export function getVideoMimeType(src) {
+  if (!src) return 'video/mp4'
+  const clean = src.split('?')[0].split('#')[0].toLowerCase()
+  if (clean.endsWith('.webm')) return 'video/webm'
+  if (clean.endsWith('.ogg') || clean.endsWith('.ogv')) return 'video/ogg'
+  if (clean.endsWith('.mov')) return 'video/quicktime'
+  return 'video/mp4'
+}
+
 /**
  * Resolves local image paths from JSON data to bundled Vite asset URLs.
  * Supports /assets/images/..., /images/..., or direct filenames.
@@ -44,6 +65,140 @@ export function resolveProjectImage(path) {
   }
 
   return path
+}
+
+/**
+ * Resolves local or external video paths from JSON data to bundled Vite asset URLs or valid URLs.
+ * Supports any location in src/assets/ (e.g. assets/images/..., assets/videos/...),
+ * public/ relative paths, or direct external URLs.
+ *
+ * @param {string} path - Video path specified in JSON data
+ * @returns {string} - The resolved asset or static URL
+ */
+export function resolveProjectVideo(path) {
+  if (!path) return ''
+  if (
+    path.startsWith('http://') ||
+    path.startsWith('https://') ||
+    path.startsWith('data:') ||
+    path.startsWith('blob:')
+  ) {
+    return path
+  }
+
+  // Normalize path by removing leading slashes and optional 'src/' prefix
+  const cleanPath = path.replace(/^\/+/, '').replace(/^src\//, '')
+
+  // 1. Direct match: e.g. /src/assets/images/... or /src/assets/videos/...
+  const targetKey1 = `/src/${cleanPath}`
+  if (localVideos[targetKey1]) {
+    return localVideos[targetKey1]
+  }
+
+  // 2. If path starts with 'assets/', match /src/assets/...
+  const cleanWithoutAssets = cleanPath.replace(/^assets\//, '')
+  const targetKey2 = `/src/assets/${cleanWithoutAssets}`
+  if (localVideos[targetKey2]) {
+    return localVideos[targetKey2]
+  }
+
+  // 3. Check case-insensitive match or filename ending match across all bundled local videos
+  const cleanLower = cleanPath.toLowerCase()
+  const foundKey = Object.keys(localVideos).find((k) => {
+    const kLower = k.toLowerCase()
+    return (
+      kLower === targetKey1.toLowerCase() ||
+      kLower === targetKey2.toLowerCase() ||
+      kLower.endsWith('/' + cleanLower) ||
+      kLower.endsWith('/' + cleanWithoutAssets.toLowerCase())
+    )
+  })
+  if (foundKey) {
+    return localVideos[foundKey]
+  }
+
+  // 4. Fallback to public folder path with BASE_URL
+  const baseUrl = import.meta.env.BASE_URL || '/'
+  const publicPath = cleanPath.startsWith('/') ? cleanPath.slice(1) : cleanPath
+  return baseUrl.endsWith('/') ? `${baseUrl}${publicPath}` : `${baseUrl}/${publicPath}`
+}
+
+/**
+ * Checks if a given media item or URL represents a video resource.
+ *
+ * @param {Object|string} item - The media item object or string URL
+ * @returns {boolean} - True if item is a video
+ */
+export function isVideoItem(item) {
+  if (!item) return false
+  if (typeof item === 'object' && item.type === 'video') return true
+  const src = (typeof item === 'string' ? item : item.src || item.url || '').toLowerCase()
+  return (
+    src.includes('youtube.com') ||
+    src.includes('youtu.be') ||
+    src.includes('vimeo.com') ||
+    src.includes('drive.google.com') ||
+    /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(src) ||
+    src.includes('/videos/') ||
+    src.includes('/assets/videos/')
+  )
+}
+
+/**
+ * Parses and normalizes any video source into a unified playback descriptor.
+ * Supports YouTube, Google Drive, Vimeo, and native HTML5 video formats.
+ *
+ * @param {string} rawSrc - Video source link or relative file path
+ * @param {string} [rawPoster] - Optional custom poster image path
+ * @returns {Object|null} - Unified video descriptor with embedUrl or native src
+ */
+export function parseVideoSource(rawSrc, rawPoster = '') {
+  if (!rawSrc) return null
+  const cleanSrc = rawSrc.trim()
+
+  // 1. YouTube Match (watch URL, youtu.be shortlink, embed, or shorts)
+  const ytMatch = cleanSrc.match(/(?:youtube\.com\/(?:watch\?v=|embed\/|shorts\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/i)
+  if (ytMatch && ytMatch[1]) {
+    const videoId = ytMatch[1]
+    return {
+      type: 'youtube',
+      embedUrl: `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`,
+      poster: rawPoster ? resolveProjectImage(rawPoster) : `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+      originalSrc: cleanSrc,
+    }
+  }
+
+  // 2. Google Drive Match
+  const gdriveMatch = cleanSrc.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/i)
+  if (gdriveMatch && gdriveMatch[1]) {
+    const fileId = gdriveMatch[1]
+    return {
+      type: 'gdrive',
+      embedUrl: `https://drive.google.com/file/d/${fileId}/preview`,
+      poster: rawPoster ? resolveProjectImage(rawPoster) : '',
+      originalSrc: cleanSrc,
+    }
+  }
+
+  // 3. Vimeo Match
+  const vimeoMatch = cleanSrc.match(/vimeo\.com\/(?:channels\/(?:\w+\/)?|groups\/([^\/]*)\/videos\/|album\/(\d+)\/video\/|)(\d+)/i)
+  if (vimeoMatch && (vimeoMatch[3] || vimeoMatch[1])) {
+    const videoId = vimeoMatch[3] || vimeoMatch[1]
+    return {
+      type: 'vimeo',
+      embedUrl: `https://player.vimeo.com/video/${videoId}?autoplay=1`,
+      poster: rawPoster ? resolveProjectImage(rawPoster) : '',
+      originalSrc: cleanSrc,
+    }
+  }
+
+  // 4. Native HTML5 Video (Local asset or direct file URL)
+  return {
+    type: 'native',
+    src: resolveProjectVideo(cleanSrc),
+    poster: rawPoster ? resolveProjectImage(rawPoster) : '',
+    originalSrc: cleanSrc,
+  }
 }
 
 /**

@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { createPortal } from 'react-dom'
 import { useTranslation } from 'react-i18next'
-import { resolveProjectImage } from '../../../utils/helpers'
+import { resolveProjectImage, resolveProjectVideo, parseVideoSource, isVideoItem, getVideoMimeType } from '../../../utils/helpers'
 import useModalHistory from '../../../hooks/useModalHistory'
 import { typography } from '../../../config/typography'
 
@@ -168,23 +168,23 @@ function getLinkButtonStyles(type) {
 export default function InfoTemplate({ project }) {
   const { i18n } = useTranslation('portfolio')
   const currentLang = i18n.language === 'en' ? 'en' : 'vi'
-  const [activeLightboxImg, setActiveLightboxImg] = useState(null)
+  const [activeLightboxItem, setActiveLightboxItem] = useState(null)
   const [isClosingLightbox, setIsClosingLightbox] = useState(false)
 
   // Open & Close Lightbox with smooth zoom-in and zoom-out transitions
-  const handleOpenLightbox = (imgData) => {
+  const handleOpenLightbox = (mediaData) => {
     setIsClosingLightbox(false)
-    setActiveLightboxImg(imgData)
+    setActiveLightboxItem(mediaData)
   }
 
   const handleCloseLightbox = useCallback(() => {
-    if (isClosingLightbox || !activeLightboxImg) return
+    if (isClosingLightbox || !activeLightboxItem) return
     setIsClosingLightbox(true)
     setTimeout(() => {
-      setActiveLightboxImg(null)
+      setActiveLightboxItem(null)
       setIsClosingLightbox(false)
     }, 220)
-  }, [isClosingLightbox, activeLightboxImg])
+  }, [isClosingLightbox, activeLightboxItem])
 
   // Retrieve bilingual text
   const title = project.title?.[currentLang] || project.title?.vi || ''
@@ -192,13 +192,20 @@ export default function InfoTemplate({ project }) {
   const description = project.description?.[currentLang] || project.description?.vi || ''
   const features = project.features?.[currentLang] || project.features?.vi || []
   const gallery = project.gallery || []
+  const videos = project.videos || []
   const coverUrl = resolveProjectImage(project.coverImage)
+
+  // Determine display order of media sections based on their order in portfolioData.json
+  const projectKeys = Object.keys(project || {})
+  const galleryIndex = projectKeys.indexOf('gallery')
+  const videosIndex = projectKeys.indexOf('videos')
+  const isVideosFirst = videosIndex !== -1 && (galleryIndex === -1 || videosIndex < galleryIndex)
 
   // Universal dynamic links normalization
   const normalizedLinks = normalizeProjectLinks(project.links, currentLang)
 
   // Intercept mobile back button to close lightbox instead of navigating away
-  useModalHistory(Boolean(activeLightboxImg), handleCloseLightbox, 'lightbox')
+  useModalHistory(Boolean(activeLightboxItem), handleCloseLightbox, 'lightbox')
 
 
   return (
@@ -235,6 +242,7 @@ export default function InfoTemplate({ project }) {
           onClick={() =>
             handleOpenLightbox({
               id: 'cover',
+              mediaType: 'image',
               resolvedSrc: coverUrl,
               caption: `${title} - Cover Banner`,
             })
@@ -329,71 +337,203 @@ export default function InfoTemplate({ project }) {
         </div>
       )}
 
-      {/* ─── 8. Gallery (Photo Showcase & Screenshots) ─────────────────────────── */}
-      {gallery && gallery.length > 0 && (
-        <div className="space-y-3 pt-2">
-          <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
-            <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
-              <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-              </svg>
-              <span>{currentLang === 'vi' ? 'Bộ sưu tập ảnh & Giao diện' : 'Gallery & Screenshots'}</span>
-            </h3>
-            <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
-              {gallery.length} PHOTOS (BẤM ĐỂ PHÓNG TO)
-            </span>
-          </div>
+      {/* ─── Video Showcase Section Renderer ───────────────────────────────── */}
+      {(() => {
+        const renderVideoSection = () =>
+          videos && videos.length > 0 ? (
+            <div key="videos-section" className="space-y-3 pt-2">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
+                  <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>{currentLang === 'vi' ? 'Video Demo & Trải nghiệm' : 'Video Demos & Showcase'}</span>
+                </h3>
+                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
+                  {videos.length} {videos.length === 1 ? 'VIDEO' : 'VIDEOS'} (BẤM ĐỂ XEM)
+                </span>
+              </div>
 
-          {/* Responsive Gallery Grid: 1 col on mobile, 2 col on tablet/desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-            {gallery.map((img, idx) => {
-              const caption = img.caption?.[currentLang] || img.caption?.vi || ''
-              const resolvedSrc = resolveProjectImage(img.src)
-              return (
-                <div
-                  key={img.id || idx}
-                  onClick={() => handleOpenLightbox({ ...img, caption, resolvedSrc })}
-                  className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
-                    border border-zinc-800 bg-zinc-950 aspect-video
-                    hover:border-white transition-all duration-300 shadow-md"
-                >
-                  {resolvedSrc ? (
-                    <img
-                      src={resolvedSrc}
-                      alt={caption || `Gallery ${idx + 1}`}
-                      loading="lazy"
-                      decoding="async"
-                      className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
-                      onError={(e) => {
-                        e.currentTarget.style.display = 'none'
-                      }}
-                    />
-                  ) : null}
+              {/* Responsive Video Grid: 1 col on mobile, 2 col on tablet/desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {videos.map((vid, idx) => {
+                  const caption = vid.caption?.[currentLang] || vid.caption?.vi || ''
+                  const videoData = parseVideoSource(vid.src, vid.poster)
+                  return (
+                    <div
+                      key={vid.id || idx}
+                      onClick={() => handleOpenLightbox({ ...vid, mediaType: 'video', caption, videoData })}
+                      className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
+                        border border-zinc-800 bg-zinc-950 aspect-video
+                        hover:border-white transition-all duration-300 shadow-md"
+                    >
+                      {/* Poster Thumbnail or Native Video Preview */}
+                      {videoData?.poster ? (
+                        <img
+                          src={videoData.poster}
+                          alt={caption || `Video ${idx + 1}`}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none'
+                          }}
+                        />
+                      ) : videoData?.type === 'native' && videoData.src ? (
+                        <video
+                          src={`${videoData.src}#t=0.001`}
+                          preload="metadata"
+                          muted
+                          playsInline
+                          className="w-full h-full object-cover object-center filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-zinc-900 flex items-center justify-center">
+                          <span className="font-mono text-xs text-zinc-500">VIDEO #{idx + 1}</span>
+                        </div>
+                      )}
 
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300">
-                      <span className="px-1.5 py-0.5 rounded-none bg-black/90 border border-zinc-800">
-                        #{idx + 1}
-                      </span>
-                      <span className="px-2 py-0.5 rounded-none bg-black/90 border border-zinc-800 text-zinc-300 opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-1 uppercase tracking-wider text-[9px]">
-                        <span>ZOOM</span>
-                        <span>🔍</span>
-                      </span>
+                      {/* Dark Gradient Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300">
+                          <span className="px-1.5 py-0.5 rounded-none bg-black/90 border border-zinc-800">
+                            #{idx + 1}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-none bg-black/90 border border-zinc-800 text-zinc-300 opacity-80 group-hover:opacity-100 transition-opacity flex items-center gap-1 uppercase tracking-wider text-[9px] text-white">
+                            <span>PLAY</span>
+                            <span className="text-white">▶</span>
+                          </span>
+                        </div>
+
+                        {/* Centered Play Button Indicator */}
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="w-11 h-11 sm:w-13 sm:h-13 rounded-full bg-black/80 border border-white/40 group-hover:border-white group-hover:scale-110 group-hover:bg-white group-hover:text-black text-white flex items-center justify-center transition-all duration-300 shadow-xl backdrop-blur-sm">
+                            <svg className="w-5 h-5 sm:w-6 sm:h-6 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
+                          </div>
+                        </div>
+
+                        {caption && (
+                          <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-tight bg-black/90 p-2 rounded-none backdrop-blur-sm border border-zinc-800 shadow relative z-10">
+                            {caption}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                    {caption && (
-                      <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-tight bg-black/90 p-2 rounded-none backdrop-blur-sm border border-zinc-800 shadow">
-                        {caption}
-                      </p>
-                    )}
-                  </div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      )}
+                  )
+                })}
+              </div>
+            </div>
+          ) : null
 
-      {/* ─── 9. Links (Universal Dynamic Multi-Demo & Repos) ─────────────────── */}
+        const renderGallerySection = () =>
+          gallery && gallery.length > 0 ? (
+            <div key="gallery-section" className="space-y-3 pt-2">
+              <div className="flex items-center justify-between border-b border-zinc-800 pb-2">
+                <h3 className={`flex items-center gap-2 ${typography.projects.drawer.sectionHeading}`}>
+                  <svg className="w-4 h-4 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <span>{currentLang === 'vi' ? 'Bộ sưu tập ảnh & Giao diện' : 'Gallery & Screenshots'}</span>
+                </h3>
+                <span className="text-[10px] sm:text-[11px] font-mono text-zinc-400 uppercase tracking-wider">
+                  {gallery.length} PHOTOS (BẤM ĐỂ PHÓNG TO)
+                </span>
+              </div>
+
+              {/* Responsive Gallery Grid: 1 col on mobile, 2 col on tablet/desktop */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                {gallery.map((img, idx) => {
+                  const caption = img.caption?.[currentLang] || img.caption?.vi || ''
+                  const isVid = isVideoItem(img)
+                  const videoData = isVid ? parseVideoSource(img.src, img.poster) : null
+                  const resolvedSrc = isVid ? (videoData?.poster || '') : resolveProjectImage(img.src)
+
+                  return (
+                    <div
+                      key={img.id || idx}
+                      onClick={() =>
+                        handleOpenLightbox(
+                          isVid
+                            ? { ...img, mediaType: 'video', caption, videoData }
+                            : { ...img, mediaType: 'image', caption, resolvedSrc }
+                        )
+                      }
+                      className="group relative cursor-pointer overflow-hidden rounded-none sm:rounded-sm
+                        border border-zinc-800 bg-zinc-950 aspect-video
+                        hover:border-white transition-all duration-300 shadow-md"
+                    >
+                      {resolvedSrc ? (
+                        <img
+                          src={resolvedSrc}
+                          alt={caption || `Gallery ${idx + 1}`}
+                          loading="lazy"
+                          decoding="async"
+                          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 filter grayscale group-hover:grayscale-0"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none'
+                          }}
+                        />
+                      ) : isVid && videoData?.type === 'native' && videoData.src ? (
+                        <video
+                          src={videoData.src}
+                          preload="metadata"
+                          muted
+                          playsInline
+                          className="w-full h-full object-cover object-center filter grayscale group-hover:grayscale-0 group-hover:scale-105 transition-transform duration-500 pointer-events-none"
+                        />
+                      ) : null}
+
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent p-2.5 sm:p-3 flex flex-col justify-between">
+                        <div className="flex items-center justify-between text-[10px] font-mono text-zinc-300">
+                          <span className="px-1.5 py-0.5 rounded-none bg-black/90 border border-zinc-800">
+                            #{idx + 1}
+                          </span>
+                          <span className="px-2 py-0.5 rounded-none bg-black/90 border border-zinc-800 text-zinc-300 opacity-70 group-hover:opacity-100 transition-opacity flex items-center gap-1 uppercase tracking-wider text-[9px]">
+                            <span>{isVid ? 'PLAY' : 'ZOOM'}</span>
+                            <span>{isVid ? '▶' : '🔍'}</span>
+                          </span>
+                        </div>
+
+                        {isVid && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                            <div className="w-10 h-10 rounded-full bg-black/80 border border-white/40 group-hover:border-white group-hover:scale-110 group-hover:bg-white group-hover:text-black text-white flex items-center justify-center transition-all duration-300 shadow-xl backdrop-blur-sm">
+                              <svg className="w-4 h-4 fill-current translate-x-0.5" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+
+                        {caption && (
+                          <p className="text-xs font-medium text-zinc-200 line-clamp-2 leading-tight bg-black/90 p-2 rounded-none backdrop-blur-sm border border-zinc-800 shadow relative z-10">
+                            {caption}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ) : null
+
+        return isVideosFirst ? (
+          <React.Fragment key="media-sections">
+            {renderVideoSection()}
+            {renderGallerySection()}
+          </React.Fragment>
+        ) : (
+          <React.Fragment key="media-sections">
+            {renderGallerySection()}
+            {renderVideoSection()}
+          </React.Fragment>
+        )
+      })()}
+
+      {/* ─── 10. Links (Universal Dynamic Multi-Demo & Repos) ─────────────────── */}
       {normalizedLinks.length > 0 && (
         <div className="pt-4 sm:pt-5 flex flex-wrap items-center gap-2 sm:gap-3 border-t border-zinc-800">
           {normalizedLinks.map((linkItem, idx) => {
@@ -414,8 +554,8 @@ export default function InfoTemplate({ project }) {
         </div>
       )}
 
-      {/* ─── Lightbox Portal: Viewport-Centered Fullscreen Zoom ────────────────── */}
-      {activeLightboxImg &&
+      {/* ─── Lightbox Portal: Viewport-Centered Fullscreen Zoom / Video Player ────────────────── */}
+      {activeLightboxItem &&
         createPortal(
           <div
             onClick={(e) => {
@@ -437,7 +577,7 @@ export default function InfoTemplate({ project }) {
                 <div className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-white animate-pulse" />
                   <span className="text-[11px] sm:text-xs font-mono font-bold text-white uppercase tracking-widest">
-                    {activeLightboxImg.id || 'Photo Preview'}
+                    {activeLightboxItem.id || (activeLightboxItem.mediaType === 'video' ? 'Video Player' : 'Photo Preview')}
                   </span>
                 </div>
 
@@ -454,26 +594,61 @@ export default function InfoTemplate({ project }) {
                 </button>
               </div>
 
-              {/* Large Image Container */}
+              {/* Large Media Container (Image or Video Player) */}
               <div className="w-full max-h-[65vh] sm:max-h-[75vh] rounded-none overflow-hidden bg-black border border-zinc-800 flex items-center justify-center p-1 sm:p-2">
-                {activeLightboxImg.resolvedSrc ? (
+                {activeLightboxItem.mediaType === 'video' || activeLightboxItem.videoData ? (
+                  activeLightboxItem.videoData?.type === 'native' ? (
+                    <video
+                      key={activeLightboxItem.videoData.src}
+                      src={activeLightboxItem.videoData.src}
+                      controls
+                      autoPlay
+                      playsInline
+                      preload="auto"
+                      width="1280"
+                      height="720"
+                      poster={activeLightboxItem.videoData.poster || undefined}
+                      className="w-full max-h-[60vh] sm:max-h-[70vh] rounded-none object-contain shadow-2xl"
+                    >
+                      <source
+                        src={activeLightboxItem.videoData.src}
+                        type={getVideoMimeType(activeLightboxItem.videoData.src)}
+                      />
+                      Your browser does not support HTML5 video playback.
+                    </video>
+                  ) : activeLightboxItem.videoData?.embedUrl ? (
+                    <div className="w-full aspect-video max-h-[60vh] sm:max-h-[70vh]">
+                      <iframe
+                        src={activeLightboxItem.videoData.embedUrl}
+                        title={activeLightboxItem.caption || 'Video Player'}
+                        className="w-full h-full border-0 rounded-none shadow-2xl"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share; fullscreen"
+                        allowFullScreen
+                      />
+                    </div>
+                  ) : (
+                    <span className="font-mono text-xs text-zinc-500 py-12">
+                      Video source not available
+                    </span>
+                  )
+                ) : activeLightboxItem.resolvedSrc ? (
                   <img
-                    src={activeLightboxImg.resolvedSrc}
-                    alt={activeLightboxImg.caption || 'Preview'}
+                    src={activeLightboxItem.resolvedSrc}
+                    alt={activeLightboxItem.caption || 'Preview'}
                     className="max-w-full max-h-[60vh] sm:max-h-[70vh] object-contain shadow-2xl"
                   />
                 ) : (
                   <span className="font-mono text-xs text-zinc-500 py-12">
-                    {activeLightboxImg.caption || 'No Image Available'}
+                    {activeLightboxItem.caption || 'No Image Available'}
                   </span>
                 )}
               </div>
 
               {/* Caption */}
-              {activeLightboxImg.caption && (
+              {activeLightboxItem.caption && (
                 <div className="p-2.5 sm:p-3 rounded-none bg-black border border-zinc-800 text-center">
                   <p className="text-xs sm:text-sm text-zinc-200 font-sans">
-                    {activeLightboxImg.caption}
+                    {activeLightboxItem.caption}
                   </p>
                 </div>
               )}

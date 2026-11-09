@@ -465,6 +465,17 @@
           }
         }
       ],
+      "videos": [
+        {
+          "id": "qt-vid-001",
+          "src": "assets/images/projects/quick-test/quick-test-loadingtest.webm",
+          "poster": "assets/images/projects/quick-test/quick-test-loadingtest-poster.png",
+          "caption": {
+            "vi": "Thử nghiệm thu và chấm điểm 1.000 bài thi thực tế.",
+            "en": "Demo collecting and grading 1,000 exam submissions."
+          }
+        }
+      ],
       "links": [
         {
           "label": {
@@ -555,6 +566,7 @@
           "Admin & Merchant Portal (React + Vite) with menu designer, generic JSONB onboarding request approvals, order triage, and Recharts analytics"
         ]
       },
+      "videos": [],
       "gallery": [
         {
           "id": "qb-img-001",
@@ -691,6 +703,7 @@
           "Refresh token rotation, multi-tab auth sync, proactive token refresh"
         ]
       },
+      "videos": [],
       "gallery": [
         {
           "id": "stl-img-001",

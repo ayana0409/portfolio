@@ -50,10 +50,21 @@ function extractTranslations(locale) {
       // Features list — store as JSON string array for useTranslation().t() with returnObjects
       acc[`projects.${key}.features`] = project.features[locale]
 
-      // Gallery captions (only present for type === 'gallery')
+      // Gallery captions
       if (project.gallery) {
         project.gallery.forEach((img) => {
-          acc[`projects.${key}.gallery.${img.id}.caption`] = img.caption[locale]
+          if (img.caption && img.caption[locale]) {
+            acc[`projects.${key}.gallery.${img.id}.caption`] = img.caption[locale]
+          }
+        })
+      }
+
+      // Video captions
+      if (project.videos) {
+        project.videos.forEach((vid) => {
+          if (vid.caption && vid.caption[locale]) {
+            acc[`projects.${key}.videos.${vid.id}.caption`] = vid.caption[locale]
+          }
         })
       }
 
